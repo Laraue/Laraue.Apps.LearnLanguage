@@ -31,3 +31,8 @@ to learn preffered words first of all.
 }
 ```
 3. Run `Laraue.Apps.LearnLanguage.Host`. Write `/start` to your bot and wait for answer.
+
+## License
+
+The source code is available under the [PolyForm Noncommercial License 1.0.0](LICENSE): free for personal
+and other noncommercial use. For commercial use see [COMMERCIAL.md](COMMERCIAL.md).
