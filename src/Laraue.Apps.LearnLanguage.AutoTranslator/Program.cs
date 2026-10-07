@@ -16,7 +16,7 @@ var configuration = new ConfigurationBuilder()
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 var serviceCollection = new ServiceCollection()
-    .AddLogging(x => x.AddConsole())
+    .AddLogging(x => x.AddJsonConsole())
     .AddSingleton<IWordsService, WordsService>()
     .AddSingleton<IWordsAutoTranslator, WordsAutoTranslator>()
     .AddScoped<IResxFilesTranslator, ResxFilesTranslator>()
