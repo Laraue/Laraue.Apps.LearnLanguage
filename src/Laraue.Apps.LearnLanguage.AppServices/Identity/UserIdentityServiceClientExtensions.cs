@@ -1,25 +1,28 @@
-using Laraue.Apps.Identity.Internal.Contracts;
-using Laraue.Apps.LearnLanguage.DataAccess.Entities;
+﻿using Laraue.Apps.Identity.Internal.Contracts;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Identity;
 
 public static class UserIdentityServiceClientExtensions
 {
     /// <summary>
-    /// Resolves (or creates) the global Laraue user id of the Telegram account of <paramref name="user"/>.
+    /// Resolves (or creates) the global Laraue user id of the Telegram account described by the arguments.
     /// Lets any failure (including <see cref="Grpc.Core.RpcException"/>) propagate.
     /// </summary>
     public static async Task<Guid> GetGlobalUserIdAsync(
         this UserIdentityService.UserIdentityServiceClient client,
-        User user,
+        long telegramId,
+        string? userName,
+        string? firstName,
+        string? lastName,
+        string? languageCode,
         CancellationToken cancellationToken)
     {
-        var request = new CreateUserIfNotExistsRequest { TelegramId = user.TelegramId };
+        var request = new CreateUserIfNotExistsRequest { TelegramId = telegramId };
 
-        if (user.TelegramUserName is { } userName) request.TelegramUsername = userName;
-        if (user.TelegramFirstName is { } firstName) request.TelegramFirstName = firstName;
-        if (user.TelegramLastName is { } lastName) request.TelegramLastName = lastName;
-        if (user.TelegramLanguageCode is { } languageCode) request.TelegramLanguageCode = languageCode;
+        if (userName is not null) request.TelegramUsername = userName;
+        if (firstName is not null) request.TelegramFirstName = firstName;
+        if (lastName is not null) request.TelegramLastName = lastName;
+        if (languageCode is not null) request.TelegramLanguageCode = languageCode;
 
         var response = await client.CreateUserIfNotExistsAsync(request, cancellationToken: cancellationToken);
 

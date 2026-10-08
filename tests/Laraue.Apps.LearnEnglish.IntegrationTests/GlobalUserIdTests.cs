@@ -1,4 +1,4 @@
-using Grpc.Core;
+﻿using Grpc.Core;
 using Laraue.Apps.Identity.Internal.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Identity;
 using Laraue.Telegram.NET.Authentication.Services;
@@ -61,10 +61,10 @@ public class GlobalUserIdTests : IAsyncLifetime
     public async Task NewUser_GetsGlobalIdFromIdentity()
     {
         using var scope = _provider.CreateScope();
-        var service = scope.ServiceProvider.GetRequiredService<ITelegramUserQueryService<User, Guid>>();
+        var service = scope.ServiceProvider.GetRequiredService<ITelegramUserQueryService<Guid>>();
 
         var id = await service.CreateAsync(
-            new User { TelegramId = 100, TelegramUserName = "john", TelegramFirstName = "John", TelegramLanguageCode = "en" },
+            new TelegramData(100, "john", "en", "John", null),
             default);
 
         var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
@@ -78,9 +78,9 @@ public class GlobalUserIdTests : IAsyncLifetime
     {
         _identity.Fail = true;
         using var scope = _provider.CreateScope();
-        var service = scope.ServiceProvider.GetRequiredService<ITelegramUserQueryService<User, Guid>>();
+        var service = scope.ServiceProvider.GetRequiredService<ITelegramUserQueryService<Guid>>();
 
-        await Assert.ThrowsAsync<RpcException>(() => service.CreateAsync(new User { TelegramId = 101 }, default));
+        await Assert.ThrowsAsync<RpcException>(() => service.CreateAsync(new TelegramData(101, null, null, null, null), default));
 
         var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
         Assert.False(await db.Users.AnyAsync());

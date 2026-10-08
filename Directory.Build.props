@@ -17,7 +17,7 @@
   
   <PropertyGroup>
     <Linq2DbVersion>6.3.0</Linq2DbVersion>
-    <LaraueTelegramNetVersion>4.9.1</LaraueTelegramNetVersion>
+    <LaraueTelegramNetVersion>5.0.1</LaraueTelegramNetVersion>
     <LaraueCoreDataAccessVersion>10.8.0</LaraueCoreDataAccessVersion>
     <LaraueCoreDateTimeVersion>10.0.0</LaraueCoreDateTimeVersion>
     <EfCoreVersion>10.0.0</EfCoreVersion>

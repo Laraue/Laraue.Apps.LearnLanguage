@@ -1,4 +1,4 @@
-using Laraue.Apps.Identity.Internal.Contracts;
+﻿using Laraue.Apps.Identity.Internal.Contracts;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +56,13 @@ public class GlobalUserIdBackfill(
 
             foreach (var user in batch)
             {
-                var globalUserId = await identityClient.GetGlobalUserIdAsync(user, cancellationToken);
+                var globalUserId = await identityClient.GetGlobalUserIdAsync(
+                    user.TelegramId,
+                    user.TelegramUserName,
+                    user.TelegramFirstName,
+                    user.TelegramLastName,
+                    user.TelegramLanguageCode,
+                    cancellationToken);
 
                 await context.Users
                     .Where(u => u.Id == user.Id)

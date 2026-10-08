@@ -1,15 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
-using Laraue.Telegram.NET.Authentication.Models;
 
 namespace Laraue.Apps.LearnLanguage.DataAccess.Entities;
 
 /// <summary>
 /// Application user.
 /// </summary>
-public sealed class User : ITelegramUser<Guid>
+public sealed class User
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// System user identifier.
+    /// </summary>
     public Guid Id { get; set; }
     
     /// <summary>
@@ -18,26 +19,38 @@ public sealed class User : ITelegramUser<Guid>
     /// </summary>
     public Guid GlobalUserId { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Telegram identifier.
+    /// </summary>
     public long TelegramId { get; set; }
     
-    /// <inheritdoc />
+    /// <summary>
+    /// Telegram user name.
+    /// </summary>
     [MaxLength(32)]
     public string? TelegramUserName { get; set; }
     
-    /// <inheritdoc />
+    /// <summary>
+    /// Telegram user language code, e.g "ru", "en".
+    /// </summary>
     [MaxLength(2)]
     public string? TelegramLanguageCode { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Telegram last name.
+    /// </summary>
     [MaxLength(64)]
     public string? TelegramLastName { get; set; }
     
-    /// <inheritdoc />
+    /// <summary>
+    /// Telegram first name.
+    /// </summary>
     [MaxLength(64)]
     public string? TelegramFirstName { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// When the user first wrote to the bot (UTC).
+    /// </summary>
     public DateTime CreatedAt { get; set; }
     
     /// <summary>

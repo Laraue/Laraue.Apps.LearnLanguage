@@ -106,7 +106,7 @@ public static class WebApplicationBuilderExtensions
                     opt.AvailableLanguages = InterfaceLanguage.Available.Select(x => x.Code).ToArray();
                     opt.DefaultLanguage = InterfaceLanguage.Default.Code;
                 })
-                .AddTelegramAuthentication<User, Guid, TelegramUserQueryService, RequestContext>();
+                .AddTelegramAuthentication<Guid, TelegramUserQueryService, RequestContext>();
 
             builder.Services.UseUserRolesProvider<StaticUserRoleProvider>();
 
