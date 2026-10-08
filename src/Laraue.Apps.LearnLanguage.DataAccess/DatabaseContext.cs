@@ -12,6 +12,12 @@ namespace Laraue.Apps.LearnLanguage.DataAccess;
 
 public class DatabaseContext : DbContext, IUpdatesQueueDbContext
 {
+    /// <summary>
+    /// The migration that adds the nullable GlobalUserId column. The existing users are backfilled
+    /// after it, before the next migration makes the column required.
+    /// </summary>
+    public const string AddGlobalUserIdMigration = "20261008014243_AddGlobalUserId";
+
     public DatabaseContext(DbContextOptions options) 
         : base(options)
     {
@@ -59,6 +65,10 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext
 
         modelBuilder.Entity<Translation>()
             .HasKey(x => new { x.WordId, x.LanguageId });
+
+        modelBuilder.Entity<User>()
+            .HasIndex(x => x.GlobalUserId)
+            .IsUnique();
 
         modelBuilder.Entity<UserQuizCefrLevel>()
             .HasKey(x => new { x.UserId, x.CefrLevelId });

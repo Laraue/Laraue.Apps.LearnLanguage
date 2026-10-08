@@ -24,6 +24,9 @@
     <NpgsqlEfCoreVersion>10.0.0</NpgsqlEfCoreVersion>
     <EfCoreNamingConventionsVersion>10.0.1</EfCoreNamingConventionsVersion>
     <LaraueCoreOllamaVersion>1.0.0</LaraueCoreOllamaVersion>
+    <LaraueIdentityInternalContractsVersion>0.0.6</LaraueIdentityInternalContractsVersion>
+    <GrpcNetClientFactoryVersion>2.66.0</GrpcNetClientFactoryVersion>
+    <LaraueGrpcVersion>0.0.3</LaraueGrpcVersion>
     <TelegramBotVersion>22.7.0</TelegramBotVersion>
     <OpenTelemetryExtensionsHostingVersion>1.18.0</OpenTelemetryExtensionsHostingVersion>
     <OpenTelemetryExporterPrometheusAspNetCoreVersion>1.18.0-beta.1</OpenTelemetryExporterPrometheusAspNetCoreVersion>

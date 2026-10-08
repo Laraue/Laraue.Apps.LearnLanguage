@@ -1,4 +1,6 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices;
+﻿using Laraue.Apps.Identity.Internal.Contracts;
+using Laraue.Apps.LearnLanguage.AppServices;
+using Laraue.Apps.LearnLanguage.AppServices.Identity;
 using Laraue.Apps.LearnLanguage.AppServices.Options;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
@@ -21,6 +23,7 @@ using Laraue.Telegram.NET.Localization;
 using Laraue.Telegram.NET.Localization.Extensions;
 using Laraue.Telegram.NET.UpdatesQueue.EFCore.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Laraue.Apps.LearnLanguage.Host;
 
@@ -60,6 +63,34 @@ public static class WebApplicationBuilderExtensions
             return builder;
         }
         
+        /// <summary>
+        /// Registers the Laraue.Apps.Identity client. With "MockExternalServices" set (local
+        /// development) an in-process fake is used, so Identity doesn't have to run locally.
+        /// </summary>
+        public WebApplicationBuilder AddIdentityServices()
+        {
+            builder.Services
+                .AddOptions<IdentityOptions>()
+                .Bind(builder.Configuration.GetSection(nameof(IdentityOptions)));
+
+            builder.Services
+                .AddGrpcClient<UserIdentityService.UserIdentityServiceClient>((sp, o) =>
+                {
+                    o.Address = new Uri(sp.GetRequiredService<IOptions<IdentityOptions>>().Value.GrpcUrl);
+                })
+                .AddInterceptor(() => new ServiceIdInterceptor(ServiceId.LearnLanguage));
+
+            if (builder.Configuration.GetValue<bool>("MockExternalServices"))
+            {
+                builder.Services
+                    .AddSingleton<UserIdentityService.UserIdentityServiceClient, FakeUserIdentityServiceClient>();
+            }
+
+            builder.Services.AddScoped<GlobalUserIdBackfill>();
+
+            return builder;
+        }
+
         public WebApplicationBuilder AddApplicationServices()
         {
             builder.Services

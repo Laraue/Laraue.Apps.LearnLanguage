@@ -4,6 +4,8 @@
     <PackageReference Include="Laraue.Core.DataAccess.Linq2DB" Version="$(LaraueCoreDataAccessVersion)" />
     <PackageReference Include="Laraue.Core.DataAccess.EFCore" Version="$(LaraueCoreDataAccessVersion)" />
     <PackageReference Include="Laraue.Core.DateTime" Version="$(LaraueCoreDateTimeVersion)" />
+    <PackageReference Include="Laraue.Apps.Identity.Internal.Contracts" Version="$(LaraueIdentityInternalContractsVersion)" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="$(GrpcNetClientFactoryVersion)" />
     <PackageReference Include="Laraue.Telegram.NET.Core" Version="$(LaraueTelegramNetVersion)" />
     <PackageReference Include="Laraue.Telegram.NET.DataAccess" Version="$(LaraueTelegramNetVersion)" />
     <PackageReference Include="Laraue.Telegram.NET.Localization" Version="$(LaraueTelegramNetVersion)" />

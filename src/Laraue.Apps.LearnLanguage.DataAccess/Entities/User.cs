@@ -12,6 +12,12 @@ public sealed class User : ITelegramUser<Guid>
     /// <inheritdoc />
     public Guid Id { get; set; }
     
+    /// <summary>
+    /// The global Laraue user id from Laraue.Apps.Identity. An additional key, <see cref="Id"/> is still
+    /// the one other tables reference.
+    /// </summary>
+    public Guid GlobalUserId { get; set; }
+
     /// <inheritdoc />
     public long TelegramId { get; set; }
     

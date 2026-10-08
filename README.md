@@ -25,11 +25,15 @@ to learn preffered words first of all.
 2. Create file `appsettings.Development.json` in the project `Laraue.Apps.LearnLanguage.Host` and fill it with taken telegram token
 ```json
 {
+    "MockExternalServices": true,
     "Telegram": {
         "Token": "tg_token"
     }
 }
 ```
+`MockExternalServices` substitutes an in-process fake for Laraue.Apps.Identity (users get a random global id). Without it, set `IdentityOptions:GrpcUrl` to a running Identity instance.
+
+On startup the host applies the `AddGlobalUserId` migration, backfills the global id of existing users through Identity (restartable, throttled; no-op once everyone has an id), then applies the rest of the migrations.
 3. Run `Laraue.Apps.LearnLanguage.Host`. Write `/start` to your bot and wait for answer.
 
 ## License
