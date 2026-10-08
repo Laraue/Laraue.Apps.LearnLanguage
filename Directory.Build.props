@@ -17,13 +17,16 @@
   
   <PropertyGroup>
     <Linq2DbVersion>6.3.0</Linq2DbVersion>
-    <LaraueTelegramNetVersion>4.9.1</LaraueTelegramNetVersion>
+    <LaraueTelegramNetVersion>5.0.1</LaraueTelegramNetVersion>
     <LaraueCoreDataAccessVersion>10.8.0</LaraueCoreDataAccessVersion>
     <LaraueCoreDateTimeVersion>10.0.0</LaraueCoreDateTimeVersion>
     <EfCoreVersion>10.0.0</EfCoreVersion>
     <NpgsqlEfCoreVersion>10.0.0</NpgsqlEfCoreVersion>
     <EfCoreNamingConventionsVersion>10.0.1</EfCoreNamingConventionsVersion>
     <LaraueCoreOllamaVersion>1.0.0</LaraueCoreOllamaVersion>
+    <LaraueIdentityInternalContractsVersion>0.0.6</LaraueIdentityInternalContractsVersion>
+    <GrpcNetClientFactoryVersion>2.66.0</GrpcNetClientFactoryVersion>
+    <LaraueGrpcVersion>0.0.3</LaraueGrpcVersion>
     <TelegramBotVersion>22.7.0</TelegramBotVersion>
     <OpenTelemetryExtensionsHostingVersion>1.18.0</OpenTelemetryExtensionsHostingVersion>
     <OpenTelemetryExporterPrometheusAspNetCoreVersion>1.18.0-beta.1</OpenTelemetryExporterPrometheusAspNetCoreVersion>

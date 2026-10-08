@@ -1,4 +1,6 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices.Services;
+﻿using Laraue.Apps.Identity.Internal.Contracts;
+using Laraue.Apps.LearnLanguage.AppServices.Identity;
+using Laraue.Apps.LearnLanguage.AppServices.Services;
 using Laraue.Apps.LearnLanguage.Host;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -20,11 +22,14 @@ public class IntegrationTest
             
         builder
             .AddTelegramOptions("Telegram")
+            .AddIdentityServices()
             .AddApplicationServices()
             .AddDatabaseServices("Postgre");
         
         var appServices = builder
             .Services
+            .Replace(
+                ServiceDescriptor.Singleton<UserIdentityService.UserIdentityServiceClient, FakeUserIdentityServiceClient>())
             .Replace(
                 new ServiceDescriptor(
                     typeof(IRandomizer), 
