@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Laraue.Apps.LearnLanguage.AppServices.Extensions;
+using Laraue.Apps.LearnLanguage.AppServices.Metrics;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Resources;
 using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes;
@@ -24,7 +25,8 @@ public class QuizService(
     ISelectLanguageService selectLanguageService,
     ITelegramBotClient client,
     DatabaseContext context,
-    IQuestionsGenerator questionsGenerator)
+    IQuestionsGenerator questionsGenerator,
+    LearnLanguageMetrics metrics)
     : IQuizService
 {
     private const long NullOptionId = 0;
@@ -252,6 +254,8 @@ public class QuizService(
             await repository.SaveQuizQuestionsAsync(quizId, questions, ct);
         
             await transaction.CommitAsync(ct);
+
+            metrics.RecordQuizStarted();
         }
         
         await OpenNextQuizQuestionWindowAsync(
@@ -500,6 +504,7 @@ public class QuizService(
         CancellationToken ct = default)
     {
         await repository.SetQuizFinished(quizId, ct);
+        metrics.RecordQuizFinished();
         var learnStat = await repository.GetLearnStatAsync(
             replyData.UserId,
             languageId,
@@ -593,6 +598,7 @@ public class QuizService(
                 : UserQuizQuestionStatus.Incorrect;
         
         await repository.SetQuizQuestionStatus(currentQuestion.QuestionId, status, ct);
+        metrics.RecordQuizAnswer(status);
 
         var increaseWinStreak = status == UserQuizQuestionStatus.Correct;
         await repository.UpdateTranslationWinStreakAsync(

@@ -1,6 +1,7 @@
 ﻿using Laraue.Apps.Identity.Internal.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.AppServices.Identity;
+using Laraue.Apps.LearnLanguage.AppServices.Metrics;
 using Laraue.Apps.LearnLanguage.AppServices.Options;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
@@ -94,6 +95,8 @@ public static class WebApplicationBuilderExtensions
             builder.Services
                 .AddSingleton<IDateTimeProvider, DateTimeProvider>()
                 .AddSingleton<IRandomizer, Randomizer>()
+                .AddMetrics()
+                .AddSingleton<LearnLanguageMetrics>()
                 .AddTelegramCore()
                 .AddEfCoreUpdatesQueue<DatabaseContext>()
                 .AddTelegramMiddleware<HandleExceptionsMiddleware>()

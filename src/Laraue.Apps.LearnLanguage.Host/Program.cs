@@ -1,6 +1,8 @@
 ﻿using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Core.DataAccess.Linq2DB.Extensions;
+using Laraue.Apps.LearnLanguage.AppServices.Metrics;
 using Laraue.Telegram.NET.Core.Extensions;
+using Laraue.Telegram.NET.Core.Telemetry;
 using Microsoft.EntityFrameworkCore;
 using Laraue.Apps.LearnLanguage.Host;
 using OpenTelemetry.Metrics;
@@ -16,6 +18,7 @@ builder
     .AddDatabaseServices(dbConnectionStringName);
 
 builder.Services.AddHealthChecks();
+builder.Services.AddHostedService<LearnLanguageStateMetrics>();
 builder.Logging.ClearProviders().AddJsonConsole();
 
 builder.Services
@@ -24,6 +27,7 @@ builder.Services
         .AddAspNetCoreInstrumentation()
         .AddHttpClientInstrumentation()
         .AddRuntimeInstrumentation()
+        .AddMeter(LearnLanguageMetrics.MeterName, LaraueTelegramTelemetry.SourceName)
         .AddPrometheusExporter());
 
 var app = builder.Build();
