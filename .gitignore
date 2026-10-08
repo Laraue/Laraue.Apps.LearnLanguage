@@ -239,3 +239,5 @@ _Pvt_Extensions
 .fake/
 
 .local-chromium
+# Local settings (may contain secrets)
+appsettings.Development.json
