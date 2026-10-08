@@ -15,8 +15,9 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                 name: "global_user_id",
                 table: "users",
                 type: "uuid",
+                // No default on purpose: this must fail, not fill zeros, while a user still has no
+                // global id (the backfill runs before this migration).
                 nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"),
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
                 oldNullable: true);

@@ -1,4 +1,4 @@
-# Laraue.Apps.LearnLanguage
+﻿# Laraue.Apps.LearnLanguage
 
 The repository contains the backend of Telegram bot allows to learn translations of the top 5000+ most used english words
 passing quizes. Deployed bot can be found in [Telegram](https://t.me/learn_lang_bot?start=source-github).
@@ -32,8 +32,6 @@ to learn preffered words first of all.
 }
 ```
 `MockExternalServices` substitutes an in-process fake for Laraue.Apps.Identity (users get a random global id). Without it, set `IdentityOptions:GrpcUrl` to a running Identity instance.
-
-On startup the host applies the `AddGlobalUserId` migration, backfills the global id of existing users through Identity (restartable, throttled; no-op once everyone has an id), then applies the rest of the migrations.
 3. Run `Laraue.Apps.LearnLanguage.Host`. Write `/start` to your bot and wait for answer.
 
 ## License
