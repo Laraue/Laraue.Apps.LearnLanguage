@@ -86,8 +86,6 @@ public static class WebApplicationBuilderExtensions
                     .AddSingleton<UserIdentityService.UserIdentityServiceClient, FakeUserIdentityServiceClient>();
             }
 
-            builder.Services.AddScoped<GlobalUserIdBackfill>();
-
             return builder;
         }
 

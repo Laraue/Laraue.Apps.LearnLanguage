@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Identity;
 
@@ -13,15 +13,4 @@ public class IdentityOptions
     [Required]
     [Url]
     public required string GrpcUrl { get; set; }
-
-    /// <summary>
-    /// How many users without a global id the backfill loads and processes per batch.
-    /// </summary>
-    [Range(1, 10_000)]
-    public int BackfillBatchSize { get; set; } = 100;
-
-    /// <summary>
-    /// Pause between two Identity calls of the backfill, so Identity is not flooded.
-    /// </summary>
-    public TimeSpan BackfillThrottle { get; set; } = TimeSpan.FromMilliseconds(50);
 }

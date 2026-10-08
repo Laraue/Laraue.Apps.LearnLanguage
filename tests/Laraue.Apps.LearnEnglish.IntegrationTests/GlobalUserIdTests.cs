@@ -26,8 +26,6 @@ public class GlobalUserIdTests : IAsyncLifetime
 
         var builder = WebApplication.CreateBuilder();
         builder.Configuration.AddJsonFile("appsettings.json");
-        builder.Configuration["IdentityOptions:BackfillThrottle"] = "00:00:00";
-        builder.Configuration["IdentityOptions:BackfillBatchSize"] = "2";
         builder
             .AddTelegramOptions("Telegram")
             .AddIdentityServices()
@@ -48,10 +46,6 @@ public class GlobalUserIdTests : IAsyncLifetime
         {
             var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
             await db.Users.ExecuteDeleteAsync();
-            // Restore what the backfill test relaxed.
-            await db.Database.ExecuteSqlRawAsync("ALTER TABLE users ALTER COLUMN global_user_id SET NOT NULL");
-            await db.Database.ExecuteSqlRawAsync(
-                "CREATE UNIQUE INDEX IF NOT EXISTS ix_users_global_user_id ON users (global_user_id)");
         }
 
         await _provider.DisposeAsync();
@@ -84,48 +78,6 @@ public class GlobalUserIdTests : IAsyncLifetime
 
         var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
         Assert.False(await db.Users.AnyAsync());
-    }
-
-    [Fact]
-    public async Task Backfill_FillsOnlyUsersWithoutId_AndIsSafeToRunTwice()
-    {
-        var existingGlobalId = Guid.NewGuid();
-        using (var scope = _provider.CreateScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-            // Put the table into the state of the nullable column: no required constraint, no unique index.
-            await db.Database.ExecuteSqlRawAsync("DROP INDEX IF EXISTS ix_users_global_user_id");
-            await db.Database.ExecuteSqlRawAsync("ALTER TABLE users ALTER COLUMN global_user_id DROP NOT NULL");
-
-            for (var telegramId = 1; telegramId <= 5; telegramId++)
-            {
-                await db.Database.ExecuteSqlInterpolatedAsync(
-                    $"""
-                     INSERT INTO users (id, telegram_id, created_at, global_user_id, words_template_mode, show_words_mode)
-                     VALUES ({Guid.NewGuid()}, {telegramId}, now(), {(telegramId == 1 ? existingGlobalId : null)}, 0, 0)
-                     """);
-            }
-        }
-
-        var first = await RunBackfillAsync();
-        var second = await RunBackfillAsync();
-
-        Assert.Equal(4, first);
-        Assert.Equal(0, second);
-        Assert.DoesNotContain(1L, _identity.Requests.Select(r => r.TelegramId));
-        Assert.Equal(4, _identity.Requests.Count);
-
-        using var verify = _provider.CreateScope();
-        var users = await verify.ServiceProvider.GetRequiredService<DatabaseContext>()
-            .Users.AsNoTracking().ToListAsync();
-        Assert.Equal(existingGlobalId, users.Single(u => u.TelegramId == 1).GlobalUserId);
-        Assert.All(users.Where(u => u.TelegramId != 1), u => Assert.Equal(_identity.GlobalIdOf(u.TelegramId), u.GlobalUserId));
-    }
-
-    private async Task<int> RunBackfillAsync()
-    {
-        using var scope = _provider.CreateScope();
-        return await scope.ServiceProvider.GetRequiredService<GlobalUserIdBackfill>().RunAsync(default);
     }
 
     private class RecordingIdentityClient : FakeUserIdentityServiceClient
