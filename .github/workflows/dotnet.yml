@@ -74,9 +74,9 @@ jobs:
        user: ${{ secrets.SSH_USER }} # "user"
        password: ${{ secrets.SSH_PASSWORD }} # "password"
        local: laraue.tar.gz
-       remote: "/home/laraue/backend-learn-language"
+       remote: "/home/laraue/learn-language-telegram-host"
        post_upload: |-
-        cd /home/laraue/backend-learn-language && find . -mindepth 1 ! -name laraue.tar.gz -delete &&
+        cd /home/laraue/learn-language-telegram-host && find . -mindepth 1 ! -name laraue.tar.gz -delete &&
         tar -xzf laraue.tar.gz && rm laraue.tar.gz
 
     - name: Build container
@@ -88,8 +88,8 @@ jobs:
        password: ${{ secrets.SSH_PASSWORD }}
        script: |
         set -e
-        cd /home/laraue && docker compose build backendlearnlanguage
-        docker compose up -d --force-recreate backendlearnlanguage
+        cd /home/laraue && docker compose build learn-language-telegram-host
+        docker compose up -d --force-recreate learn-language-telegram-host
 
     - name: Notify deploy finished
       if: success()
