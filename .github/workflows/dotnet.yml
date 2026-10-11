@@ -59,7 +59,7 @@ jobs:
       run: |
         curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d text="🚀 Deploy started: Learn Language Host (${{ github.sha }})"
+          -d text="🚀 Deploy started: Learn Language Telegram Host (${{ github.sha }})"
 
     - name: Download artifact
       uses: actions/download-artifact@v4
@@ -74,9 +74,9 @@ jobs:
        user: ${{ secrets.SSH_USER }} # "user"
        password: ${{ secrets.SSH_PASSWORD }} # "password"
        local: laraue.tar.gz
-       remote: "/home/laraue/backend-learn-language"
+       remote: "/home/laraue/learn-language-telegram-host"
        post_upload: |-
-        cd /home/laraue/backend-learn-language && find . -mindepth 1 ! -name laraue.tar.gz -delete &&
+        cd /home/laraue/learn-language-telegram-host && find . -mindepth 1 ! -name laraue.tar.gz -delete &&
         tar -xzf laraue.tar.gz && rm laraue.tar.gz
 
     - name: Build container
@@ -88,19 +88,19 @@ jobs:
        password: ${{ secrets.SSH_PASSWORD }}
        script: |
         set -e
-        cd /home/laraue && docker compose build backendlearnlanguage
-        docker compose up -d --force-recreate backendlearnlanguage
+        cd /home/laraue && docker compose build learn-language-telegram-host
+        docker compose up -d --force-recreate learn-language-telegram-host
 
     - name: Notify deploy finished
       if: success()
       run: |
         curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d text="✅ Deploy finished: Learn Language Host (${{ github.sha }})"
+          -d text="✅ Deploy finished: Learn Language Telegram Host (${{ github.sha }})"
 
     - name: Notify deploy failed
       if: failure()
       run: |
         curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d text="❌ Deploy failed: Learn Language Host (${{ github.sha }})"
+          -d text="❌ Deploy failed: Learn Language Telegram Host (${{ github.sha }})"
