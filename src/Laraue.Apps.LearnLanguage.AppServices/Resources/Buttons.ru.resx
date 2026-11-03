@@ -44,4 +44,7 @@
     <data name="ReleaseNotes" xml:space="preserve">
         <value>📋 Список изменений (en)</value>
     </data>
+    <data name="StartFirstQuiz" xml:space="preserve">
+        <value>▶️ Начать: {0} простых слов</value>
+    </data>
 </root>

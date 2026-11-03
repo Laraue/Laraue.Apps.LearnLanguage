@@ -20,13 +20,13 @@ public class StartController(IMenuService service) : TelegramController
             cancellationToken);
     }
     
-    [TelegramCallbackRoute(TelegramRoutes.Start, RouteMethod.Post)]
-    public Task ApplyStartSettingsAsync(
+    [TelegramCallbackRoute(TelegramRoutes.StartFirstQuiz, RouteMethod.Post)]
+    public Task StartFirstQuizAsync(
         RequestContext context,
-        [FromQuery] ApplyStartSettingsRequest request,
+        [FromQuery] StartQuizRequest request,
         CancellationToken cancellationToken)
     {
-        return service.HandleApplyStartSettingsAsync(
+        return service.StartFirstQuizAsync(
             request,
             ReplyData.FromRequest(context),
             cancellationToken);

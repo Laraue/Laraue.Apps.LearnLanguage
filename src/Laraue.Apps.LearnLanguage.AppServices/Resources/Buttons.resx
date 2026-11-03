@@ -51,4 +51,7 @@
     <data name="Back" xml:space="preserve">
         <value>← Back</value>
     </data>
+    <data name="StartFirstQuiz" xml:space="preserve">
+        <value>▶️ Start: {0} easy words</value>
+    </data>
 </root>

@@ -23,8 +23,12 @@ public interface IMenuService
         long telegramId,
         CancellationToken ct = default);
 
-    Task HandleApplyStartSettingsAsync(
-        ApplyStartSettingsRequest request,
+    /// <summary>
+    /// Handle the first quiz button of the start message: save the chosen language pair as the default one when
+    /// none is set, and show the first question.
+    /// </summary>
+    Task StartFirstQuizAsync(
+        StartQuizRequest request,
         ReplyData replyData,
         CancellationToken ct = default);
 }

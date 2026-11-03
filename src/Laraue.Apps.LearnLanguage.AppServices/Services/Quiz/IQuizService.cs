@@ -32,6 +32,15 @@ public interface IQuizService
         StartQuizRequest startQuizRequest,
         CancellationToken ct = default);
 
+    /// <summary>
+    /// Start the short and easy first quiz of a new user and show its first question. If the user already had a
+    /// quiz, starts a regular one.
+    /// </summary>
+    Task StartFirstQuizAsync(
+        ReplyData replyData,
+        long languageToLearnId,
+        CancellationToken ct = default);
+
     Task SelectQuizAnswerAsync(
         ReplyData replyData,
         SelectQuizAnswerRequest request,

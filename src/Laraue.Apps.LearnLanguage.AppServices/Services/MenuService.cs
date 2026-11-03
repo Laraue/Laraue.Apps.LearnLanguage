@@ -1,5 +1,6 @@
 ﻿using Laraue.Apps.LearnLanguage.AppServices.Extensions;
 using Laraue.Apps.LearnLanguage.AppServices.Options;
+using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Resources;
 using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Quiz;
@@ -64,8 +65,16 @@ public class MenuService(
         // Send welcome message
         var tmb = new TelegramMessageBuilder()
             .AppendRow(Menu.Start);
-        
-        AppendMainMenuButtons(tmb);
+
+        var isNewUser = !await databaseContext.UserQuizzes.AnyAsync(q => q.UserId == userId, ct);
+        if (isNewUser)
+        {
+            await AppendFirstQuizButtonsAsync(tmb, userId, ct);
+        }
+        else
+        {
+            AppendMainMenuButtons(tmb);
+        }
 
         await client.SendTextMessageAsync(
             telegramId,
@@ -73,19 +82,55 @@ public class MenuService(
             cancellationToken: ct);
     }
 
-    public async Task HandleApplyStartSettingsAsync(
-        ApplyStartSettingsRequest request,
+    public async Task StartFirstQuizAsync(
+        StartQuizRequest request,
         ReplyData replyData,
         CancellationToken ct = default)
     {
-        if (request.LanguageToLearnId is not null)
+        var languageToLearnId = request.LanguageToLearnId!.Value;
+
+        // The language picked here becomes the default pair, so the user isn't asked again.
+        await databaseContext.Users
+            .Where(u => u.Id == replyData.UserId && u.LanguageToLearnId == null)
+            .ExecuteUpdateAsync(u => u
+                .SetProperty(p => p.LanguageToLearnId, languageToLearnId), ct);
+
+        await quizService.StartFirstQuizAsync(replyData, languageToLearnId, ct);
+    }
+
+    /// <summary>
+    /// A new user gets one button to the first question: the first quiz in their default language pair, or a
+    /// button per pair when it isn't known. The menu stays available.
+    /// </summary>
+    private async Task AppendFirstQuizButtonsAsync(
+        TelegramMessageBuilder tmb,
+        Guid userId,
+        CancellationToken ct)
+    {
+        var languageToLearnId = await databaseContext.Users
+            .Where(u => u.Id == userId)
+            .Select(u => u.LanguageToLearnId)
+            .FirstOrDefaultAsync(ct);
+
+        var route = new CallbackRoutePath(TelegramRoutes.StartFirstQuiz, RouteMethod.Post);
+
+        tmb.AppendRow();
+        if (languageToLearnId is not null)
         {
-            await databaseContext.Users.Where(u => u.Id == replyData.UserId)
-                .ExecuteUpdateAsync(u => u
-                    .SetProperty(p => p.LanguageToLearnId, request.LanguageToLearnId), ct);
+            tmb.AppendRow(string.Format(Menu.FirstQuizOffer, QuizService.FirstQuizQuestionsCount));
+            tmb.AddInlineKeyboardButtons([
+                InlineKeyboardButton.WithCallbackData(
+                    string.Format(Buttons.StartFirstQuiz, QuizService.FirstQuizQuestionsCount),
+                    route.WithTranslationDirection(new SelectedTranslation(languageToLearnId)))
+            ]);
+        }
+        else
+        {
+            tmb.AppendRow(string.Format(Menu.FirstQuizSelectLanguage, QuizService.FirstQuizQuestionsCount));
+            await selectLanguageService.AppendLanguagePairButtonsAsync(tmb, route, ct);
         }
 
-        await quizService.OpenQuizWindowAsync(replyData, new QuizRequest(), ct);
+        tmb.AddMainMenuButton();
     }
 
     private async Task ProcessUtmLabels(

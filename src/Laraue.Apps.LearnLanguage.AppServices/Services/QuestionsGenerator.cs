@@ -77,12 +77,14 @@ public class QuestionsGenerator(
             .ToListAsyncEF(ct);
         
         var newQuestionsCount = questionsCount - oldQuestions.Count - repeatQuestions.Count;
+        // New for this user: no learned translation of theirs, whatever other users have met.
         var newQuestionsQuery = context.Translations
             .LeftJoin(
                 context.LearnedTranslations,
                 (translation, learnedTranslation) => 
                     translation.LanguageId == learnedTranslation.LanguageId 
-                    && translation.WordId == learnedTranslation.WordId,
+                    && translation.WordId == learnedTranslation.WordId
+                    && learnedTranslation.UserId == userId,
                 (translation, learnedTranslation) => new { translation, learnedTranslation })
             .Where(x => x.translation.LanguageId == languageId)
             .Where(x => x.learnedTranslation == null);

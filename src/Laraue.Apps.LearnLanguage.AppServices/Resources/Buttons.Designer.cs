@@ -157,5 +157,14 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("Stat", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ▶️ Start: {0} easy words.
+        /// </summary>
+        public static string StartFirstQuiz {
+            get {
+                return ResourceManager.GetString("StartFirstQuiz", resourceCulture);
+            }
+        }
     }
 }

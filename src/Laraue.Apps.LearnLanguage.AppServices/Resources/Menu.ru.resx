@@ -19,4 +19,10 @@
 бесплатно, без регистрации, на любом 
 устройстве.</value>
     </data>
+    <data name="FirstQuizOffer" xml:space="preserve">
+        <value>Начнём сразу: {0} простых слов. Для каждого выберите правильный перевод.</value>
+    </data>
+    <data name="FirstQuizSelectLanguage" xml:space="preserve">
+        <value>Выберите язык перевода, и сразу начнём с {0} простых слов.</value>
+    </data>
 </root>

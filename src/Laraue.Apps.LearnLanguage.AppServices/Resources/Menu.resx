@@ -25,4 +25,10 @@ Learn the most common English words
 through short daily quizzes — free, 
 no signup, works on any device.</value>
     </data>
+    <data name="FirstQuizOffer" xml:space="preserve">
+        <value>Let's start right away: {0} easy words. Pick the right translation for each one.</value>
+    </data>
+    <data name="FirstQuizSelectLanguage" xml:space="preserve">
+        <value>Choose the language of the translations, and the first {0} easy words will start right away.</value>
+    </data>
 </root>

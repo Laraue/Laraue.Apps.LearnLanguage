@@ -35,6 +35,7 @@ public class TelegramUserQueryService(DatabaseContext context, UserIdentityServi
         var user = new User
         {
             GlobalUserId = globalUserId,
+            LanguageToLearnId = await FindLanguageToLearnIdAsync(telegramData.LanguageCode, cancellationToken),
             TelegramId = telegramData.Id,
             TelegramUserName = telegramData.Username,
             TelegramLanguageCode = telegramData.LanguageCode,
@@ -48,5 +49,24 @@ public class TelegramUserQueryService(DatabaseContext context, UserIdentityServi
         await context.SaveChangesAsync(cancellationToken);
 
         return user.Id;
+    }
+
+    /// <summary>
+    /// The default language pair for a new user: English → the language of their Telegram app, when we have
+    /// translations to it. English speakers and unknown languages choose the pair themselves.
+    /// </summary>
+    private async Task<long?> FindLanguageToLearnIdAsync(string? telegramLanguageCode, CancellationToken ct)
+    {
+        // An IETF tag like "pt-br" or "zh-hans"; only the language part matters here.
+        var code = telegramLanguageCode?.Split('-')[0].ToLowerInvariant();
+        if (string.IsNullOrEmpty(code) || code == "en")
+        {
+            return null;
+        }
+
+        return await context.Translations
+            .Where(t => t.Language.Name == code)
+            .Select(t => (long?)t.LanguageId)
+            .FirstOrDefaultAsyncEF(ct);
     }
 }
