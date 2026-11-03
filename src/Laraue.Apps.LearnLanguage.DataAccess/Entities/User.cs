@@ -31,9 +31,9 @@ public sealed class User
     public string? TelegramUserName { get; set; }
     
     /// <summary>
-    /// Telegram user language code, e.g "ru", "en".
+    /// Telegram user language code, an IETF language tag, e.g "ru", "en", "pt-br".
     /// </summary>
-    [MaxLength(2)]
+    [MaxLength(35)]
     public string? TelegramLanguageCode { get; set; }
 
     /// <summary>
