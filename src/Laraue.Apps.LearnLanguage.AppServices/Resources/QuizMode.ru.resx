@@ -114,4 +114,7 @@
     <data name="Selected" xml:space="preserve">
         <value>Выбрано: {0}</value>
     </data>
+    <data name="InProgress" xml:space="preserve">
+        <value>🔶 Начато изучение слов: +{0}. Слово выучено после 3 правильных ответов подряд.</value>
+    </data>
 </root>

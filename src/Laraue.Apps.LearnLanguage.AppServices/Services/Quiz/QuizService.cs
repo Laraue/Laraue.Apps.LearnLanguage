@@ -36,6 +36,13 @@ public class QuizService(
     // TODO - use settings to setup
     private const int QuestionsCount = 20;
     private const int OptionsCount = 8;
+
+    /// <summary>
+    /// The first quiz of a new user is short and easy, so it is finished and ends with something learned.
+    /// </summary>
+    public const int FirstQuizQuestionsCount = 6;
+    private const int FirstQuizOptionsCount = 4;
+    private const string FirstQuizCefrLevel = "A1";
     
     /// <summary>
     /// Handle any request related to quiz. If quiz is started handle answers, otherwise handle new quiz window.
@@ -232,17 +239,10 @@ public class QuizService(
     {
         if (!await HasActiveQuizAsync(replyData.UserId, ct))
         {
-            await using var transaction = await context.Database.BeginTransactionAsync(ct);
-
             var topicData = await repository.GetUserQuizTopicsAsync(replyData.UserId, ct);
             var cefrLevelData = await repository.GetUserCefrLevelsAsync(replyData.UserId, ct);
-            
-            var quizId = await repository.CreateQuizAsync(
-                replyData.UserId,
-                startQuizRequest.LanguageToLearnId!.Value,
-                ct);
-        
-            var questions = await questionsGenerator.GenerateQuestions(
+
+            await CreateQuizAsync(
                 replyData.UserId,
                 startQuizRequest.LanguageToLearnId!.Value,
                 topicData.Select(x => x.Id).ToArray(),
@@ -250,18 +250,72 @@ public class QuizService(
                 QuestionsCount,
                 OptionsCount,
                 ct);
-
-            await repository.SaveQuizQuestionsAsync(quizId, questions, ct);
-        
-            await transaction.CommitAsync(ct);
-
-            metrics.RecordQuizStarted();
         }
         
         await OpenNextQuizQuestionWindowAsync(
             replyData,
             previousAnswerResult: null,
             ct);
+    }
+
+    public async Task StartFirstQuizAsync(
+        ReplyData replyData,
+        long languageToLearnId,
+        CancellationToken ct = default)
+    {
+        if (await context.UserQuizzes.AnyAsync(q => q.UserId == replyData.UserId, ct))
+        {
+            // Not the first one (e.g. the start message was tapped twice), start a regular quiz.
+            await StartNewQuizAsync(
+                replyData,
+                new StartQuizRequest { LanguageToLearnId = languageToLearnId },
+                ct);
+            
+            return;
+        }
+
+        await CreateQuizAsync(
+            replyData.UserId,
+            languageToLearnId,
+            topicIds: [],
+            cefrLevelIds: [DefaultContextData.CefrLevels.GetId(FirstQuizCefrLevel)],
+            FirstQuizQuestionsCount,
+            FirstQuizOptionsCount,
+            ct);
+        
+        await OpenNextQuizQuestionWindowAsync(
+            replyData,
+            previousAnswerResult: null,
+            ct);
+    }
+
+    private async Task CreateQuizAsync(
+        Guid userId,
+        long languageToLearnId,
+        long[] topicIds,
+        long[] cefrLevelIds,
+        int questionsCount,
+        int optionsCount,
+        CancellationToken ct)
+    {
+        await using var transaction = await context.Database.BeginTransactionAsync(ct);
+
+        var quizId = await repository.CreateQuizAsync(userId, languageToLearnId, ct);
+
+        var questions = await questionsGenerator.GenerateQuestions(
+            userId,
+            languageToLearnId,
+            topicIds,
+            cefrLevelIds,
+            questionsCount,
+            optionsCount,
+            ct);
+
+        await repository.SaveQuizQuestionsAsync(quizId, questions, ct);
+
+        await transaction.CommitAsync(ct);
+
+        metrics.RecordQuizStarted();
     }
 
     public async Task FinishQuizAsync(ReplyData replyData, CancellationToken ct = default)
@@ -556,6 +610,14 @@ public class QuizService(
 
         if (learnedInSessionCount > 0)
             tmb.AppendRow($"{QuizMode.Learned}: +{learnedInSessionCount} {QuizMode.Meanings}");
+
+        // A word needs several quizzes to be learned, so show the words that moved towards it as well.
+        var inProgressInSessionCount = lastQuizQuestions
+            .Where(q => q.Status == UserQuizQuestionStatus.Correct)
+            .Count(q => q.LearnedAttempts < WinStreakToLearn);
+
+        if (inProgressInSessionCount > 0)
+            tmb.AppendRow(string.Format(QuizMode.InProgress, inProgressInSessionCount));
             
         tmb
             .AppendRow(CommonStrings.Divider)
