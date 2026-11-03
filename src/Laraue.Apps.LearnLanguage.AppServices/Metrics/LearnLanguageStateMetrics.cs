@@ -48,6 +48,19 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
     /// </summary>
     private static readonly TimeSpan ReminderFollowUp = TimeSpan.FromHours(24);
 
+    /// <summary>
+    /// The most common Telegram languages of new users get their own label value, the rest are "other".
+    /// </summary>
+    private const int MaxTelegramLanguages = 10;
+
+    /// <summary>
+    /// Words are English, so English speakers have no pair "of their own"; their language is reported as
+    /// supported="source".
+    /// </summary>
+    private const string SourceLanguage = "en";
+
+    private const string UnknownLanguage = "unknown";
+
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ILogger<LearnLanguageStateMetrics> _logger;
@@ -122,7 +135,41 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
                 new KeyValuePair<string, object?>("outcome", x.Outcome))),
             description: "Reminders sent in the last 7 and 30 days, by kind, and how many of them were followed " +
                 "(outcome=followed) by a quiz started or a question answered within 24 hours.");
+
+        meter.CreateObservableGauge(
+            "learnlanguage.active_users_by_language",
+            () => Measurements(_snapshot.Languages.ActiveUsers),
+            description: "Distinct users who started a quiz or answered a question in the last day, 7 days and 30 " +
+                "days, by the language pair of the quiz (language is the translation language, e.g. ru for " +
+                "English -> Russian). A user practising two pairs is counted in both.");
+
+        meter.CreateObservableGauge(
+            "learnlanguage.quizzes_started_by_language",
+            () => Measurements(_snapshot.Languages.QuizzesStarted),
+            description: "Quizzes started in the last day, 7 days and 30 days, by language pair.");
+
+        meter.CreateObservableGauge(
+            "learnlanguage.words_learned_by_language",
+            () => Measurements(_snapshot.Languages.WordsLearned),
+            description: "Translations learned in the last day, 7 days and 30 days, by language pair.");
+
+        meter.CreateObservableGauge(
+            "learnlanguage.users_by_language_pair",
+            () => Measurements(_snapshot.Languages.UsersByPair),
+            description: "Users by their default language pair, none when it isn't set. New users get the pair " +
+                "of their Telegram language, so compare with active_users_by_language for what is really used.");
+
+        meter.CreateObservableGauge(
+            "learnlanguage.new_users_by_telegram_language",
+            () => Measurements(_snapshot.Languages.NewUsersByTelegramLanguage),
+            description: "Users who signed up in the last 7 and 30 days, by the language of their Telegram app " +
+                "(the language part of the IETF tag, unknown without one, other outside the top 10). supported " +
+                "is true when the bot has translations to it, false when not, source for English, unknown for unknown " +
+                "and other.");
     }
+
+    private static IEnumerable<Measurement<long>> Measurements(IEnumerable<LabeledValue> values)
+        => values.Select(x => new Measurement<long>(x.Count, x.Tags));
 
     private static IEnumerable<Measurement<long>> Measurements(IReadOnlyDictionary<string, long> values, string label)
         => values.Select(x => new Measurement<long>(x.Value, new KeyValuePair<string, object?>(label, x.Key)));
@@ -227,6 +274,8 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
             }
         }
 
+        var languages = await GetLanguageStatsAsync(context, now, cancellationToken);
+
         _snapshot = new Snapshot(
             users,
             activeUsers,
@@ -238,7 +287,8 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
             wordsLearnedInWindow,
             funnel,
             reminderSubscribers,
-            reminders);
+            reminders,
+            languages);
     }
 
     private static async Task<FunnelMeasurement[]> GetFunnelAsync(
@@ -354,6 +404,127 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
         }
     }
 
+    private static async Task<LanguageStats> GetLanguageStatsAsync(
+        DatabaseContext context,
+        DateTime now,
+        CancellationToken cancellationToken)
+    {
+        // The pairs the bot has translations for; each gets a value in every window, zeros included.
+        var pairs = await context.Translations
+            .Select(t => new { t.LanguageId, t.Language.Name })
+            .Distinct()
+            .ToDictionaryAsync(x => x.LanguageId, x => x.Name, cancellationToken);
+
+        var activeUsers = new List<LabeledValue>();
+        var quizzesStarted = new List<LabeledValue>();
+        var wordsLearned = new List<LabeledValue>();
+        foreach (var (label, window) in Windows)
+        {
+            var since = now - window;
+
+            var users = await context.UserQuizzes
+                .Where(q => q.CreatedAt >= since)
+                .Select(q => new { q.LanguageId, q.UserId })
+                .Union(context.UserQuizQuestions
+                    .Where(x => x.AnsweredAt >= since)
+                    .Select(x => new { x.Quiz.LanguageId, x.Quiz.UserId }))
+                .GroupBy(x => x.LanguageId)
+                .Select(g => new { LanguageId = g.Key, Count = g.LongCount() })
+                .ToDictionaryAsync(x => x.LanguageId, x => x.Count, cancellationToken);
+
+            var quizzes = await context.UserQuizzes
+                .Where(q => q.CreatedAt >= since)
+                .GroupBy(q => q.LanguageId)
+                .Select(g => new { LanguageId = g.Key, Count = g.LongCount() })
+                .ToDictionaryAsync(x => x.LanguageId, x => x.Count, cancellationToken);
+
+            var learned = await context.LearnedTranslations
+                .Where(t => t.LearnedAt >= since)
+                .GroupBy(t => t.LanguageId)
+                .Select(g => new { LanguageId = g.Key, Count = g.LongCount() })
+                .ToDictionaryAsync(x => x.LanguageId, x => x.Count, cancellationToken);
+
+            foreach (var (languageId, name) in pairs)
+            {
+                activeUsers.Add(LabeledValue.Of(users.GetValueOrDefault(languageId), ("window", label), ("language", name)));
+                quizzesStarted.Add(LabeledValue.Of(quizzes.GetValueOrDefault(languageId), ("window", label), ("language", name)));
+                wordsLearned.Add(LabeledValue.Of(learned.GetValueOrDefault(languageId), ("window", label), ("language", name)));
+            }
+        }
+
+        var usersByPair = (await context.Users
+                .GroupBy(u => u.LanguageToLearnId)
+                .Select(g => new { LanguageId = g.Key, Count = g.LongCount() })
+                .ToListAsync(cancellationToken))
+            .Select(x => LabeledValue.Of(
+                x.Count,
+                ("language", x.LanguageId is { } id ? pairs.GetValueOrDefault(id, "unknown") : "none")))
+            .ToArray();
+
+        // A few hundred rows at most, so the language part of the tag is taken here rather than in SQL.
+        var widestWindow = FunnelWindows.Max(x => x.Window);
+        var newUsers = await context.Users
+            .Where(u => u.CreatedAt >= now - widestWindow)
+            .Select(u => new { u.CreatedAt, u.TelegramLanguageCode })
+            .ToListAsync(cancellationToken);
+
+        var newUserLanguages = newUsers
+            .Select(u => (
+                u.CreatedAt,
+                Language: string.IsNullOrEmpty(u.TelegramLanguageCode)
+                    ? UnknownLanguage
+                    : u.TelegramLanguageCode.Split('-')[0].ToLowerInvariant()))
+            .ToArray();
+
+        var topLanguages = newUserLanguages
+            .GroupBy(x => x.Language)
+            .OrderByDescending(g => g.Count())
+            .ThenBy(g => g.Key)
+            .Take(MaxTelegramLanguages)
+            .Select(g => g.Key)
+            .ToHashSet();
+
+        var supportedNames = pairs.Values.ToHashSet();
+        var newUsersByTelegramLanguage = FunnelWindows
+            .SelectMany(w => newUserLanguages
+                .Where(x => x.CreatedAt >= now - w.Window)
+                .GroupBy(x => topLanguages.Contains(x.Language) ? x.Language : OtherSource)
+                .Select(g => LabeledValue.Of(
+                    g.LongCount(),
+                    ("window", w.Label),
+                    ("telegram_language", g.Key),
+                    ("supported", g.Key switch
+                    {
+                        SourceLanguage => "source",
+                        UnknownLanguage or OtherSource => "unknown",
+                        _ => supportedNames.Contains(g.Key) ? "true" : "false",
+                    }))))
+            .ToArray();
+
+        return new LanguageStats(
+            activeUsers,
+            quizzesStarted,
+            wordsLearned,
+            usersByPair,
+            newUsersByTelegramLanguage);
+    }
+
+    private sealed record LabeledValue(long Count, KeyValuePair<string, object?>[] Tags)
+    {
+        public static LabeledValue Of(long count, params (string Key, string Value)[] tags) =>
+            new(count, tags.Select(t => new KeyValuePair<string, object?>(t.Key, t.Value)).ToArray());
+    }
+
+    private sealed record LanguageStats(
+        IReadOnlyList<LabeledValue> ActiveUsers,
+        IReadOnlyList<LabeledValue> QuizzesStarted,
+        IReadOnlyList<LabeledValue> WordsLearned,
+        IReadOnlyList<LabeledValue> UsersByPair,
+        IReadOnlyList<LabeledValue> NewUsersByTelegramLanguage)
+    {
+        public static readonly LanguageStats Empty = new([], [], [], [], []);
+    }
+
     private sealed record FunnelRow(
         string Source,
         long SignedUp,
@@ -375,7 +546,8 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
         IReadOnlyDictionary<string, long> WordsLearnedInWindow,
         IReadOnlyList<FunnelMeasurement> Funnel,
         long ReminderSubscribers,
-        IReadOnlyList<ReminderMeasurement> Reminders)
+        IReadOnlyList<ReminderMeasurement> Reminders,
+        LanguageStats Languages)
     {
         public static readonly Snapshot Empty = new(
             0,
@@ -386,6 +558,7 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
             new Dictionary<string, long>(),
             [],
             0,
-            []);
+            [],
+            LanguageStats.Empty);
     }
 }

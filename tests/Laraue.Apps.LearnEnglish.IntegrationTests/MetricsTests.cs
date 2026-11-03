@@ -252,6 +252,78 @@ public class MetricsTests : IAsyncLifetime
         Assert.Equal(0, reminders["30d/abandonedquiz/followed"]);
     }
 
+    [Fact]
+    public async Task StateMetrics_CountUsageAndSignUpsByLanguage()
+    {
+        var now = DateTime.UtcNow;
+        long ruId, deId;
+        using (var scope = _provider.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            ruId = await db.Languages.Where(l => l.Name == "ru").Select(l => l.Id).FirstAsync();
+            deId = await db.Languages.Where(l => l.Name == "de").Select(l => l.Id).FirstAsync();
+            var ruWord = await db.Translations.Where(t => t.LanguageId == ruId).OrderBy(t => t.WordId).FirstAsync();
+
+            // Practises English -> Russian today and learned a word.
+            var russian = NewUser(1, now.AddDays(-2));
+            russian.TelegramLanguageCode = "ru-RU";
+            russian.LanguageToLearnId = ruId;
+            // Practised German ten days ago and Russian today: counted in both pairs.
+            var german = NewUser(2, now.AddDays(-10));
+            german.TelegramLanguageCode = "de";
+            german.LanguageToLearnId = deId;
+            // Languages we have no pair for, or don't know.
+            var portuguese = NewUser(3, now.AddDays(-3));
+            portuguese.TelegramLanguageCode = "pt-br";
+            var english = NewUser(4, now.AddDays(-1));
+            english.TelegramLanguageCode = "en";
+            var noCode = NewUser(5, now.AddDays(-20));
+            db.Users.AddRange(russian, german, portuguese, english, noCode);
+            await db.SaveChangesAsync();
+
+            db.UserQuizzes.AddRange(
+                new UserQuiz { UserId = russian.Id, LanguageId = ruId, Status = UserQuizStatus.Active, CreatedAt = now },
+                new UserQuiz { UserId = german.Id, LanguageId = deId, Status = UserQuizStatus.Finished, CreatedAt = now.AddDays(-10) },
+                new UserQuiz { UserId = german.Id, LanguageId = ruId, Status = UserQuizStatus.Active, CreatedAt = now });
+            db.LearnedTranslations.Add(new LearnedTranslation
+            {
+                UserId = russian.Id,
+                WordId = ruWord.WordId,
+                LanguageId = ruId,
+                WinStreakCount = 3,
+                LearnedAt = now,
+            });
+            await db.SaveChangesAsync();
+        }
+
+        var measurements = await CollectStateAsync();
+
+        var active = measurements["learnlanguage.active_users_by_language"];
+        Assert.Equal(2, active["1d/ru"]);
+        Assert.Equal(0, active["1d/de"]);
+        Assert.Equal(0, active["7d/de"]);
+        Assert.Equal(1, active["30d/de"]);
+        Assert.Equal(0, active["30d/fr"]);
+        Assert.DoesNotContain("1d/en", active.Keys);
+
+        Assert.Equal(2, measurements["learnlanguage.quizzes_started_by_language"]["1d/ru"]);
+        Assert.Equal(1, measurements["learnlanguage.quizzes_started_by_language"]["30d/de"]);
+        Assert.Equal(1, measurements["learnlanguage.words_learned_by_language"]["1d/ru"]);
+
+        var byPair = measurements["learnlanguage.users_by_language_pair"];
+        Assert.Equal(1, byPair["ru"]);
+        Assert.Equal(1, byPair["de"]);
+        Assert.Equal(3, byPair["none"]);
+
+        var byTelegram = measurements["learnlanguage.new_users_by_telegram_language"];
+        Assert.Equal(1, byTelegram["7d/ru/true"]);
+        Assert.Equal(1, byTelegram["7d/pt/false"]);
+        Assert.Equal(1, byTelegram["7d/en/source"]);
+        Assert.DoesNotContain("7d/de/true", byTelegram.Keys);
+        Assert.Equal(1, byTelegram["30d/de/true"]);
+        Assert.Equal(1, byTelegram["30d/unknown/unknown"]);
+    }
+
     private async Task<Dictionary<string, Dictionary<string, long>>> CollectStateAsync()
     {
         var state = _provider.GetRequiredService<LearnLanguageStateMetrics>();
