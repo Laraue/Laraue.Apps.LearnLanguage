@@ -61,6 +61,8 @@ public static class WebApplicationBuilderExtensions
                 })
                 .AddLinq2Db();
 
+            builder.Services.AddScoped<DictionarySync>();
+
             return builder;
         }
         
