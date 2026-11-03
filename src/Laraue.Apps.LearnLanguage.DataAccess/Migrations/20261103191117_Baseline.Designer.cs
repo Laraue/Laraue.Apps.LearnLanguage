@@ -13,7 +13,7 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     [Migration("20261103191117_MoveDictionaryToSync")]
-    partial class MoveDictionaryToSync
+    partial class Baseline
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
