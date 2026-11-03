@@ -16,6 +16,7 @@ public class AppTelegramTestHost(IServiceCollection serviceCollection)
         using var scope = CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
         dbContext.Database.Migrate();
+        scope.ServiceProvider.GetRequiredService<DictionarySync>().SyncAsync().GetAwaiter().GetResult();
         dbContext.Users.ExecuteDelete();
     }
 

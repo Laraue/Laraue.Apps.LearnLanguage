@@ -36,6 +36,7 @@ public class MetricsTests : IAsyncLifetime
         using var scope = _provider.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
         await db.Database.MigrateAsync();
+        await scope.ServiceProvider.GetRequiredService<DictionarySync>().SyncAsync();
         await db.Users.ExecuteDeleteAsync();
     }
 

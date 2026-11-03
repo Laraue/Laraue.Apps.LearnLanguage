@@ -3,10 +3,7 @@ using Laraue.Apps.LearnLanguage.DataAccess.Extensions;
 using Laraue.Telegram.NET.UpdatesQueue.EFCore;
 using Laraue.Telegram.NET.UpdatesQueue.EFCore.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Laraue.Apps.LearnLanguage.DataAccess;
 
@@ -46,6 +43,8 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext
     public DbSet<FailedUpdate> FailedUpdates { get; set; }
     
     public DbSet<UtmLabel> UtmLabels { get; set; }
+
+    public DbSet<DictionaryVersion> DictionaryVersions { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,21 +97,13 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext
         modelBuilder.Entity<UtmLabel>()
             .HasKey(x => new { x.UserId, x.Name });
 
-        // Do not use memory on prod
-        if (!IsMigrationRun())
-            AddSeedData(modelBuilder);
+        AddSeedData(modelBuilder);
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.ConfigureWarnings(warnings =>
             warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
-    }
-
-    private bool IsMigrationRun()
-    {
-        var designTimeServices = Database.GetInfrastructure().GetService<IDesignTimeServices>();
-        return designTimeServices != null;
     }
 
     private void AddSeedData(ModelBuilder modelBuilder)
@@ -125,40 +116,5 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext
         modelBuilder.Entity<CefrLevel>().HasData(DefaultContextData.CefrLevels.Items);
         modelBuilder.Entity<Topic>().HasData(wordTopics.Items);
         modelBuilder.Entity<PartOfSpeech>().HasData(partsOfSpeech.Items);
-        
-        foreach (var word in DefaultContextData.GetWords())
-        {
-            modelBuilder.Entity<Word>()
-                .HasData(new Word
-                {
-                    Id = word.Id,
-                    Text = word.Word,
-                    CefrLevelId = word.CefrLevel is not null ? DefaultContextData.CefrLevels.GetId(word.CefrLevel) : null,
-                    Transcription = word.Transcription,
-                    PartOfSpeechId = partsOfSpeech.GetId(word.PartOfSpeech),
-                });
-            
-            foreach (var topic in word.Topics)
-            {
-                modelBuilder.Entity<WordTopic>()
-                    .HasData(new WordTopic
-                    {
-                        WordId = word.Id,
-                        TopicId = wordTopics.GetId(topic),
-                    });
-            }
-
-            foreach (var translation in word.Translations)
-            {
-                modelBuilder.Entity<Translation>()
-                    .HasData(new Translation
-                    {
-                        Text = translation.Text,
-                        LanguageId = wordLanguages.GetId(translation.Language),
-                        WordId = word.Id,
-                        Transcription = translation.Transcription,
-                    });
-            }
-        }
     }
 }
