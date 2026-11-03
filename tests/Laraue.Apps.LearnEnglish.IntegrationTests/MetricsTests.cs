@@ -117,6 +117,96 @@ public class MetricsTests : IAsyncLifetime
         Assert.Equal(0, measurements["learnlanguage.words_learned_in_window"]["30d"]);
     }
 
+    [Fact]
+    public async Task StateMetrics_CountNewUserFunnelBySource()
+    {
+        var today = DateTime.UtcNow.Date;
+        using (var scope = _provider.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            var language = await db.Languages.OrderBy(x => x.Id).FirstAsync();
+            var word = await db.Words.OrderBy(x => x.Id).FirstAsync();
+
+            // Came from "ads", answered, finished a quiz and came back the next day.
+            var engaged = NewUser(1, today.AddDays(-2).AddHours(1));
+            // No UTM labels, started a quiz the same day but only skipped questions.
+            var skipper = NewUser(2, today.AddDays(-3).AddHours(1));
+            // Has a label but no source label, did nothing.
+            var idle = NewUser(3, today.AddDays(-20));
+            // Signed up before both windows.
+            var old = NewUser(4, today.AddDays(-40));
+            db.Users.AddRange(engaged, skipper, idle, old);
+            await db.SaveChangesAsync();
+
+            db.UtmLabels.AddRange(
+                new UtmLabel { UserId = engaged.Id, Name = "campaign", Value = "spring" },
+                new UtmLabel { UserId = engaged.Id, Name = "source", Value = "ads" },
+                new UtmLabel { UserId = idle.Id, Name = "campaign", Value = "x" });
+
+            db.UserQuizzes.AddRange(
+                new UserQuiz
+                {
+                    UserId = engaged.Id,
+                    LanguageId = language.Id,
+                    Status = UserQuizStatus.Finished,
+                    CreatedAt = engaged.CreatedAt.AddMinutes(1),
+                    FinishedAt = engaged.CreatedAt.AddMinutes(5),
+                    UserQuizQuestions =
+                    [
+                        new UserQuizQuestion
+                        {
+                            WordId = word.Id,
+                            Status = UserQuizQuestionStatus.Incorrect,
+                            AnsweredAt = engaged.CreatedAt.AddMinutes(2),
+                        },
+                    ],
+                },
+                new UserQuiz
+                {
+                    UserId = engaged.Id,
+                    LanguageId = language.Id,
+                    Status = UserQuizStatus.Active,
+                    CreatedAt = engaged.CreatedAt.AddDays(1),
+                },
+                new UserQuiz
+                {
+                    UserId = skipper.Id,
+                    LanguageId = language.Id,
+                    Status = UserQuizStatus.Active,
+                    CreatedAt = skipper.CreatedAt.AddMinutes(1),
+                    UserQuizQuestions =
+                    [
+                        new UserQuizQuestion
+                        {
+                            WordId = word.Id,
+                            Status = UserQuizQuestionStatus.Skipped,
+                            AnsweredAt = skipper.CreatedAt.AddMinutes(2),
+                        },
+                    ],
+                });
+            await db.SaveChangesAsync();
+        }
+
+        var funnel = (await CollectStateAsync())["learnlanguage.new_user_funnel"];
+
+        Assert.Equal(1, funnel["7d/signed_up/ads"]);
+        Assert.Equal(1, funnel["7d/started_quiz/ads"]);
+        Assert.Equal(1, funnel["7d/answered/ads"]);
+        Assert.Equal(1, funnel["7d/finished_quiz/ads"]);
+        Assert.Equal(1, funnel["7d/returned/ads"]);
+
+        Assert.Equal(1, funnel["7d/signed_up/none"]);
+        Assert.Equal(1, funnel["7d/started_quiz/none"]);
+        Assert.Equal(0, funnel["7d/answered/none"]);
+        Assert.Equal(0, funnel["7d/finished_quiz/none"]);
+        Assert.Equal(0, funnel["7d/returned/none"]);
+
+        Assert.DoesNotContain("7d/signed_up/campaign-x", funnel.Keys);
+        Assert.Equal(1, funnel["30d/signed_up/campaign-x"]);
+        Assert.Equal(0, funnel["30d/started_quiz/campaign-x"]);
+        Assert.Equal(3, funnel.Where(x => x.Key.StartsWith("30d/signed_up/")).Sum(x => x.Value));
+    }
+
     private async Task<Dictionary<string, Dictionary<string, long>>> CollectStateAsync()
     {
         var state = _provider.GetRequiredService<LearnLanguageStateMetrics>();
@@ -133,7 +223,7 @@ public class MetricsTests : IAsyncLifetime
         };
         listener.SetMeasurementEventCallback<long>((instrument, value, tags, _) =>
         {
-            var label = tags.Length > 0 ? (string)tags[0].Value! : "";
+            var label = string.Join("/", tags.ToArray().Select(x => (string)x.Value!));
             if (!result.TryGetValue(instrument.Name, out var byLabel))
             {
                 result[instrument.Name] = byLabel = new Dictionary<string, long>();
