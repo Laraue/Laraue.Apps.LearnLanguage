@@ -61,16 +61,16 @@
         <value>easy</value>
     </data>
     <data name="Difficulty_Medium" xml:space="preserve">
-        <value>very hard</value>
-    </data>
-    <data name="Difficulty_Hard" xml:space="preserve">
         <value>medium</value>
     </data>
-    <data name="Difficulty_Impossible" xml:space="preserve">
+    <data name="Difficulty_Hard" xml:space="preserve">
         <value>hard</value>
     </data>
-    <data name="Difficulty_VeryHard" xml:space="preserve">
+    <data name="Difficulty_Impossible" xml:space="preserve">
         <value>impossible</value>
+    </data>
+    <data name="Difficulty_VeryHard" xml:space="preserve">
+        <value>very hard</value>
     </data>
     <data name="ViewMode_TranslationToWord" xml:space="preserve">
         <value>Translation -&gt; Word</value>

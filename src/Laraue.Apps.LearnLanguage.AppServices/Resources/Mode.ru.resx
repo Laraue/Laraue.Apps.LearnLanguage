@@ -54,16 +54,16 @@
         <value>легкая</value>
     </data>
     <data name="Difficulty_Hard" xml:space="preserve">
-        <value>средняя</value>
-    </data>
-    <data name="Difficulty_Impossible" xml:space="preserve">
         <value>сложная</value>
     </data>
+    <data name="Difficulty_Impossible" xml:space="preserve">
+        <value>невозможная</value>
+    </data>
     <data name="Difficulty_Medium" xml:space="preserve">
-        <value>очень сложная</value>
+        <value>средняя</value>
     </data>
     <data name="Difficulty_VeryHard" xml:space="preserve">
-        <value>невозможная</value>
+        <value>очень сложная</value>
     </data>
     <data name="ViewMode_TranslationToWord" xml:space="preserve">
         <value>Перевод -&gt; Слово</value>

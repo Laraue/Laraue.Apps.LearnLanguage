@@ -34,14 +34,14 @@ public class QuizService(
     private const int MaxTopicsCount = 30;
     
     // TODO - use settings to setup
-    private const int QuestionsCount = 20;
-    private const int OptionsCount = 8;
+    // 10 questions with 4 options fit a phone screen and a short break; 20 with 8 were often left unfinished.
+    private const int QuestionsCount = 10;
+    private const int OptionsCount = 4;
 
     /// <summary>
-    /// The first quiz of a new user is short and easy, so it is finished and ends with something learned.
+    /// The first quiz of a new user is shorter and easy (A1), so it is finished and ends with words in progress.
     /// </summary>
     public const int FirstQuizQuestionsCount = 6;
-    private const int FirstQuizOptionsCount = 4;
     private const string FirstQuizCefrLevel = "A1";
     
     /// <summary>
@@ -280,7 +280,7 @@ public class QuizService(
             topicIds: [],
             cefrLevelIds: [DefaultContextData.CefrLevels.GetId(FirstQuizCefrLevel)],
             FirstQuizQuestionsCount,
-            FirstQuizOptionsCount,
+            OptionsCount,
             ct);
         
         await OpenNextQuizQuestionWindowAsync(

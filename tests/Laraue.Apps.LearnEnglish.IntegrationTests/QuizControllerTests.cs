@@ -88,7 +88,7 @@ public class QuizControllerTests : IntegrationTest
 Language: <b>English → Russian</b>
 Topics: <b>All</b>
 CEFR Levels: <b>All (A1-C1)</b>
-Questions: <b>20</b>
+Questions: <b>10</b>
 
 You progress for these settings
 ✅ Correct: <b>0</b>
@@ -131,7 +131,7 @@ You progress for these settings
         
         request.CheckMessage(
             """
-            Question 1/20
+            Question 1/10
             
             <b>a</b>
             indefinite article · A1
@@ -140,13 +140,7 @@ You progress for these settings
         request.CheckButtonsSequentially(buttons => 
             buttons
                 .HasButtonsRow(
-                    new ButtonAssert("Аборт", $"1 sa?q={questionId}&a=6"),
-                    new ButtonAssert("О", $"1 sa?q={questionId}&a=8"))
-                .HasButtonsRow(
                     new ButtonAssert("Один", $"1 sa?q={questionId}&a=1"),
-                    new ButtonAssert("Около", $"1 sa?q={questionId}&a=7"))
-                .HasButtonsRow(
-                    new ButtonAssert("Отменить", $"1 sa?q={questionId}&a=5"),
                     new ButtonAssert("Покидать", $"1 sa?q={questionId}&a=2"))
                 .HasButtonsRow(
                     new ButtonAssert("Способность", $"1 sa?q={questionId}&a=3"),
@@ -161,6 +155,7 @@ You progress for these settings
         Assert.Null(quiz.FinishedAt);
 
         var quizQuestions = telegramTestHost.GetFromDb(x => x.UserQuizQuestions.ToArray());
-        Assert.Equal(20, quizQuestions.Length);
+        Assert.Equal(10, quizQuestions.Length);
+        Assert.All(quizQuestions, q => Assert.Equal(4, q.OptionIds.Length));
     }
 }

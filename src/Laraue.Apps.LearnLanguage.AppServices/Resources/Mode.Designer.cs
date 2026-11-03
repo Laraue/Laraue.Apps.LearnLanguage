@@ -87,7 +87,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to medium.
+        ///   Looks up a localized string similar to hard.
         /// </summary>
         public static string Difficulty_Hard {
             get {
@@ -96,7 +96,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to hard.
+        ///   Looks up a localized string similar to impossible.
         /// </summary>
         public static string Difficulty_Impossible {
             get {
@@ -105,7 +105,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to very hard.
+        ///   Looks up a localized string similar to medium.
         /// </summary>
         public static string Difficulty_Medium {
             get {
@@ -114,7 +114,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to impossible.
+        ///   Looks up a localized string similar to very hard.
         /// </summary>
         public static string Difficulty_VeryHard {
             get {
