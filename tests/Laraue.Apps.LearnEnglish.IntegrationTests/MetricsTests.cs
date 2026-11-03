@@ -207,6 +207,51 @@ public class MetricsTests : IAsyncLifetime
         Assert.Equal(3, funnel.Where(x => x.Key.StartsWith("30d/signed_up/")).Sum(x => x.Value));
     }
 
+    [Fact]
+    public async Task StateMetrics_CountRemindersAndTheirFollowUp()
+    {
+        var now = DateTime.UtcNow;
+        using (var scope = _provider.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+            var language = await db.Languages.OrderBy(x => x.Id).FirstAsync();
+
+            var subscriber = NewUser(1, now.AddDays(-10));
+            subscriber.ReminderTime = new TimeOnly(9, 0);
+            var blocked = NewUser(2, now.AddDays(-10));
+            blocked.ReminderTime = new TimeOnly(9, 0);
+            blocked.BotBlockedAt = now.AddDays(-1);
+            db.Users.AddRange(subscriber, blocked);
+            await db.SaveChangesAsync();
+
+            db.Reminders.AddRange(
+                // Followed by a quiz an hour later.
+                new Reminder { UserId = subscriber.Id, Kind = ReminderKind.Daily, SentAt = now.AddDays(-3) },
+                // Ignored.
+                new Reminder { UserId = subscriber.Id, Kind = ReminderKind.Daily, SentAt = now.AddDays(-2) },
+                // Outside the 7-day window.
+                new Reminder { UserId = blocked.Id, Kind = ReminderKind.AbandonedQuiz, SentAt = now.AddDays(-9) });
+            db.UserQuizzes.Add(new UserQuiz
+            {
+                UserId = subscriber.Id,
+                LanguageId = language.Id,
+                Status = UserQuizStatus.Finished,
+                CreatedAt = now.AddDays(-3).AddHours(1),
+            });
+            await db.SaveChangesAsync();
+        }
+
+        var measurements = await CollectStateAsync();
+
+        Assert.Equal(1, measurements["learnlanguage.reminder_subscribers"][""]);
+        var reminders = measurements["learnlanguage.reminders_in_window"];
+        Assert.Equal(2, reminders["7d/daily/sent"]);
+        Assert.Equal(1, reminders["7d/daily/followed"]);
+        Assert.Equal(0, reminders["7d/abandonedquiz/sent"]);
+        Assert.Equal(1, reminders["30d/abandonedquiz/sent"]);
+        Assert.Equal(0, reminders["30d/abandonedquiz/followed"]);
+    }
+
     private async Task<Dictionary<string, Dictionary<string, long>>> CollectStateAsync()
     {
         var state = _provider.GetRequiredService<LearnLanguageStateMetrics>();

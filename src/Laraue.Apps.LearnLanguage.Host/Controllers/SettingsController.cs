@@ -32,6 +32,15 @@ public class SettingsController(IUserSettingsService service) : TelegramControll
         return service.HandleLearnLanguageSettingsViewAsync(ReplyData.FromRequest(context), ct);
     }
     
+    [TelegramCallbackRoute(TelegramRoutes.RemindersSettings, RouteMethod.Post)]
+    public Task UpdateRemindersSettingsAsync(
+        RequestContext context,
+        [FromQuery] UpdateRemindersSettingsRequest request,
+        CancellationToken ct)
+    {
+        return service.UpdateRemindersSettingsAsync(ReplyData.FromRequest(context), request, ct);
+    }
+
     [TelegramCallbackRoute(TelegramRoutes.LearnLanguageSettings, RouteMethod.Post)]
     public async Task UpdateLearnLanguageSettingsAsync(
         RequestContext context,

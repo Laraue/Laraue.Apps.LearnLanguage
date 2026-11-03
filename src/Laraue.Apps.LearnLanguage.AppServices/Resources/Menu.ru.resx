@@ -25,4 +25,13 @@
     <data name="FirstQuizSelectLanguage" xml:space="preserve">
         <value>Выберите язык перевода, и сразу начнём с {0} простых слов.</value>
     </data>
+    <data name="ReminderContinueQuiz" xml:space="preserve">
+        <value>⏸ Вы остановились на вопросе {0} из {1}. Продолжим?</value>
+    </data>
+    <data name="ReminderWordsToReview" xml:space="preserve">
+        <value>📚 Слов на повторение: {0}. Тест займёт пару минут.</value>
+    </data>
+    <data name="ReminderTimeForQuiz" xml:space="preserve">
+        <value>🎯 Пройдём короткий тест? Это займёт пару минут.</value>
+    </data>
 </root>

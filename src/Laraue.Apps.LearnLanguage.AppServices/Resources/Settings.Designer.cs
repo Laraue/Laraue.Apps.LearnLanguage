@@ -121,5 +121,32 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("UpdateTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔔 Daily reminder: {0}.
+        /// </summary>
+        public static string Reminders {
+            get {
+                return ResourceManager.GetString("Reminders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to on, around {0} UTC.
+        /// </summary>
+        public static string RemindersOn {
+            get {
+                return ResourceManager.GetString("RemindersOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to off.
+        /// </summary>
+        public static string RemindersOff {
+            get {
+                return ResourceManager.GetString("RemindersOff", resourceCulture);
+            }
+        }
     }
 }

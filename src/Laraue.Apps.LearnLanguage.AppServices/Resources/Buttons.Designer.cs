@@ -166,5 +166,41 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("StartFirstQuiz", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔔 Remind me daily at this time.
+        /// </summary>
+        public static string RemindMeDaily {
+            get {
+                return ResourceManager.GetString("RemindMeDaily", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔔 Turn on reminders.
+        /// </summary>
+        public static string TurnOnReminders {
+            get {
+                return ResourceManager.GetString("TurnOnReminders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔕 Turn off reminders.
+        /// </summary>
+        public static string TurnOffReminders {
+            get {
+                return ResourceManager.GetString("TurnOffReminders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ▶️ Continue.
+        /// </summary>
+        public static string ContinueQuiz {
+            get {
+                return ResourceManager.GetString("ContinueQuiz", resourceCulture);
+            }
+        }
     }
 }

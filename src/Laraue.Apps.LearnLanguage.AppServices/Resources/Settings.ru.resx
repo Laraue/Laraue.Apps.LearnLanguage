@@ -32,4 +32,13 @@
     <data name="NotSet" xml:space="preserve">
         <value>Не задан(ы)</value>
     </data>
+    <data name="Reminders" xml:space="preserve">
+        <value>🔔 Ежедневное напоминание: {0}</value>
+    </data>
+    <data name="RemindersOn" xml:space="preserve">
+        <value>включено, около {0} UTC</value>
+    </data>
+    <data name="RemindersOff" xml:space="preserve">
+        <value>выключено</value>
+    </data>
 </root>

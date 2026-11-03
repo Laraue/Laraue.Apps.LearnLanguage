@@ -4,4 +4,5 @@ public record UserSettings(
     string? InterfaceLanguageCode,
     long? LanguageToLearnId,
     string? LanguageToLearnCode,
-    string? LanguageToLearnTitle);
+    string? LanguageToLearnTitle,
+    TimeOnly? ReminderTime);

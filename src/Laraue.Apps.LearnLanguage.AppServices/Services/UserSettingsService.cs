@@ -4,6 +4,7 @@ using Laraue.Apps.LearnLanguage.AppServices.Repositories;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Resources;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
+using Laraue.Core.DateTime.Services.Abstractions;
 using Laraue.Telegram.NET.Core.Extensions;
 using Laraue.Telegram.NET.Core.Routing;
 using Laraue.Telegram.NET.Core.Utils;
@@ -13,7 +14,11 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Services;
 
-public class UserSettingsService(IUserRepository repository, ITelegramBotClient client, IWordsRepository wordsRepository)
+public class UserSettingsService(
+    IUserRepository repository,
+    ITelegramBotClient client,
+    IWordsRepository wordsRepository,
+    IDateTimeProvider dateTimeProvider)
     : IUserSettingsService
 {
     public async Task HandleSettingsViewAsync(ReplyData replyData, CancellationToken ct = default)
@@ -31,6 +36,11 @@ public class UserSettingsService(IUserRepository repository, ITelegramBotClient 
                 settings.LanguageToLearnTitle is not null
                     ? $"<b>English → {settings.LanguageToLearnTitle}</b>"
                     : $"<b>{Settings.NotSet}</b>"))
+            .AppendRow(string.Format(
+                Settings.Reminders,
+                settings.ReminderTime is { } reminderTime
+                    ? $"<b>{string.Format(Settings.RemindersOn, reminderTime.ToString("HH:mm"))}</b>"
+                    : $"<b>{Settings.RemindersOff}</b>"))
             .AppendRow();
 
         tmb.AddInlineKeyboardButtons([
@@ -38,6 +48,13 @@ public class UserSettingsService(IUserRepository repository, ITelegramBotClient 
                 Buttons.Settings_Language, TelegramRoutes.InterfaceLanguageSettings),
             InlineKeyboardButton.WithCallbackData(
                 Buttons.Settings_LearnLanguage, TelegramRoutes.LearnLanguageSettings)
+        ]);
+        tmb.AddInlineKeyboardButtons([
+            new CallbackRoutePath(TelegramRoutes.RemindersSettings, RouteMethod.Post)
+                .WithQueryParameter(ParameterNames.Enable, settings.ReminderTime is null)
+                .ToInlineKeyboardButton(settings.ReminderTime is null
+                    ? Buttons.TurnOnReminders
+                    : Buttons.TurnOffReminders)
         ]);
 
         tmb.AddBackMenuButton(TelegramRoutes.Menu);
@@ -88,6 +105,19 @@ public class UserSettingsService(IUserRepository repository, ITelegramBotClient 
         ]);
         
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+    }
+
+    public async Task UpdateRemindersSettingsAsync(
+        ReplyData replyData,
+        UpdateRemindersSettingsRequest request,
+        CancellationToken ct = default)
+    {
+        var reminderTime = request.Enabled
+            ? TimeOnly.FromDateTime(dateTimeProvider.UtcNow)
+            : (TimeOnly?)null;
+
+        await repository.SetReminderTimeAsync(replyData.UserId, reminderTime, ct);
+        await HandleSettingsViewAsync(replyData, ct);
     }
 
     public async Task HandleLearnLanguageSettingsViewAsync(ReplyData replyData, CancellationToken ct = default)

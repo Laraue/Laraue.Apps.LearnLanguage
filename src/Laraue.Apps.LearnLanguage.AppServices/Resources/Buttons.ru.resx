@@ -47,4 +47,16 @@
     <data name="StartFirstQuiz" xml:space="preserve">
         <value>▶️ Начать: {0} простых слов</value>
     </data>
+    <data name="RemindMeDaily" xml:space="preserve">
+        <value>🔔 Напоминать каждый день в это время</value>
+    </data>
+    <data name="TurnOnReminders" xml:space="preserve">
+        <value>🔔 Включить напоминания</value>
+    </data>
+    <data name="TurnOffReminders" xml:space="preserve">
+        <value>🔕 Выключить напоминания</value>
+    </data>
+    <data name="ContinueQuiz" xml:space="preserve">
+        <value>▶️ Продолжить</value>
+    </data>
 </root>

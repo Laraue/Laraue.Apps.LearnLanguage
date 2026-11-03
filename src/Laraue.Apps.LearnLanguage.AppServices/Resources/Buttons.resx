@@ -54,4 +54,16 @@
     <data name="StartFirstQuiz" xml:space="preserve">
         <value>▶️ Start: {0} easy words</value>
     </data>
+    <data name="RemindMeDaily" xml:space="preserve">
+        <value>🔔 Remind me daily at this time</value>
+    </data>
+    <data name="TurnOnReminders" xml:space="preserve">
+        <value>🔔 Turn on reminders</value>
+    </data>
+    <data name="TurnOffReminders" xml:space="preserve">
+        <value>🔕 Turn off reminders</value>
+    </data>
+    <data name="ContinueQuiz" xml:space="preserve">
+        <value>▶️ Continue</value>
+    </data>
 </root>

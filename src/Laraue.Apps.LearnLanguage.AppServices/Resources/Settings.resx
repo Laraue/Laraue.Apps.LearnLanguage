@@ -39,4 +39,13 @@
     <data name="NotSet" xml:space="preserve">
         <value>Not set</value>
     </data>
+    <data name="Reminders" xml:space="preserve">
+        <value>🔔 Daily reminder: {0}</value>
+    </data>
+    <data name="RemindersOn" xml:space="preserve">
+        <value>on, around {0} UTC</value>
+    </data>
+    <data name="RemindersOff" xml:space="preserve">
+        <value>off</value>
+    </data>
 </root>

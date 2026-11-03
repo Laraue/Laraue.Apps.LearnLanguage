@@ -89,5 +89,32 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("FirstQuizSelectLanguage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⏸ You stopped at question {0} of {1}. Shall we continue?.
+        /// </summary>
+        public static string ReminderContinueQuiz {
+            get {
+                return ResourceManager.GetString("ReminderContinueQuiz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📚 Words waiting for review: {0}. A quiz takes a couple of minutes..
+        /// </summary>
+        public static string ReminderWordsToReview {
+            get {
+                return ResourceManager.GetString("ReminderWordsToReview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🎯 Time for a quick quiz? It takes a couple of minutes..
+        /// </summary>
+        public static string ReminderTimeForQuiz {
+            get {
+                return ResourceManager.GetString("ReminderTimeForQuiz", resourceCulture);
+            }
+        }
     }
 }

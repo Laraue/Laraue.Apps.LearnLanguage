@@ -28,6 +28,7 @@ public static class TelegramRoutes
     public const string Settings = "s";
     public const string InterfaceLanguageSettings = "s/ils";
     public const string LearnLanguageSettings = "s/lls";
+    public const string RemindersSettings = "s/rem";
     
     // Commands section
     public const string Start = "/start(.*)";
