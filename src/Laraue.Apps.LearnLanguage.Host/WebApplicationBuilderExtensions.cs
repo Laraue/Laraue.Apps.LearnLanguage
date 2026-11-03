@@ -10,6 +10,7 @@ using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes.Group.CefrLevel;
 using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes.Group.FirstLetter;
 using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes.Group.Topic;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Quiz;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Reminders;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
 using Laraue.Core.DataAccess.Linq2DB.Extensions;
@@ -123,6 +124,8 @@ public static class WebApplicationBuilderExtensions
                 .AddScoped<IAdminRepository, AdminRepository>()
 
                 .AddScoped<IUserSettingsService, UserSettingsService>()
+                .AddScoped<ReminderSender>()
+                .Configure<RemindersOptions>(builder.Configuration.GetSection("Reminders"))
                 .AddScoped<IUserRepository, UserRepository>()
 
                 .AddScoped<ISelectLanguageService, SelectLanguageService>()

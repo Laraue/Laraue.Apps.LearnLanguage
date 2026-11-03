@@ -13,6 +13,14 @@ public interface IUserSettingsService
     
     Task HandleLearnLanguageSettingsViewAsync(ReplyData replyData, CancellationToken ct = default);
     
+    /// <summary>
+    /// Turn the daily reminder on or off and show the settings.
+    /// </summary>
+    Task UpdateRemindersSettingsAsync(
+        ReplyData replyData,
+        UpdateRemindersSettingsRequest request,
+        CancellationToken ct = default);
+
     Task UpdateLearnLanguageSettingsAsync(
         ReplyData replyData,
         UpdateLearnLanguageSettingsRequest request,

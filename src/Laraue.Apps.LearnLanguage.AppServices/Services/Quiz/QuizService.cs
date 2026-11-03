@@ -629,6 +629,19 @@ public class QuizService(
         if (learnStat.Learned > 0)
             tmb.Append($"{QuizMode.Learned}: {learnStat.Learned} / {learnStat.Total} {QuizMode.Meanings}");
             
+        // Offer the daily reminder once, after the first finished quiz, to users who don't have it on.
+        var isFirstFinishedQuiz = await context.UserQuizzes
+            .CountAsync(q => q.UserId == replyData.UserId && q.Status == UserQuizStatus.Finished, ct) == 1;
+        if (isFirstFinishedQuiz && await context.Users
+                .AnyAsync(u => u.Id == replyData.UserId && u.ReminderTime == null, ct))
+        {
+            tmb.AddInlineKeyboardButtons([
+                new CallbackRoutePath(TelegramRoutes.RemindersSettings, RouteMethod.Post)
+                    .WithQueryParameter(ParameterNames.Enable, true)
+                    .ToInlineKeyboardButton(Buttons.RemindMeDaily)
+            ]);
+        }
+
         tmb
             .AddInlineKeyboardButtons([
                 InlineKeyboardButton.WithCallbackData(

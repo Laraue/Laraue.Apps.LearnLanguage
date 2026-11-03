@@ -31,4 +31,13 @@ no signup, works on any device.</value>
     <data name="FirstQuizSelectLanguage" xml:space="preserve">
         <value>Choose the language of the translations, and the first {0} easy words will start right away.</value>
     </data>
+    <data name="ReminderContinueQuiz" xml:space="preserve">
+        <value>⏸ You stopped at question {0} of {1}. Shall we continue?</value>
+    </data>
+    <data name="ReminderWordsToReview" xml:space="preserve">
+        <value>📚 Words waiting for review: {0}. A quiz takes a couple of minutes.</value>
+    </data>
+    <data name="ReminderTimeForQuiz" xml:space="preserve">
+        <value>🎯 Time for a quick quiz? It takes a couple of minutes.</value>
+    </data>
 </root>

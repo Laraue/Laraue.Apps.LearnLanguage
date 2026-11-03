@@ -46,6 +46,8 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext
 
     public DbSet<DictionaryVersion> DictionaryVersions { get; init; }
 
+    public DbSet<Reminder> Reminders { get; init; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("uuid-ossp");
@@ -96,6 +98,9 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext
         
         modelBuilder.Entity<UtmLabel>()
             .HasKey(x => new { x.UserId, x.Name });
+
+        modelBuilder.Entity<Reminder>()
+            .HasIndex(x => new { x.UserId, x.SentAt });
 
         AddSeedData(modelBuilder);
     }

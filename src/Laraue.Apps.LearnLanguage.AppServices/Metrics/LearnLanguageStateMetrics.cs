@@ -43,6 +43,11 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
 
     private const string OtherSource = "other";
 
+    /// <summary>
+    /// A reminder counts as followed when the user did something within this time after it.
+    /// </summary>
+    private static readonly TimeSpan ReminderFollowUp = TimeSpan.FromHours(24);
+
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly ILogger<LearnLanguageStateMetrics> _logger;
@@ -102,6 +107,21 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
                 "started_quiz, answered (at least one correct or incorrect answer), finished_quiz (reached the " +
                 "results screen), returned (a quiz, an answer or a learned word on a later UTC day than the sign-up). " +
                 "source is the user's UTM source, none without one.");
+
+        meter.CreateObservableGauge(
+            "learnlanguage.reminder_subscribers",
+            () => new Measurement<long>(_snapshot.ReminderSubscribers),
+            description: "Users with the daily reminder on who haven't blocked the bot.");
+
+        meter.CreateObservableGauge(
+            "learnlanguage.reminders_in_window",
+            () => _snapshot.Reminders.Select(x => new Measurement<long>(
+                x.Count,
+                new KeyValuePair<string, object?>("window", x.Window),
+                new KeyValuePair<string, object?>("kind", x.Kind),
+                new KeyValuePair<string, object?>("outcome", x.Outcome))),
+            description: "Reminders sent in the last 7 and 30 days, by kind, and how many of them were followed " +
+                "(outcome=followed) by a quiz started or a question answered within 24 hours.");
     }
 
     private static IEnumerable<Measurement<long>> Measurements(IReadOnlyDictionary<string, long> values, string label)
@@ -176,6 +196,37 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
 
         var funnel = await GetFunnelAsync(context, now, cancellationToken);
 
+        var reminderSubscribers = await context.Users
+            .LongCountAsync(u => u.ReminderTime != null && u.BotBlockedAt == null, cancellationToken);
+
+        var reminders = new List<ReminderMeasurement>();
+        foreach (var (label, window) in FunnelWindows)
+        {
+            var since = now - window;
+            foreach (var kind in Enum.GetValues<ReminderKind>())
+            {
+                var sent = context.Reminders.Where(r => r.SentAt >= since && r.Kind == kind);
+                var kindLabel = kind.ToString().ToLowerInvariant();
+
+                reminders.Add(new ReminderMeasurement(
+                    label, kindLabel, "sent", await sent.LongCountAsync(cancellationToken)));
+                reminders.Add(new ReminderMeasurement(
+                    label,
+                    kindLabel,
+                    "followed",
+                    await sent.LongCountAsync(r =>
+                        context.UserQuizzes.Any(q =>
+                            q.UserId == r.UserId
+                            && q.CreatedAt >= r.SentAt
+                            && q.CreatedAt < r.SentAt + ReminderFollowUp)
+                        || context.UserQuizQuestions.Any(q =>
+                            q.Quiz.UserId == r.UserId
+                            && q.AnsweredAt >= r.SentAt
+                            && q.AnsweredAt < r.SentAt + ReminderFollowUp),
+                        cancellationToken)));
+            }
+        }
+
         _snapshot = new Snapshot(
             users,
             activeUsers,
@@ -185,7 +236,9 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
             quizzesStarted,
             wordsLearned,
             wordsLearnedInWindow,
-            funnel);
+            funnel,
+            reminderSubscribers,
+            reminders);
     }
 
     private static async Task<FunnelMeasurement[]> GetFunnelAsync(
@@ -311,6 +364,8 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
 
     private sealed record FunnelMeasurement(string Window, string Step, string Source, long Count);
 
+    private sealed record ReminderMeasurement(string Window, string Kind, string Outcome, long Count);
+
     private sealed record Snapshot(
         long Users,
         IReadOnlyDictionary<string, long> ActiveUsers,
@@ -318,7 +373,9 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
         IReadOnlyDictionary<string, long> QuizzesStarted,
         long WordsLearned,
         IReadOnlyDictionary<string, long> WordsLearnedInWindow,
-        IReadOnlyList<FunnelMeasurement> Funnel)
+        IReadOnlyList<FunnelMeasurement> Funnel,
+        long ReminderSubscribers,
+        IReadOnlyList<ReminderMeasurement> Reminders)
     {
         public static readonly Snapshot Empty = new(
             0,
@@ -327,6 +384,8 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
             new Dictionary<string, long>(),
             0,
             new Dictionary<string, long>(),
+            [],
+            0,
             []);
     }
 }

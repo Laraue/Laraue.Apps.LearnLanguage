@@ -2,6 +2,7 @@
 using Laraue.Core.DataAccess.Linq2DB.Extensions;
 using Laraue.Apps.LearnLanguage.AppServices.Metrics;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Reminders;
 using Laraue.Telegram.NET.Core.Extensions;
 using Laraue.Telegram.NET.Core.Telemetry;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ builder
 builder.Services.AddHealthChecks();
 builder.Services.AddHostedService<LearnLanguageStateMetrics>();
 builder.Services.AddHostedService<DictionarySyncService>();
+builder.Services.AddHostedService<ReminderService>();
 builder.Logging.ClearProviders().AddJsonConsole();
 
 builder.Services

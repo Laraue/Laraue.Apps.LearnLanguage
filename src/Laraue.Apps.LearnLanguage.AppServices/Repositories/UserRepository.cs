@@ -54,8 +54,19 @@ public class UserRepository(DatabaseContext context) : IUserRepository
                 x.TelegramLanguageCode,
                 x.LanguageToLearnId,
                 x.LanguageToLearn.Name,
-                x.LanguageToLearn.Description))
+                x.LanguageToLearn.Description,
+                x.ReminderTime))
             .FirstAsyncEF(ct);
+    }
+
+    public Task SetReminderTimeAsync(Guid userId, TimeOnly? reminderTime, CancellationToken ct = default)
+    {
+        // Turning reminders on is also the user saying they want messages from the bot again.
+        return context.Users
+            .Where(x => x.Id == userId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(u => u.ReminderTime, reminderTime)
+                .SetProperty(u => u.BotBlockedAt, u => reminderTime != null ? null : u.BotBlockedAt), ct);
     }
 
     public Task SetLanguageCodeAsync(Guid userId, string code, CancellationToken ct = default)

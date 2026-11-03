@@ -245,6 +245,36 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.Reminder", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("integer")
+                        .HasColumnName("kind");
+
+                    b.Property<DateTime>("SentAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("sent_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_reminders");
+
+                    b.HasIndex("UserId", "SentAt")
+                        .HasDatabaseName("ix_reminders_user_id_sent_at");
+
+                    b.ToTable("reminders", (string)null);
+                });
+
             modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.Topic", b =>
                 {
                     b.Property<long>("Id")
@@ -12977,6 +13007,10 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime?>("BotBlockedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("bot_blocked_at");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
@@ -12988,6 +13022,10 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                     b.Property<long?>("LanguageToLearnId")
                         .HasColumnType("bigint")
                         .HasColumnName("language_to_learn_id");
+
+                    b.Property<TimeOnly?>("ReminderTime")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("reminder_time");
 
                     b.Property<byte>("ShowWordsMode")
                         .HasColumnType("smallint")
@@ -13399,6 +13437,18 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                     b.Navigation("User");
 
                     b.Navigation("Word");
+                });
+
+            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.Reminder", b =>
+                {
+                    b.HasOne("Laraue.Apps.LearnLanguage.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_reminders_users_user_id");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.Translation", b =>

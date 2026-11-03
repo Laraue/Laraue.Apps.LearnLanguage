@@ -16,6 +16,7 @@ public sealed class LearnLanguageMetrics
     private readonly Counter<long> _quizzesStarted;
     private readonly Counter<long> _quizzesFinished;
     private readonly Counter<long> _quizAnswers;
+    private readonly Counter<long> _remindersSent;
 
     public LearnLanguageMetrics(IMeterFactory meterFactory)
     {
@@ -32,11 +33,18 @@ public sealed class LearnLanguageMetrics
         _quizAnswers = meter.CreateCounter<long>(
             "learnlanguage.quiz.answers",
             description: "Quiz questions answered, by result (correct, incorrect, skipped).");
+
+        _remindersSent = meter.CreateCounter<long>(
+            "learnlanguage.reminders.sent",
+            description: "Reminders sent, by kind (daily, abandonedquiz).");
     }
 
     public void RecordQuizStarted() => _quizzesStarted.Add(1);
 
     public void RecordQuizFinished() => _quizzesFinished.Add(1);
+
+    public void RecordReminderSent(ReminderKind kind) =>
+        _remindersSent.Add(1, new KeyValuePair<string, object?>("kind", kind.ToString().ToLowerInvariant()));
 
     public void RecordQuizAnswer(UserQuizQuestionStatus status)
     {

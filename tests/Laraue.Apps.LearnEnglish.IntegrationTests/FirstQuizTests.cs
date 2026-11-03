@@ -169,6 +169,44 @@ public class FirstQuizTests : IntegrationTest
         Assert.Contains(
             "🔶 Words in progress: +6. A word is learned after 3 correct answers in a row.",
             results.Text);
+
+        // The first finished quiz offers the daily reminder (MIN-30).
+        var firstButton = ((InlineKeyboardMarkup)results.ReplyMarkup!).InlineKeyboard.First().First();
+        Assert.Equal(("🔔 Remind me daily at this time", "1 s/rem?e=true"), (firstButton.Text, firstButton.CallbackData));
+    }
+
+    [Fact]
+    public async Task RemindersSetting_ShouldTurnDailyReminderOnAndOff()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        telegramTestHost.InsertIntoDb(new User
+        {
+            TelegramId = DefaultUser.Id,
+            GlobalUserId = Guid.NewGuid(),
+            BotBlockedAt = DateTime.UtcNow.AddDays(-1),
+        });
+
+        var before = TimeOnly.FromDateTime(DateTime.UtcNow);
+        await telegramTestHost.SendUpdateAsync(Callback(
+            new CallbackRoutePath(TelegramRoutes.RemindersSettings, RouteMethod.Post)
+                .WithQueryParameter(ParameterNames.Enable, true)));
+
+        var user = Assert.Single(telegramTestHost.GetFromDb(db => db.Users.ToArray()));
+        Assert.NotNull(user.ReminderTime);
+        Assert.InRange(user.ReminderTime.Value, before, TimeOnly.FromDateTime(DateTime.UtcNow));
+        Assert.Null(user.BotBlockedAt);
+
+        var settings = telegramTestHost.Requests().Last<EditMessageTextRequest>();
+        Assert.Contains($"🔔 Daily reminder: <b>on, around {user.ReminderTime.Value:HH:mm} UTC</b>", settings.Text);
+
+        await telegramTestHost.SendUpdateAsync(Callback(
+            new CallbackRoutePath(TelegramRoutes.RemindersSettings, RouteMethod.Post)
+                .WithQueryParameter(ParameterNames.Enable, false)));
+
+        Assert.Null(Assert.Single(telegramTestHost.GetFromDb(db => db.Users.ToArray())).ReminderTime);
+        Assert.Contains(
+            "🔔 Daily reminder: <b>off</b>",
+            telegramTestHost.Requests().Last<EditMessageTextRequest>().Text);
     }
 
     private static (string, string?)[][] Buttons(SendMessageRequest request) =>

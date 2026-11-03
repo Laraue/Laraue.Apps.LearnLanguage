@@ -54,6 +54,17 @@ public sealed class User
     public DateTime CreatedAt { get; set; }
     
     /// <summary>
+    /// UTC time of day for the daily practice reminder, the time the user turned it on. Null when reminders are
+    /// off.
+    /// </summary>
+    public TimeOnly? ReminderTime { get; set; }
+
+    /// <summary>
+    /// When Telegram answered that the user blocked the bot. Nothing is sent on our own to such a user.
+    /// </summary>
+    public DateTime? BotBlockedAt { get; set; }
+
+    /// <summary>
     /// How to show word translations for this user. 
     /// </summary>
     public WordsTemplateMode WordsTemplateMode { get; set; }
