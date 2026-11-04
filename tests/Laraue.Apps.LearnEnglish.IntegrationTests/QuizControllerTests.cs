@@ -44,12 +44,15 @@ public class QuizControllerTests : IntegrationTest
         request.CheckMessage(excepted);
         request.CheckButtonsSequentially(assert =>
             assert
+                .HasButtonsRow(new ButtonAssert("English → Arabic", "quiz?lt=10"))
                 .HasButtonsRow(new ButtonAssert("English → German", "quiz?lt=6"))
                 .HasButtonsRow(new ButtonAssert("English → Spanish", "quiz?lt=5"))
+                .HasButtonsRow(new ButtonAssert("English → Persian", "quiz?lt=11"))
                 .HasButtonsRow(new ButtonAssert("English → French", "quiz?lt=3"))
                 .HasButtonsRow(new ButtonAssert("English → Hindi", "quiz?lt=8"))
                 .HasButtonsRow(new ButtonAssert("English → Japanese", "quiz?lt=4"))
                 .HasButtonsRow(new ButtonAssert("English → Russian", "quiz?lt=2"))
+                .HasButtonsRow(new ButtonAssert("English → Uzbek", "quiz?lt=9"))
                 .HasButtonsRow(new ButtonAssert("English → Chinese", "quiz?lt=7"))
                 .HasButtonsRow(new ButtonAssert("Menu", "m")));
     }
