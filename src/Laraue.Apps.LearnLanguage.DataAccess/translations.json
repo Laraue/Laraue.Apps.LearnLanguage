@@ -6010,8 +6010,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "передний",
-        "transcription": "pee-ryed-niy"
+        "text": "предварительный",
+        "transcription": "predvaritel'nyy"
       },
       {
         "language": "fr",
@@ -7490,8 +7490,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "день",
-        "transcription": "dyen'"
+        "text": "вторая половина дня",
+        "transcription": "vtoraya polovina dnya"
       },
       {
         "language": "fr",
@@ -9280,8 +9280,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "будить",
-        "transcription": "budit'"
+        "text": "тревожить",
+        "transcription": "trevozhit'"
       },
       {
         "language": "fr",
@@ -9577,8 +9577,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "боевой",
-        "transcription": "boy-vy-oy"
+        "text": "бдительный",
+        "transcription": "bditel'nyy"
       },
       {
         "language": "fr",
@@ -11096,8 +11096,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "одиноко",
-        "transcription": "uh-dee-no-ko"
+        "text": "в одиночку",
+        "transcription": "v odinochku"
       },
       {
         "language": "fr",
@@ -11718,8 +11718,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "вместе",
-        "transcription": "vmyestye"
+        "text": "полностью",
+        "transcription": "polnost'yu"
       },
       {
         "language": "fr",
@@ -12634,8 +12634,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "оценивать",
-        "transcription": "ah-tsyeh-nee-vat'"
+        "text": "составлять",
+        "transcription": "sostavlyat'"
       },
       {
         "language": "fr",
@@ -14174,8 +14174,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ещё",
-        "transcription": "yeshcho"
+        "text": "другой",
+        "transcription": "drugoy"
       },
       {
         "language": "fr",
@@ -14239,8 +14239,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ещё",
-        "transcription": "yeshcho"
+        "text": "другой",
+        "transcription": "drugoy"
       },
       {
         "language": "fr",
@@ -14781,8 +14781,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ещё",
-        "transcription": "yeshcho"
+        "text": "больше",
+        "transcription": "bol'she"
       },
       {
         "language": "fr",
@@ -15602,7 +15602,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "я́вный",
+        "text": "явный",
         "transcription": "yahv-niy"
       },
       {
@@ -18174,8 +18174,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "согласование",
-        "transcription": "sah-gla-sah-vah-nee-ye"
+        "text": "договорённость",
+        "transcription": "dogovorennost'"
       },
       {
         "language": "fr",
@@ -19253,8 +19253,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "стыдный",
-        "transcription": "styidnyy"
+        "text": "пристыженный",
+        "transcription": "pristyzhennyy"
       },
       {
         "language": "fr",
@@ -23694,8 +23694,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "осознанный",
-        "transcription": "ah-sahz-nah-niy"
+        "text": "осведомлённый",
+        "transcription": "osvedomlyonnyy"
       },
       {
         "language": "fr",
@@ -23811,8 +23811,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "вдаль",
-        "transcription": "vdál'"
+        "text": "прочь",
+        "transcription": "proch'"
       },
       {
         "language": "fr",
@@ -26001,8 +26001,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "торг",
-        "transcription": "torg"
+        "text": "сделка",
+        "transcription": "sdelka"
       },
       {
         "language": "fr",
@@ -31271,8 +31271,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "смещение",
-        "transcription": "smishcheniye"
+        "text": "предвзятость",
+        "transcription": "predvzyatost'"
       },
       {
         "language": "fr",
@@ -32400,8 +32400,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "бит",
-        "transcription": "bit"
+        "text": "кусочек",
+        "transcription": "kusochek"
       },
       {
         "language": "fr",
@@ -32435,18 +32435,18 @@
       },
       {
         "language": "uz",
-        "text": "bit",
-        "transcription": "bit"
+        "text": "bo'lak",
+        "transcription": "bo'-lak"
       },
       {
         "language": "ar",
-        "text": "بت",
-        "transcription": "bit"
+        "text": "قطعة",
+        "transcription": "qit-'a"
       },
       {
         "language": "fa",
-        "text": "بیت",
-        "transcription": "bit"
+        "text": "تکه",
+        "transcription": "te-keh"
       }
     ]
   },
@@ -32881,7 +32881,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ви́на",
+        "text": "вина",
         "transcription": "vi'na"
       },
       {
@@ -33769,8 +33769,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "блондинка",
-        "transcription": "blondinka"
+        "text": "светловолосый",
+        "transcription": "svetlovolosyy"
       },
       {
         "language": "fr",
@@ -33901,8 +33901,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "порыв",
-        "transcription": "po-riv"
+        "text": "удар",
+        "transcription": "udar"
       },
       {
         "language": "fr",
@@ -34214,8 +34214,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "кормить",
-        "transcription": "kar'mit'"
+        "text": "садиться",
+        "transcription": "sadit'sya"
       },
       {
         "language": "fr",
@@ -38513,8 +38513,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "транслятор",
-        "transcription": "translátor"
+        "text": "вещатель",
+        "transcription": "veshchatel'"
       },
       {
         "language": "fr",
@@ -39562,8 +39562,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "опт",
-        "transcription": "opt"
+        "text": "большая часть",
+        "transcription": "bol'shaya chast'"
       },
       {
         "language": "fr",
@@ -41765,8 +41765,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "лагерь",
-        "transcription": "lager'"
+        "text": "разбивать лагерь",
+        "transcription": "razbivat' lager'"
       },
       {
         "language": "fr",
@@ -42094,8 +42094,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "бочка",
-        "transcription": "bochka"
+        "text": "банка",
+        "transcription": "banka"
       },
       {
         "language": "fr",
@@ -46652,8 +46652,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "сажать",
-        "transcription": "sazhat'"
+        "text": "председательствовать",
+        "transcription": "predsedatel'stvovat'"
       },
       {
         "language": "fr",
@@ -49320,8 +49320,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "сундук",
-        "transcription": "sunduk"
+        "text": "грудная клетка",
+        "transcription": "grudnaya kletka"
       },
       {
         "language": "fr",
@@ -50416,8 +50416,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "округлять",
-        "transcription": "akruglyat'"
+        "text": "кружить",
+        "transcription": "kruzhit'"
       },
       {
         "language": "fr",
@@ -52785,7 +52785,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ле́зть",
+        "text": "лезть",
         "transcription": "lezť'"
       },
       {
@@ -53247,8 +53247,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "близкий",
-        "transcription": "blízkiy"
+        "text": "конец",
+        "transcription": "konets"
       },
       {
         "language": "fr",
@@ -57131,8 +57131,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "коммерция",
-        "transcription": "kammertsiya"
+        "text": "реклама",
+        "transcription": "reklama"
       },
       {
         "language": "fr",
@@ -57350,8 +57350,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "обязывать",
-        "transcription": "abjazyvat'"
+        "text": "совершать",
+        "transcription": "sovershat'"
       },
       {
         "language": "fr",
@@ -60482,8 +60482,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "зачасть",
-        "transcription": "za-chast'"
+        "text": "задумать",
+        "transcription": "zadumat'"
       },
       {
         "language": "fr",
@@ -60702,8 +60702,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "восприятие",
-        "transcription": "vasprijatije"
+        "text": "представление",
+        "transcription": "pred-stav-le-nie"
       },
       {
         "language": "fr",
@@ -66221,8 +66221,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "противоречия",
-        "transcription": "prəˈtivərəˈt͡ɕɪɪ̯ə"
+        "text": "противоположное",
+        "transcription": "protivopolozhnoye"
       },
       {
         "language": "fr",
@@ -66506,8 +66506,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "вноситель",
-        "transcription": "vnosítel'"
+        "text": "участник",
+        "transcription": "uchastnik"
       },
       {
         "language": "fr",
@@ -73849,8 +73849,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "рыдание",
-        "transcription": "rydaniye"
+        "text": "крик",
+        "transcription": "krik"
       },
       {
         "language": "fr",
@@ -75631,8 +75631,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "отруб",
-        "transcription": "otrub"
+        "text": "вырезка",
+        "transcription": "vyrezka"
       },
       {
         "language": "fr",
@@ -75748,8 +75748,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "циклировать",
-        "transcription": "tsik-lee-ro-vat'"
+        "text": "ездить на велосипеде",
+        "transcription": "yezdit' na velosipede"
       },
       {
         "language": "fr",
@@ -77206,8 +77206,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "свидаться",
-        "transcription": "svidat'sya"
+        "text": "встречаться",
+        "transcription": "vstrechat'sya"
       },
       {
         "language": "fr",
@@ -79231,8 +79231,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "акт",
-        "transcription": "akt"
+        "text": "поступок",
+        "transcription": "postupok"
       },
       {
         "language": "fr",
@@ -88724,8 +88724,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "сдержанность",
-        "transcription": "sděrzhánnost'"
+        "text": "усмотрение",
+        "transcription": "usmotreniye"
       },
       {
         "language": "fr",
@@ -89321,8 +89321,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "отправлять",
-        "transcription": "otpravlyat'"
+        "text": "увольнять",
+        "transcription": "uvol'nyat'"
       },
       {
         "language": "fr",
@@ -90401,8 +90401,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "тягость",
-        "transcription": "tja'got'"
+        "text": "страдание",
+        "transcription": "stradaniye"
       },
       {
         "language": "fr",
@@ -90452,8 +90452,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "страдать",
-        "transcription": "strat'at'"
+        "text": "расстраивать",
+        "transcription": "rasstraivat'"
       },
       {
         "language": "fr",
@@ -91281,8 +91281,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "разойтись",
-        "transcription": "razoytis'"
+        "text": "развестись",
+        "transcription": "razvestis'"
       },
       {
         "language": "fr",
@@ -92799,8 +92799,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "удвоение",
-        "transcription": "udvoenie"
+        "text": "вдвое больше",
+        "transcription": "vdvoye bol'she"
       },
       {
         "language": "fr",
@@ -93324,8 +93324,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "внижний",
-        "transcription": "vnizhnij"
+        "text": "нижний",
+        "transcription": "nizhniy"
       },
       {
         "language": "fr",
@@ -94768,8 +94768,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "проезд",
-        "transcription": "pro-ezd"
+        "text": "поездка",
+        "transcription": "poyezdka"
       },
       {
         "language": "fr",
@@ -95748,8 +95748,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "просроченный",
-        "transcription": "prosrochennyy"
+        "text": "должный",
+        "transcription": "dolzhnyy"
       },
       {
         "language": "fr",
@@ -97118,8 +97118,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "облегчение",
-        "transcription": "obligcheniye"
+        "text": "лёгкость",
+        "transcription": "lyogkost'"
       },
       {
         "language": "fr",
@@ -99503,8 +99503,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "либо",
-        "transcription": "lʲiˈbo"
+        "text": "любой",
+        "transcription": "lyuboy"
       },
       {
         "language": "fr",
@@ -99568,8 +99568,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "или",
-        "transcription": "ili"
+        "text": "любой",
+        "transcription": "lyuboy"
       },
       {
         "language": "fr",
@@ -101397,8 +101397,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "принимать",
-        "transcription": "pri-ni-ma-ty"
+        "text": "обнимать",
+        "transcription": "obnimat'"
       },
       {
         "language": "fr",
@@ -105135,8 +105135,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "энтузиастичный",
-        "transcription": "en-too-zee-AS-tee-chn-iy"
+        "text": "восторженный",
+        "transcription": "vostorzhennyy"
       },
       {
         "language": "fr",
@@ -105287,8 +105287,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "называть",
-        "transcription": "n'i'z'va't'"
+        "text": "давать право",
+        "transcription": "davat' pravo"
       },
       {
         "language": "fr",
@@ -105988,8 +105988,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "равнять",
-        "transcription": "ravnyat'"
+        "text": "равняться",
+        "transcription": "ravnyat'sya"
       },
       {
         "language": "fr",
@@ -111010,8 +111010,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "выставка",
-        "transcription": "vibistavka"
+        "text": "экспонат",
+        "transcription": "eksponat"
       },
       {
         "language": "fr",
@@ -114134,8 +114134,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "дополнительный",
-        "transcription": "da-pol-nee-tel'-niy"
+        "text": "дополнение",
+        "transcription": "dopolneniye"
       },
       {
         "language": "fr",
@@ -114419,8 +114419,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "экстремум",
-        "transcription": "ekstremum"
+        "text": "крайность",
+        "transcription": "krainost'"
       },
       {
         "language": "fr",
@@ -114820,8 +114820,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "сражаться",
-        "transcription": "srazhat'sya"
+        "text": "столкнуться",
+        "transcription": "stolknut'sya"
       },
       {
         "language": "fr",
@@ -114937,8 +114937,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "здание",
-        "transcription": "zdanije"
+        "text": "объект",
+        "transcription": "ob'yekt"
       },
       {
         "language": "fr",
@@ -116433,8 +116433,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "украшать",
-        "transcription": "ukrashat'"
+        "text": "хотеть",
+        "transcription": "khotet'"
       },
       {
         "language": "fr",
@@ -118234,8 +118234,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "поступок",
-        "transcription": "pastupok"
+        "text": "подвиг",
+        "transcription": "podvig"
       },
       {
         "language": "fr",
@@ -121339,8 +121339,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "нахождение",
-        "transcription": "naˈxodʲɪnɪje"
+        "text": "вывод",
+        "transcription": "vyvod"
       },
       {
         "language": "fr",
@@ -121819,8 +121819,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "гореть",
-        "transcription": "goret'"
+        "text": "стрелять",
+        "transcription": "strelyat'"
       },
       {
         "language": "fr",
@@ -122783,8 +122783,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "форма",
-        "transcription": "forma"
+        "text": "приступ",
+        "transcription": "pristup"
       },
       {
         "language": "fr",
@@ -125708,8 +125708,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ласковый",
-        "transcription": "láskovyj"
+        "text": "любящий",
+        "transcription": "lyubyashchiy"
       },
       {
         "language": "fr",
@@ -127946,8 +127946,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "опекать",
-        "transcription": "apikat'"
+        "text": "способствовать",
+        "transcription": "sposobstvovat'"
       },
       {
         "language": "fr",
@@ -127997,8 +127997,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "нашёл",
-        "transcription": "nashol"
+        "text": "основывать",
+        "transcription": "osnovyvat'"
       },
       {
         "language": "fr",
@@ -128630,8 +128630,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "рамка",
-        "transcription": "ˈramkə"
+        "text": "структура",
+        "transcription": "struktura"
       },
       {
         "language": "fr",
@@ -133126,8 +133126,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "взглядывать",
-        "transcription": "vzglyadivat'"
+        "text": "пристально смотреть",
+        "transcription": "pristal'no smotret'"
       },
       {
         "language": "fr",
@@ -133177,8 +133177,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "шестерня",
-        "transcription": "shesternyā"
+        "text": "снаряжение",
+        "transcription": "snaryazheniye"
       },
       {
         "language": "fr",
@@ -134822,8 +134822,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "радостный",
-        "transcription": "radóstnyj"
+        "text": "рад",
+        "transcription": "rad"
       },
       {
         "language": "fr",
@@ -135437,8 +135437,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "поездка",
-        "transcription": "poyezdka:"
+        "text": "попытка",
+        "transcription": "popytka"
       },
       {
         "language": "fr",
@@ -138590,8 +138590,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "точить",
-        "transcription": "tochit'"
+        "text": "молоть",
+        "transcription": "molot'"
       },
       {
         "language": "fr",
@@ -140368,8 +140368,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "воздавать почести",
-        "transcription": "vozdavat' pochesti"
+        "text": "приветствовать",
+        "transcription": "privetstvovat'"
       },
       {
         "language": "fr",
@@ -144756,8 +144756,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "здесь",
-        "transcription": "zdes'"
+        "text": "следовательно",
+        "transcription": "sledovatel'no"
       },
       {
         "language": "fr",
@@ -145303,8 +145303,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "замедляться",
-        "transcription": "zam-e-dlyat'-sya"
+        "text": "колебаться",
+        "transcription": "kolebat'sya"
       },
       {
         "language": "fr",
@@ -154399,8 +154399,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "внутренне",
-        "transcription": "vnutrenne"
+        "text": "внутри",
+        "transcription": "vnutri"
       },
       {
         "language": "fr",
@@ -155135,8 +155135,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "инклюзия",
-        "transcription": "inklyu-zi-ya"
+        "text": "включение",
+        "transcription": "vklyucheniye"
       },
       {
         "language": "fr",
@@ -155470,8 +155470,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "постепенно",
-        "transcription": "pas-tye-pen-na"
+        "text": "всё больше",
+        "transcription": "vsyo bol'she"
       },
       {
         "language": "fr",
@@ -156902,8 +156902,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "знаменитый",
-        "transcription": "znaménityy"
+        "text": "печально известный",
+        "transcription": "pechal'no izvestnyy"
       },
       {
         "language": "fr",
@@ -159905,8 +159905,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "экземпляр",
-        "transcription": "ekzemplyar"
+        "text": "пример",
+        "transcription": "primer"
       },
       {
         "language": "fr",
@@ -165268,8 +165268,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "он",
-        "transcription": "on"
+        "text": "оно",
+        "transcription": "ono"
       },
       {
         "language": "fr",
@@ -165646,8 +165646,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "сажать (zazat')",
-        "transcription": "za-zat'"
+        "text": "сажать в тюрьму",
+        "transcription": "sazhat' v tyur'mu"
       },
       {
         "language": "fr",
@@ -167504,8 +167504,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "простой",
-        "transcription": "prostyj"
+        "text": "справедливый",
+        "transcription": "spravedlivyy"
       },
       {
         "language": "fr",
@@ -168038,8 +168038,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "открывать",
-        "transcription": "otkryvat'"
+        "text": "вводить",
+        "transcription": "vvodit'"
       },
       {
         "language": "fr",
@@ -168729,8 +168729,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "род",
-        "transcription": "rod"
+        "text": "вид",
+        "transcription": "vid"
       },
       {
         "language": "fr",
@@ -170629,8 +170629,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "дорога",
-        "transcription": "daroga"
+        "text": "переулок",
+        "transcription": "pereulok"
       },
       {
         "language": "fr",
@@ -170745,7 +170745,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "колени́",
+        "text": "колени",
         "transcription": "kolen'i"
       },
       {
@@ -171078,8 +171078,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "последний",
-        "transcription": "posledniy"
+        "text": "в последний раз",
+        "transcription": "v posledniy raz"
       },
       {
         "language": "fr",
@@ -171276,8 +171276,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "продливаться",
-        "transcription": "prodlivatsya"
+        "text": "продолжаться",
+        "transcription": "prodolzhat'sya"
       },
       {
         "language": "fr",
@@ -171768,8 +171768,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "поздний",
-        "transcription": "paˈzhnʲiː"
+        "text": "последний",
+        "transcription": "posledniy"
       },
       {
         "language": "fr",
@@ -172284,8 +172284,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "исковое заявление",
-        "transcription": "i-skov-oye za-yav-l-n-iye"
+        "text": "иск",
+        "transcription": "isk"
       },
       {
         "language": "fr",
@@ -174158,8 +174158,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "лево",
-        "transcription": "levo"
+        "text": "левая сторона",
+        "transcription": "levaya storona"
       },
       {
         "language": "fr",
@@ -175073,8 +175073,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "лесбийская",
-        "transcription": "lesbiyskaya"
+        "text": "лесбийский",
+        "transcription": "lesbiyskiy"
       },
       {
         "language": "fr",
@@ -175617,8 +175617,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "уровневый",
-        "transcription": "urovnev'y"
+        "text": "ровный",
+        "transcription": "rovnyy"
       },
       {
         "language": "fr",
@@ -177030,8 +177030,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "вроде",
-        "transcription": "vrode"
+        "text": "симпатия",
+        "transcription": "simpatiya"
       },
       {
         "language": "fr",
@@ -177744,8 +177744,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "прочертить",
-        "transcription": "procherchit'"
+        "text": "выстраивать",
+        "transcription": "vystraivat'"
       },
       {
         "language": "fr",
@@ -177795,8 +177795,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "выступление",
-        "transcription": "vystupleniye"
+        "text": "состав",
+        "transcription": "sostav"
       },
       {
         "language": "fr",
@@ -179107,8 +179107,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "маленький",
-        "transcription": "ma-len'-kiy"
+        "text": "немного",
+        "transcription": "nemnogo"
       },
       {
         "language": "fr",
@@ -179303,8 +179303,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "живо",
-        "transcription": "zheevo"
+        "text": "вживую",
+        "transcription": "vzhivuyu"
       },
       {
         "language": "fr",
@@ -179601,8 +179601,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "живой",
-        "transcription": "zhi-voy"
+        "text": "заработок",
+        "transcription": "zarabotok"
       },
       {
         "language": "fr",
@@ -181763,8 +181763,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "пачка",
-        "transcription": "patchka"
+        "text": "множество",
+        "transcription": "mnozhestvo"
       },
       {
         "language": "fr",
@@ -183151,8 +183151,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "злой",
-        "transcription": "zloy"
+        "text": "сумасшедший",
+        "transcription": "sumasshedshiy"
       },
       {
         "language": "fr",
@@ -183466,8 +183466,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "магистр",
-        "transcription": "magistr"
+        "text": "судья",
+        "transcription": "sud'ya"
       },
       {
         "language": "fr",
@@ -183619,7 +183619,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "величи́на",
+        "text": "величина",
         "transcription": "velichina"
       },
       {
@@ -184353,8 +184353,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "изделие",
-        "transcription": "izdeliye"
+        "text": "марка",
+        "transcription": "marka"
       },
       {
         "language": "fr",
@@ -184520,8 +184520,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "производство",
-        "transcription": "prʲɪzvɐˈdstvə"
+        "text": "создание",
+        "transcription": "sozdaniye"
       },
       {
         "language": "fr",
@@ -186374,8 +186374,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "продавать",
-        "transcription": "pro-davat'"
+        "text": "продвигать",
+        "transcription": "prodvigat'"
       },
       {
         "language": "fr",
@@ -186858,8 +186858,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "массивный",
-        "transcription": "massívnyy"
+        "text": "массовый",
+        "transcription": "massovyy"
       },
       {
         "language": "fr",
@@ -187398,8 +187398,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "соединять",
-        "transcription": "soedinyat'"
+        "text": "спариваться",
+        "transcription": "sparivat'sya"
       },
       {
         "language": "fr",
@@ -187813,8 +187813,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "имеет значение",
-        "transcription": "i-myet zna-chye-ni-ye"
+        "text": "иметь значение",
+        "transcription": "imet' znacheniye"
       },
       {
         "language": "fr",
@@ -190811,8 +190811,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "просто",
-        "transcription": "prost'o"
+        "text": "простой",
+        "transcription": "prostoy"
       },
       {
         "language": "fr",
@@ -192495,8 +192495,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "запомнить",
-        "transcription": "zapomnit'"
+        "text": "возражать",
+        "transcription": "vozrazhat'"
       },
       {
         "language": "fr",
@@ -193251,8 +193251,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "минутный",
-        "transcription": "minut-niy"
+        "text": "крошечный",
+        "transcription": "kroshechnyy"
       },
       {
         "language": "fr",
@@ -195917,7 +195917,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "мора́ль",
+        "text": "мораль",
         "transcription": "morál'"
       },
       {
@@ -196098,8 +196098,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "еще",
-        "transcription": "yeshchyo"
+        "text": "больше",
+        "transcription": "bol'she"
       },
       {
         "language": "fr",
@@ -196448,8 +196448,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "самый",
-        "transcription": "samyj"
+        "text": "большинство",
+        "transcription": "bol'shinstvo"
       },
       {
         "language": "fr",
@@ -200009,8 +200009,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "коренной",
-        "transcription": "kərénnyy"
+        "text": "уроженец",
+        "transcription": "urozhenets"
       },
       {
         "language": "fr",
@@ -200788,8 +200788,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "необходимо",
-        "transcription": "niyechˈno"
+        "text": "обязательно",
+        "transcription": "obyazatel'no"
       },
       {
         "language": "fr",
@@ -202161,8 +202161,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "сетевой",
-        "transcription": "syetevoy"
+        "text": "чистый",
+        "transcription": "chistyy"
       },
       {
         "language": "fr",
@@ -202876,8 +202876,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "следующий",
-        "transcription": "sledujushchiy"
+        "text": "затем",
+        "transcription": "zatem"
       },
       {
         "language": "fr",
@@ -206658,8 +206658,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "медсестринство",
-        "transcription": "medsestrinstvo"
+        "text": "сестринское дело",
+        "transcription": "sestrinskoye delo"
       },
       {
         "language": "fr",
@@ -206824,8 +206824,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "точно",
-        "transcription": "tóchno"
+        "text": "час",
+        "transcription": "chas"
       },
       {
         "language": "fr",
@@ -207917,8 +207917,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "иногда",
-        "transcription": "in-OH-zhah"
+        "text": "случайный",
+        "transcription": "sluchaynyy"
       },
       {
         "language": "fr",
@@ -208367,8 +208367,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "нечётный",
-        "transcription": "niechótnyj"
+        "text": "странный",
+        "transcription": "strannyy"
       },
       {
         "language": "fr",
@@ -208433,8 +208433,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "коэффициенты",
-        "transcription": "koˈefːɪˌjɪnty"
+        "text": "шансы",
+        "transcription": "shansy"
       },
       {
         "language": "fr",
@@ -208551,8 +208551,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "от",
-        "transcription": "ot"
+        "text": "прочь",
+        "transcription": "proch'"
       },
       {
         "language": "fr",
@@ -209891,8 +209891,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "на",
-        "transcription": "na"
+        "text": "дальше",
+        "transcription": "dal'she"
       },
       {
         "language": "fr",
@@ -211526,8 +211526,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "противоположный",
-        "transcription": "prəˈtivəpɐˈlozhnɨj"
+        "text": "против",
+        "transcription": "protiv"
       },
       {
         "language": "fr",
@@ -214865,8 +214865,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "окружающая среда",
-        "transcription": "ɐkrʊˈʐajə ˈsʲrʲedə"
+        "text": "внешняя сторона",
+        "transcription": "vneshnyaya storona"
       },
       {
         "language": "fr",
@@ -214996,8 +214996,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "изгой",
-        "transcription": "izˈgoy"
+        "text": "посторонний",
+        "transcription": "postoronniy"
       },
       {
         "language": "fr",
@@ -215447,8 +215447,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "посмотреть",
-        "transcription": "pasmotret'"
+        "text": "упускать",
+        "transcription": "upuskat'"
       },
       {
         "language": "fr",
@@ -215902,8 +215902,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "должник",
-        "transcription": "dolzhnik"
+        "text": "задолжать",
+        "transcription": "zadolzhat'"
       },
       {
         "language": "fr",
@@ -216367,8 +216367,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ходить в порыве",
-        "transcription": "hodit' v poryve"
+        "text": "ходить взад-вперёд",
+        "transcription": "khodit' vzad-vpered"
       },
       {
         "language": "fr",
@@ -219501,8 +219501,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "оценка",
-        "transcription": "ɐˈt͡sʲɪnka"
+        "text": "прохождение",
+        "transcription": "prokhozhdeniye"
       },
       {
         "language": "fr",
@@ -219900,8 +219900,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "прошлом",
-        "transcription": "proshlom"
+        "text": "мимо",
+        "transcription": "mimo"
       },
       {
         "language": "fr",
@@ -221813,8 +221813,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "через",
-        "transcription": "cherez"
+        "text": "за",
+        "transcription": "za"
       },
       {
         "language": "fr",
@@ -222906,8 +222906,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "настаивать",
-        "transcription": "nastayivat'"
+        "text": "упорствовать",
+        "transcription": "upornstvovat'"
       },
       {
         "language": "fr",
@@ -225015,7 +225015,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "го́ра",
+        "text": "гора",
         "transcription": "goˈra"
       },
       {
@@ -227306,8 +227306,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "умолять",
-        "transcription": "umolyat'"
+        "text": "радовать",
+        "transcription": "radovat'"
       },
       {
         "language": "fr",
@@ -231771,8 +231771,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "наделить",
-        "transcription": "nade-lit'"
+        "text": "приводить в действие",
+        "transcription": "privodit' v deystviye"
       },
       {
         "language": "fr",
@@ -234981,8 +234981,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "прелестно",
-        "transcription": "prelestno"
+        "text": "довольно",
+        "transcription": "dovol'no"
       },
       {
         "language": "fr",
@@ -235047,8 +235047,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "превалить",
-        "transcription": "pre-va-lit'"
+        "text": "преобладать",
+        "transcription": "preobladat'"
       },
       {
         "language": "fr",
@@ -235511,8 +235511,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "цени́ть",
-        "transcription": "tsenít'"
+        "text": "оценивать",
+        "transcription": "otsenivat'"
       },
       {
         "language": "fr",
@@ -237382,8 +237382,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "процедура",
-        "transcription": "pratsedúra"
+        "text": "разбирательство",
+        "transcription": "razbiratel'stvo"
       },
       {
         "language": "fr",
@@ -239751,8 +239751,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "выразительный",
-        "transcription": "vy-raz-i-tel'-nyy"
+        "text": "заметный",
+        "transcription": "zametnyy"
       },
       {
         "language": "fr",
@@ -241916,8 +241916,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "публичность",
-        "transcription": "publichnost'"
+        "text": "огласка",
+        "transcription": "oglaska"
       },
       {
         "language": "fr",
@@ -242315,8 +242315,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "насос",
-        "transcription": "nasós"
+        "text": "накачивать",
+        "transcription": "nakachivat'"
       },
       {
         "language": "fr",
@@ -243580,8 +243580,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "квалифицировать",
-        "transcription": "kvalifikárovat'"
+        "text": "соответствовать",
+        "transcription": "sootvetstvovat'"
       },
       {
         "language": "fr",
@@ -245916,8 +245916,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "дождь",
-        "transcription": "dozhd'"
+        "text": "идти",
+        "transcription": "idti"
       },
       {
         "language": "fr",
@@ -248488,8 +248488,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "умеренно",
-        "transcription": "ooˈmʲernə"
+        "text": "разумно",
+        "transcription": "razumno"
       },
       {
         "language": "fr",
@@ -251276,8 +251276,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "взгляд",
-        "transcription": "vzglyad"
+        "text": "уважение",
+        "transcription": "uvazheniye"
       },
       {
         "language": "fr",
@@ -251377,8 +251377,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "несмотря на",
-        "transcription": "ne-smot-ri-na"
+        "text": "всё равно",
+        "transcription": "vsyo ravno"
       },
       {
         "language": "fr",
@@ -252769,8 +252769,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "родственный",
-        "transcription": "rodstvennyy"
+        "text": "относительный",
+        "transcription": "otnositel'nyy"
       },
       {
         "language": "fr",
@@ -253783,8 +253783,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "нехотящий",
-        "transcription": "ni-haˈtʲɪjɪj"
+        "text": "неохотный",
+        "transcription": "neokhotnyy"
       },
       {
         "language": "fr",
@@ -255265,8 +255265,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "повторюваний",
-        "transcription": "pa-vta-ryu-va-nɨj"
+        "text": "повторный",
+        "transcription": "povtornyy"
       },
       {
         "language": "fr",
@@ -255995,8 +255995,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "представительский",
-        "transcription": "pred-sta-vi-tel-skiy"
+        "text": "репрезентативный",
+        "transcription": "reprezentativnyy"
       },
       {
         "language": "fr",
@@ -257168,8 +257168,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "жилой",
-        "transcription": "zhi-loy"
+        "text": "проживающий",
+        "transcription": "prozhivayushchiy"
       },
       {
         "language": "fr",
@@ -258807,8 +258807,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "получить",
-        "transcription": "pa-lu-chit'"
+        "text": "приводить",
+        "transcription": "privodit'"
       },
       {
         "language": "fr",
@@ -258873,8 +258873,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "взять на себя",
-        "transcription": "vzyat' na sebya"
+        "text": "возобновлять",
+        "transcription": "vozobnovlyat'"
       },
       {
         "language": "fr",
@@ -260049,8 +260049,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "редакция",
-        "transcription": "riˈdakt͡sɪyə"
+        "text": "пересмотр",
+        "transcription": "peresmotr"
       },
       {
         "language": "fr",
@@ -261948,8 +261948,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "украсть",
-        "transcription": "ukrast'"
+        "text": "грабить",
+        "transcription": "grabit'"
       },
       {
         "language": "fr",
@@ -262333,8 +262333,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "жердь",
-        "transcription": "zherd'"
+        "text": "стержень",
+        "transcription": "sterzhen'"
       },
       {
         "language": "fr",
@@ -262514,8 +262514,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "кататься",
-        "transcription": "katat'sya"
+        "text": "катиться",
+        "transcription": "katit'sya"
       },
       {
         "language": "fr",
@@ -263279,7 +263279,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "круго́м",
+        "text": "кругом",
         "transcription": "kruhó'm"
       },
       {
@@ -264776,8 +264776,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "поток",
-        "transcription": "po-tok"
+        "text": "спешка",
+        "transcription": "speshka"
       },
       {
         "language": "fr",
@@ -266232,8 +266232,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "выбирать",
-        "transcription": "vy-brat'"
+        "text": "пробовать",
+        "transcription": "probovat'"
       },
       {
         "language": "fr",
@@ -267031,8 +267031,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ве́с",
-        "transcription": "ves'"
+        "text": "масштаб",
+        "transcription": "mas-shtab"
       },
       {
         "language": "fr",
@@ -268733,8 +268733,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "болт",
-        "transcription": "bolt"
+        "text": "винт",
+        "transcription": "vint"
       },
       {
         "language": "fr",
@@ -272957,8 +272957,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "устанавливаться",
-        "transcription": "us-ta-nov-lee-t'sya"
+        "text": "поселяться",
+        "transcription": "poselyat'sya"
       },
       {
         "language": "fr",
@@ -273367,8 +273367,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "они",
-        "transcription": "oni:"
+        "text": "несколько",
+        "transcription": "neskol'ko"
       },
       {
         "language": "fr",
@@ -274116,8 +274116,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "срам",
-        "transcription": "sram"
+        "text": "стыд",
+        "transcription": "styd"
       },
       {
         "language": "fr",
@@ -282559,8 +282559,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "чувствовать",
-        "transcription": "chuvstvovat'"
+        "text": "пахнуть",
+        "transcription": "pakhnut'"
       },
       {
         "language": "fr",
@@ -283200,8 +283200,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "сыпать",
-        "transcription": "sipat'"
+        "text": "идти",
+        "transcription": "idti"
       },
       {
         "language": "fr",
@@ -283331,8 +283331,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "так",
-        "transcription": "tak"
+        "text": "поэтому",
+        "transcription": "poetomu"
       },
       {
         "language": "fr",
@@ -285413,8 +285413,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "там",
-        "transcription": "tam"
+        "text": "где-то",
+        "transcription": "gde-to"
       },
       {
         "language": "fr",
@@ -285855,8 +285855,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "сортировка",
-        "transcription": "sortirovka"
+        "text": "вид",
+        "transcription": "vid"
       },
       {
         "language": "fr",
@@ -286037,8 +286037,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "звучащий",
-        "transcription": "zvuchashchiy"
+        "text": "здравый",
+        "transcription": "zdravyy"
       },
       {
         "language": "fr",
@@ -286153,8 +286153,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "издавать звук",
-        "transcription": "izdat' zvuk"
+        "text": "звучать",
+        "transcription": "zvuchat'"
       },
       {
         "language": "fr",
@@ -286931,8 +286931,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "экономить",
-        "transcription": "iekonomit'"
+        "text": "щадить",
+        "transcription": "shchadit'"
       },
       {
         "language": "fr",
@@ -287819,8 +287819,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "феноменальный",
-        "transcription": "fenomenál'nyy"
+        "text": "эффектный",
+        "transcription": "effektnyy"
       },
       {
         "language": "fr",
@@ -289119,8 +289119,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "злопамятство",
-        "transcription": "zlopamyatstvo"
+        "text": "злоба",
+        "transcription": "zloba"
       },
       {
         "language": "fr",
@@ -289170,8 +289170,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "трещина",
-        "transcription": "tre-shchi-na"
+        "text": "раскол",
+        "transcription": "raskol"
       },
       {
         "language": "fr",
@@ -289321,8 +289321,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "устным",
-        "transcription": "ˈustnɨm"
+        "text": "устный",
+        "transcription": "ustnyy"
       },
       {
         "language": "fr",
@@ -291228,8 +291228,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "стойло",
-        "transcription": "stoyló"
+        "text": "прилавок",
+        "transcription": "prilavok"
       },
       {
         "language": "fr",
@@ -291763,8 +291763,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "быть звёздой",
-        "transcription": "pamyetat' zvyezdami"
+        "text": "играть главную роль",
+        "transcription": "igrat' glavnuyu rol'"
       },
       {
         "language": "fr",
@@ -292113,8 +292113,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "обстоятельный",
-        "transcription": "obstoyátel'nyy"
+        "text": "государственный",
+        "transcription": "gosudarstvennyy"
       },
       {
         "language": "fr",
@@ -296363,8 +296363,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "создавать",
-        "transcription": "soz-dah-vat'"
+        "text": "структурировать",
+        "transcription": "strukturirovat'"
       },
       {
         "language": "fr",
@@ -297176,8 +297176,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "определённый",
-        "transcription": "opredelyonnyy"
+        "text": "подверженный",
+        "transcription": "podverzhennyy"
       },
       {
         "language": "fr",
@@ -297547,8 +297547,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "последующе",
-        "transcription": "posledúyushche"
+        "text": "впоследствии",
+        "transcription": "vposledstvii"
       },
       {
         "language": "fr",
@@ -298120,8 +298120,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "успеть",
-        "transcription": "uspet'"
+        "text": "преуспеть",
+        "transcription": "preuspet'"
       },
       {
         "language": "fr",
@@ -300090,8 +300090,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "сверх",
-        "transcription": "s-vyerkh"
+        "text": "отличный",
+        "transcription": "otlichnyy"
       },
       {
         "language": "fr",
@@ -301475,8 +301475,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "взрываться",
-        "transcription": "vzrivat'sya"
+        "text": "резко расти",
+        "transcription": "rezko rasti"
       },
       {
         "language": "fr",
@@ -304389,8 +304389,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "завязка",
-        "transcription": "zav'yazka"
+        "text": "снаряжение",
+        "transcription": "snaryazheniye"
       },
       {
         "language": "fr",
@@ -304439,8 +304439,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "останавливать",
-        "transcription": "ɐstɐˈvnɪvɐtʲ"
+        "text": "решать",
+        "transcription": "reshat'"
       },
       {
         "language": "fr",
@@ -306361,8 +306361,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "плакать",
-        "transcription": "plakat'"
+        "text": "рвать",
+        "transcription": "rvat'"
       },
       {
         "language": "fr",
@@ -307487,8 +307487,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "заботиться",
-        "transcription": "zabotit'sya"
+        "text": "иметь тенденцию",
+        "transcription": "imet' tendentsiyu"
       },
       {
         "language": "fr",
@@ -307836,8 +307836,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "должность",
-        "transcription": "dolzhnost'"
+        "text": "срок полномочий",
+        "transcription": "srok polnomochiy"
       },
       {
         "language": "fr",
@@ -307953,8 +307953,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ограничивать",
-        "transcription": "ogranichivat'"
+        "text": "называть",
+        "transcription": "nazyvat'"
       },
       {
         "language": "fr",
@@ -309701,8 +309701,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "этот",
-        "transcription": "etot"
+        "text": "тот",
+        "transcription": "tot"
       },
       {
         "language": "fr",
@@ -311463,8 +311463,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "третий",
-        "transcription": "tyet'iy"
+        "text": "треть",
+        "transcription": "tret'"
       },
       {
         "language": "fr",
@@ -311790,8 +311790,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "здесь",
-        "transcription": "zdes'"
+        "text": "настолько",
+        "transcription": "nastol'ko"
       },
       {
         "language": "fr",
@@ -311855,8 +311855,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "это",
-        "transcription": "e-ta"
+        "text": "этот",
+        "transcription": "etot"
       },
       {
         "language": "fr",
@@ -313014,8 +313014,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "в течение",
-        "transcription": "v techeniye"
+        "text": "повсюду",
+        "transcription": "povsyudu"
       },
       {
         "language": "fr",
@@ -314602,8 +314602,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "марля",
-        "transcription": "mar'lya"
+        "text": "ткань",
+        "transcription": "tkan'"
       },
       {
         "language": "fr",
@@ -317069,8 +317069,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "обходить",
-        "transcription": "obkhodit'"
+        "text": "путешествовать",
+        "transcription": "puteshestvovat'"
       },
       {
         "language": "fr",
@@ -323154,8 +323154,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "близнецовый",
-        "transcription": "bliznecovyj"
+        "text": "двойной",
+        "transcription": "dvoynoy"
       },
       {
         "language": "fr",
@@ -324491,8 +324491,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "переживать",
-        "transcription": "perézivat'"
+        "text": "подвергаться",
+        "transcription": "podvergat'sya"
       },
       {
         "language": "fr",
@@ -329260,7 +329260,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "цени́ть",
+        "text": "ценить",
         "transcription": "tsenít'"
       },
       {
@@ -330570,8 +330570,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "очень",
-        "transcription": "ochen'"
+        "text": "самый",
+        "transcription": "samyy"
       },
       {
         "language": "fr",
@@ -331538,8 +331538,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "деревенщина",
-        "transcription": "dierie-vin-shcha"
+        "text": "селянин",
+        "transcription": "selyanin"
       },
       {
         "language": "fr",
@@ -332476,8 +332476,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "выразительный",
-        "transcription": "vyrazítel'nyy"
+        "text": "голосовой",
+        "transcription": "golosovoy"
       },
       {
         "language": "fr",
@@ -334321,7 +334321,7 @@
     "translations": [
       {
         "language": "ru",
-        "text": "о́рдер",
+        "text": "ордер",
         "transcription": "ˈortʲɪr"
       },
       {
@@ -336637,8 +336637,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "приветливый",
-        "transcription": "privetlivyy"
+        "text": "желанный",
+        "transcription": "zhelannyy"
       },
       {
         "language": "fr",
@@ -336950,8 +336950,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "хорошо",
-        "transcription": "khorosho"
+        "text": "здоровый",
+        "transcription": "zdorovyy"
       },
       {
         "language": "fr",
@@ -338497,8 +338497,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "который",
-        "transcription": "ko-to-ryi"
+        "text": "благодаря чему",
+        "transcription": "blagodarya chemu"
       },
       {
         "language": "fr",
@@ -340735,8 +340735,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "дуть",
-        "transcription": "dut'"
+        "text": "наматывать",
+        "transcription": "namatyvat'"
       },
       {
         "language": "fr",
@@ -343754,8 +343754,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "хужее",
-        "transcription": "khuzhee"
+        "text": "худшее",
+        "transcription": "khudsheye"
       },
       {
         "language": "fr",
@@ -344141,8 +344141,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ранеть",
-        "transcription": "ranet'"
+        "text": "ранить",
+        "transcription": "ranit'"
       },
       {
         "language": "fr",
@@ -345442,8 +345442,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "ещё",
-        "transcription": "yeshchyo"
+        "text": "однако",
+        "transcription": "odnako"
       },
       {
         "language": "fr",
@@ -345544,8 +345544,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "поставлять",
-        "transcription": "pastlyat'"
+        "text": "приносить",
+        "transcription": "prinosit'"
       },
       {
         "language": "fr",
@@ -345725,8 +345725,8 @@
     "translations": [
       {
         "language": "ru",
-        "text": "молодой человек",
-        "transcription": "ma-lo-doy che-lo-vek"
+        "text": "молодёжь",
+        "transcription": "molodyozh'"
       },
       {
         "language": "fr",
