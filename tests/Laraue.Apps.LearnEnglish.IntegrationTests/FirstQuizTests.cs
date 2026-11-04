@@ -39,6 +39,28 @@ public class FirstQuizTests : IntegrationTest
             Buttons(request));
     }
 
+    [Theory]
+    [InlineData("uz", "uz")]
+    [InlineData("ar", "ar")]
+    [InlineData("fa-IR", "fa")]
+    public async Task Start_ShouldOfferFirstQuiz_ForUzbekArabicAndPersianSpeakers(string languageCode, string pair)
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        await telegramTestHost.SendUpdateAsync(StartMessage(languageCode));
+
+        var pairId = DefaultContextData.GetWordLanguages().GetId(pair);
+        var user = Assert.Single(telegramTestHost.GetFromDb(db => db.Users.ToArray()));
+        Assert.Equal(pairId, user.LanguageToLearnId);
+
+        var request = telegramTestHost.Requests().Single<SendMessageRequest>();
+        Assert.Equal($"1 sfq?lt={pairId}", Buttons(request)[0][0].Item2);
+
+        // The first quiz has enough A1 words in the new pair (MIN-36).
+        await telegramTestHost.SendUpdateAsync(StartFirstQuizCallback(pairId));
+        var questions = telegramTestHost.GetFromDb(db => db.UserQuizQuestions.ToArray());
+        Assert.Equal(QuizService.FirstQuizQuestionsCount, questions.Length);
+    }
+
     [Fact]
     public async Task Start_ShouldAskLanguageForFirstQuiz_WhenTelegramLanguageIsEnglish()
     {
@@ -51,12 +73,15 @@ public class FirstQuizTests : IntegrationTest
         var request = telegramTestHost.Requests().Single<SendMessageRequest>();
         Assert.Equal<(string, string?)[][]>(
             [
+                [("English → Arabic", "1 sfq?lt=10")],
                 [("English → German", "1 sfq?lt=6")],
                 [("English → Spanish", "1 sfq?lt=5")],
+                [("English → Persian", "1 sfq?lt=11")],
                 [("English → French", "1 sfq?lt=3")],
                 [("English → Hindi", "1 sfq?lt=8")],
                 [("English → Japanese", "1 sfq?lt=4")],
                 [("English → Russian", "1 sfq?lt=2")],
+                [("English → Uzbek", "1 sfq?lt=9")],
                 [("English → Chinese", "1 sfq?lt=7")],
                 [("Menu", "m")],
             ],

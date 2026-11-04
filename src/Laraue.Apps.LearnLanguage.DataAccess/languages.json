@@ -38,5 +38,20 @@
     "name": "hi",
     "description": "Hindi",
     "id": 8
+  },
+  {
+    "name": "uz",
+    "description": "Uzbek",
+    "id": 9
+  },
+  {
+    "name": "ar",
+    "description": "Arabic",
+    "id": 10
+  },
+  {
+    "name": "fa",
+    "description": "Persian",
+    "id": 11
   }
 ]

@@ -13338,6 +13338,24 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                             Id = 8L,
                             Description = "Hindi",
                             Name = "hi"
+                        },
+                        new
+                        {
+                            Id = 9L,
+                            Description = "Uzbek",
+                            Name = "uz"
+                        },
+                        new
+                        {
+                            Id = 10L,
+                            Description = "Arabic",
+                            Name = "ar"
+                        },
+                        new
+                        {
+                            Id = 11L,
+                            Description = "Persian",
+                            Name = "fa"
                         });
                 });
 
