@@ -2,21 +2,11 @@
 
 public static class ParameterNames
 {
-    public const string Page = "p";
-    
-    public const string OpenedWordId = "ow";
     public const string QuestionId = "q";
     public const string AnswerWordId = "a";
-    public const string OpenedLanguageId = "om";
     public const string TopicId = "ti";
     public const string CefrLevelId = "ci";
     public const string Enable = "e";
-    public const string ToggleTranslations = "t";
-    public const string RevertTranslations = "r";
-    public const string ShowMode = "m";
-    public const string LearnState = "ls";
-    public const string MarkState = "ms";
-    public const string GroupId = "g";
     
     public const string LanguageToLearn = "lt";
 }

@@ -105,15 +105,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to See translation 👁.
-        /// </summary>
-        public static string SeeTranslation {
-            get {
-                return ResourceManager.GetString("SeeTranslation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ⚙️ Settings.
         /// </summary>
         public static string Settings {

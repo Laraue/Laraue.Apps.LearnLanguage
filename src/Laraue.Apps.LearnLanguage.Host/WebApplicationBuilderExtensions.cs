@@ -6,9 +6,6 @@ using Laraue.Apps.LearnLanguage.AppServices.Options;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
 using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes;
-using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes.Group.CefrLevel;
-using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes.Group.FirstLetter;
-using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes.Group.Topic;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Quiz;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Reminders;
 using Laraue.Apps.LearnLanguage.DataAccess;
@@ -118,7 +115,6 @@ public static class WebApplicationBuilderExtensions
                 .AddScoped<IMenuService, MenuService>()
 
                 .AddScoped<IWordsRepository, WordsRepository>()
-                .AddScoped<IWordsWindowFactory, WordsWindowFactory>()
 
                 .AddScoped<IStatsRepository, StatsRepository>()
                 .AddScoped<IAdminRepository, AdminRepository>()
@@ -132,12 +128,6 @@ public static class WebApplicationBuilderExtensions
 
                 .AddScoped<IStatsService, StatsService>()
 
-                .AddScoped<ILearnByCefrLevelService, LearnByCefrLevelService>()
-                .AddScoped<ILearnByFirstLetterService, LearnByFirstLetterService>()
-                .AddScoped<ILearnByTopicService, LearnByTopicService>()
-                .AddScoped<ILearnByCefrLevelRepository, LearnByCefrLevelRepository>()
-                .AddScoped<ILearnByTopicRepository, LearnByTopicRepository>()
-                .AddScoped<ILearnByFirstLetterRepository, LearnByFirstLetterRepository>()
 
                 .AddScoped<IQuizService, QuizService>()
                 .AddScoped<QuizService.IRepository, QuizService.Repository>()

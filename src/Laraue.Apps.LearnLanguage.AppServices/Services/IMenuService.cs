@@ -11,8 +11,6 @@ public interface IMenuService
     /// Send bot menu to the user.
     /// </summary>
     Task SendMenuAsync(ReplyData replyData, CancellationToken ct = default);
-    
-    Task SendWordsListsMenuAsync(ReplyData replyData, CancellationToken ct = default);
 
     /// <summary>
     /// Send start messages to the user.

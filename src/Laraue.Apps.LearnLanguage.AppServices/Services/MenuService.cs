@@ -35,25 +35,6 @@ public class MenuService(
         return client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
     }
 
-    public Task SendWordsListsMenuAsync(ReplyData replyData, CancellationToken ct = default)
-    {
-        var tmb = new TelegramMessageBuilder()
-            .AppendRow(Mode.ListMode)
-            .AppendRow($"{Mode.BrowseWords}:")
-            .AddInlineKeyboardButtons(new[]
-            {
-                InlineKeyboardButton.WithCallbackData(
-                    GroupMode.CefrLevel_ButtonName, TelegramRoutes.ListGroupsByCefrLevel),
-                InlineKeyboardButton.WithCallbackData(
-                    GroupMode.Topics_ButtonName, TelegramRoutes.ListGroupsByTopic),
-                InlineKeyboardButton.WithCallbackData(
-                    GroupMode.Sequential_ButtonName, TelegramRoutes.ListGroupsByFirstLetter),
-            })
-            .AddBackMenuButton(TelegramRoutes.Menu);
-
-        return client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
-    }
-
     public async Task StartAsync(
         string rawCommand,
         Guid userId,
@@ -180,9 +161,7 @@ public class MenuService(
     {
         telegramMessageBuilder.AddInlineKeyboardButtons([
                 InlineKeyboardButton.WithCallbackData(
-                    QuizMode.ButtonName, TelegramRoutes.CurrentQuiz),
-                InlineKeyboardButton.WithCallbackData(
-                    Mode.ListMode, TelegramRoutes.ViewWordsListMenu)
+                    QuizMode.ButtonName, TelegramRoutes.CurrentQuiz)
             ])
             .AddInlineKeyboardButtons([
                 InlineKeyboardButton.WithCallbackData(

@@ -2,17 +2,6 @@
 
 public static class TelegramRoutes
 {
-    public const string ViewWordsListMenu = "wwl";
-
-    public const string ListGroupsByCefrLevel = "lgcl";
-    public const string DetailGroupByCefrLevel = "dgcl";
-    
-    public const string ListGroupsByFirstLetter = "lgfl";
-    public const string DetailGroupByFirstLetter = "dgfl";
-    
-    public const string ListGroupsByTopic = "lgt";
-    public const string DetailGroupByTopic = "dgt";
-    
     public const string CurrentQuiz = "quiz";
     public const string StartQuiz = "sq";
     public const string StartFirstQuiz = "sfq";
