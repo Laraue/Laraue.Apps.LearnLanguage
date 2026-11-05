@@ -124,6 +124,6 @@
         <value>All</value>
     </data>
     <data name="InProgress" xml:space="preserve">
-        <value>🔶 Words in progress: +{0}. A word is learned after 3 correct answers in a row.</value>
+        <value>🔶 +{0} words in progress (3 correct in a row to learn)</value>
     </data>
 </root>
