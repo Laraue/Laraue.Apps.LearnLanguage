@@ -193,5 +193,14 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("ContinueQuiz", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🎯 Review missed words.
+        /// </summary>
+        public static string ReviewMissed {
+            get {
+                return ResourceManager.GetString("ReviewMissed", resourceCulture);
+            }
+        }
     }
 }

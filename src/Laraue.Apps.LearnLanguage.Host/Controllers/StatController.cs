@@ -1,5 +1,7 @@
 using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
+using Laraue.Telegram.NET.Abstractions.Request;
 using Laraue.Telegram.NET.Core.Routing;
 using Laraue.Telegram.NET.Core.Routing.Attributes;
 
@@ -15,8 +17,8 @@ public class StatController : TelegramController
     }
 
     [TelegramCallbackRoute(TelegramRoutes.Stat)]
-    public Task SendStatsAsync(RequestContext request, CancellationToken ct)
+    public Task SendStatsAsync(RequestContext request, [FromQuery] StatsRequest statsRequest, CancellationToken ct)
     {
-        return _statsService.SendStatsAsync(ReplyData.FromRequest(request), ct);
+        return _statsService.SendStatsAsync(ReplyData.FromRequest(request), statsRequest, ct);
     }
 }

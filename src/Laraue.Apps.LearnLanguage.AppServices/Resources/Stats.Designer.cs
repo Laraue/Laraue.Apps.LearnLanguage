@@ -87,43 +87,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last activity:.
-        /// </summary>
-        public static string LastActivity {
-            get {
-                return ResourceManager.GetString("LastActivity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} - learned: {1} word(s) - {2}%.
-        /// </summary>
-        public static string LastActivityRow {
-            get {
-                return ResourceManager.GetString("LastActivityRow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Learned by CEFR level:.
-        /// </summary>
-        public static string LearnedByCefrLevel {
-            get {
-                return ResourceManager.GetString("LearnedByCefrLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to N/A.
-        /// </summary>
-        public static string NA {
-            get {
-                return ResourceManager.GetString("NA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Learn stat.
+        ///   Looks up a localized string similar to 📊 My progress · English → {0}.
         /// </summary>
         public static string Title {
             get {
@@ -132,29 +96,83 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total learned {0}.
+        ///   Looks up a localized string similar to 🔥 {0} days in a row.
         /// </summary>
-        public static string TotalLearned {
+        public static string Streak {
             get {
-                return ResourceManager.GetString("TotalLearned", resourceCulture);
+                return ResourceManager.GetString("Streak", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total stat is {0}.
+        ///   Looks up a localized string similar to 📅 This week: {0} quizzes · {1} answers · {2}% correct.
         /// </summary>
-        public static string TotalStatIs {
+        public static string Week {
             get {
-                return ResourceManager.GetString("TotalStatIs", resourceCulture);
+                return ResourceManager.GetString("Week", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yesterday you have been learned {0} words!.
+        ///   Looks up a localized string similar to 🔷 Learned: {0}.
         /// </summary>
-        public static string YesterdayWereLearned {
+        public static string Learned {
             get {
-                return ResourceManager.GetString("YesterdayWereLearned", resourceCulture);
+                return ResourceManager.GetString("Learned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔶 In progress: {0}.
+        /// </summary>
+        public static string InProgress {
+            get {
+                return ResourceManager.GetString("InProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📚 Not started yet: {0}.
+        /// </summary>
+        public static string NotStarted {
+            get {
+                return ResourceManager.GetString("NotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By level.
+        /// </summary>
+        public static string ByLevel {
+            get {
+                return ResourceManager.GetString("ByLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learned per day.
+        /// </summary>
+        public static string PerDay {
+            get {
+                return ResourceManager.GetString("PerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Most missed: {0}.
+        /// </summary>
+        public static string MostMissed {
+            get {
+                return ResourceManager.GetString("MostMissed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No quizzes yet. Start one, and your progress will show up here..
+        /// </summary>
+        public static string NoPractice {
+            get {
+                return ResourceManager.GetString("NoPractice", resourceCulture);
             }
         }
     }

@@ -14,6 +14,15 @@ public interface IQuestionsGenerator
         int questionsCount,
         int optionsCount,
         CancellationToken ct);
+
+    /// <summary>
+    /// Questions for exactly these words, in random order, with options like a regular quiz.
+    /// </summary>
+    Task<NewQuestionDto[]> GenerateQuestionsForWords(
+        long languageId,
+        long[] wordIds,
+        int optionsCount,
+        CancellationToken ct);
 }
 
 public class QuestionsGenerator(
@@ -118,6 +127,28 @@ public class QuestionsGenerator(
         await EnrichOptions(languageId, optionsCount, allQuestions, ct);
         
         return allQuestions;
+    }
+
+    public async Task<NewQuestionDto[]> GenerateQuestionsForWords(
+        long languageId,
+        long[] wordIds,
+        int optionsCount,
+        CancellationToken ct)
+    {
+        var questions = randomizer.InRandomOrder(await context.Translations
+                .Where(x => x.LanguageId == languageId && wordIds.Contains(x.WordId))
+                .Select(x => new NewQuestionDto
+                {
+                    WordId = x.WordId,
+                    PartOfSpeechId = x.Word.PartOfSpeechId,
+                    TranslationHashCode = x.Text.GetHashCode(),
+                })
+                .ToListAsyncEF(ct))
+            .ToArray();
+
+        await EnrichOptions(languageId, optionsCount, questions, ct);
+
+        return questions;
     }
 
     private async Task EnrichOptions(

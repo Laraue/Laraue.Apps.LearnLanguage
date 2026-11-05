@@ -56,4 +56,7 @@
     <data name="ContinueQuiz" xml:space="preserve">
         <value>▶️ Продолжить</value>
     </data>
+    <data name="ReviewMissed" xml:space="preserve">
+        <value>🎯 Повторить ошибки</value>
+    </data>
 </root>

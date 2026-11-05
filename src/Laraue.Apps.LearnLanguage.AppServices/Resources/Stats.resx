@@ -18,30 +18,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="YesterdayWereLearned" xml:space="preserve">
-        <value>Yesterday you have been learned {0} words!</value>
-    </data>
-    <data name="TotalStatIs" xml:space="preserve">
-        <value>Total stat is {0}</value>
-    </data>
-    <data name="Title" xml:space="preserve">
-        <value>Learn stat</value>
-    </data>
-    <data name="TotalLearned" xml:space="preserve">
-        <value>Total learned {0}</value>
-    </data>
-    <data name="LearnedByCefrLevel" xml:space="preserve">
-        <value>Learned by CEFR level:</value>
-    </data>
-    <data name="LastActivity" xml:space="preserve">
-        <value>Last activity:</value>
-    </data>
-    <data name="LastActivityRow" xml:space="preserve">
-        <value>{0} - learned: {1} word(s) - {2}%</value>
-    </data>
-    <data name="NA" xml:space="preserve">
-        <value>N/A</value>
-    </data>
     <data name="AdminStats_Title" xml:space="preserve">
         <value>Admin stats for the last 7 days</value>
     </data>
@@ -50,5 +26,35 @@
     </data>
     <data name="AdminStats_ActiveUsers" xml:space="preserve">
         <value>Active users: {0} per day</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>📊 My progress · English → {0}</value>
+    </data>
+    <data name="Streak" xml:space="preserve">
+        <value>🔥 {0} days in a row</value>
+    </data>
+    <data name="Week" xml:space="preserve">
+        <value>📅 This week: {0} quizzes · {1} answers · {2}% correct</value>
+    </data>
+    <data name="Learned" xml:space="preserve">
+        <value>🔷 Learned: {0}</value>
+    </data>
+    <data name="InProgress" xml:space="preserve">
+        <value>🔶 In progress: {0}</value>
+    </data>
+    <data name="NotStarted" xml:space="preserve">
+        <value>📚 Not started yet: {0}</value>
+    </data>
+    <data name="ByLevel" xml:space="preserve">
+        <value>By level</value>
+    </data>
+    <data name="PerDay" xml:space="preserve">
+        <value>Learned per day</value>
+    </data>
+    <data name="MostMissed" xml:space="preserve">
+        <value>Most missed: {0}</value>
+    </data>
+    <data name="NoPractice" xml:space="preserve">
+        <value>No quizzes yet. Start one, and your progress will show up here.</value>
     </data>
 </root>
