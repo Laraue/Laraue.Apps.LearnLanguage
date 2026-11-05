@@ -41,6 +41,15 @@ public interface IQuizService
         long languageToLearnId,
         CancellationToken ct = default);
 
+    /// <summary>
+    /// Start a quiz built from the words the user answered wrong most often and hasn't learned yet, or a regular
+    /// quiz when there are none.
+    /// </summary>
+    Task StartReviewQuizAsync(
+        ReplyData replyData,
+        StartQuizRequest request,
+        CancellationToken ct = default);
+
     Task SelectQuizAnswerAsync(
         ReplyData replyData,
         SelectQuizAnswerRequest request,

@@ -1,4 +1,9 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices.Extensions;
+﻿using System.Globalization;
+using Laraue.Apps.LearnLanguage.AppServices.Extensions;
+using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
+using Laraue.Core.DateTime.Services.Abstractions;
+using Laraue.Telegram.NET.Core.Routing;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories;
 using Laraue.Apps.LearnLanguage.AppServices.Resources;
 using Laraue.Telegram.NET.Core.Extensions;
@@ -6,57 +11,115 @@ using Laraue.Telegram.NET.Core.Utils;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Services;
 
 public class StatsService(
     ITelegramBotClient client,
     IStatsRepository statsRepository,
-    IAdminRepository adminRepository) : IStatsService
+    IAdminRepository adminRepository,
+    IDateTimeProvider dateTimeProvider) : IStatsService
 {
-    public async Task SendStatsAsync(ReplyData replyData, CancellationToken ct = default)
-    {
-        var (totalStat, dayLearnStatsCollection) = await statsRepository.GetLearnStatsAsync(replyData.UserId, ct);
+    private const int BarLength = 10;
 
-        var learnPercent = totalStat.LearnedCount.DivideAndReturnPercent(totalStat.TotalCount);
+    public async Task SendStatsAsync(ReplyData replyData, StatsRequest request, CancellationToken ct = default)
+    {
+        var progress = await statsRepository.GetProgressAsync(
+            replyData.UserId,
+            request.LanguageToLearnId,
+            dateTimeProvider.UtcNow,
+            ct);
 
         var tmb = new TelegramMessageBuilder();
-        tmb.AppendRow($"<b>{Stats.Title}</b>")
-            .AppendRow()
-            .AppendRow(string.Format(Stats.TotalLearned, $"{totalStat.LearnedCount}/{totalStat.TotalCount} ({learnPercent:F}%)"))
-            .AppendRow()
-            .AppendRow(Stats.LearnedByCefrLevel);
-
-        foreach (var cefrLevelStat in totalStat.ByCefrLevel)
+        if (progress is null)
         {
-            var learnCefrPercent = cefrLevelStat.LearnedCount.DivideAndReturnPercent(cefrLevelStat.TotalCount);
-            tmb.AppendRow($"{cefrLevelStat.Level} - {cefrLevelStat.LearnedCount}/{cefrLevelStat.TotalCount} ({learnCefrPercent:F}%)");
+            tmb.AppendRow(Stats.NoPractice)
+                .AddInlineKeyboardButtons([
+                    InlineKeyboardButton.WithCallbackData(QuizMode.ButtonName, TelegramRoutes.CurrentQuiz)
+                ])
+                .AddMainMenuButton();
+            await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+            return;
         }
 
-        tmb
-            .AppendRow()
-            .AppendRow(Stats.LastActivity);
+        tmb.AppendRow($"<b>{string.Format(Stats.Title, progress.LanguageTitle)}</b>")
+            .AppendRow();
 
-        if (dayLearnStatsCollection.Count == 0)
+        if (progress.StreakDays > 0)
+            tmb.AppendRow(string.Format(Stats.Streak, progress.StreakDays));
+        if (progress.WeekQuizzes > 0 || progress.WeekAnswers > 0)
+            tmb.AppendRow(string.Format(
+                Stats.Week,
+                progress.WeekQuizzes,
+                progress.WeekAnswers,
+                Percent(progress.WeekCorrectAnswers, progress.WeekAnswers)));
+
+        tmb.AppendRow()
+            .AppendRow(string.Format(Stats.Learned, Number(progress.Learned)))
+            .AppendRow(string.Format(Stats.InProgress, Number(progress.InProgress)))
+            .AppendRow(string.Format(Stats.NotStarted, Number(progress.Total - progress.Learned - progress.InProgress)))
+            .AppendRow()
+            .AppendRow(Stats.ByLevel);
+
+        // Monospace, so the bars and numbers line up.
+        var totalWidth = progress.Levels.Max(l => l.Total.ToString().Length);
+        var levelRows = progress.Levels.Select(l =>
         {
-            tmb.AppendRow(Stats.NA);
+            var percent = l.Total == 0 ? 0 : l.Learned * 100.0 / l.Total;
+            var filled = (int)Math.Round(percent / 100 * BarLength);
+            var bar = new string('▓', filled) + new string('░', BarLength - filled);
+            var counts = $"{l.Learned}/{l.Total}".PadLeft(totalWidth * 2 + 1);
+            // A decimal below 10%, so the first learned words don't show as 0%.
+            var shownPercent = percent is > 0 and < 10
+                ? percent.ToString("0.0", CultureInfo.CurrentUICulture)
+                : percent.ToString("0", CultureInfo.CurrentUICulture);
+            return $"{l.Level} {bar} {shownPercent + "%",5} {counts}";
+        });
+        tmb.AppendRow($"<pre>{string.Join("\n", levelRows)}</pre>")
+            .AppendRow()
+            .AppendRow(Stats.PerDay)
+            .AppendRow(string.Join(" · ", progress.LastDays.Select(d =>
+                $"{CultureInfo.CurrentUICulture.DateTimeFormat.GetShortestDayName(d.Date.DayOfWeek)} {d.Learned}")));
+
+        if (progress.MostMissed.Count > 0)
+        {
+            tmb.AppendRow()
+                .AppendRow(string.Format(
+                    Stats.MostMissed,
+                    string.Join(" · ", progress.MostMissed.Select(w => $"{w.Word} ✗{w.Misses}"))));
         }
-        
-        foreach (var dayStat in dayLearnStatsCollection)
+
+        var pair = new SelectedTranslation(progress.LanguageId);
+        var quizButtons = new List<InlineKeyboardButton>();
+        if (progress.MostMissed.Count > 0)
         {
-            var dayLearnPercent = dayStat.LearnedCount.DivideAndReturnPercent(totalStat.TotalCount);
-            tmb.AppendRow(
-                string.Format(
-                    Stats.LastActivityRow,
-                    dayStat.Date.ToShortDateString(),
-                    dayStat.LearnedCount,
-                    $"{dayLearnPercent:F}"));
+            quizButtons.Add(new CallbackRoutePath(TelegramRoutes.ReviewQuiz, RouteMethod.Post)
+                .WithTranslationDirection(pair)
+                .ToInlineKeyboardButton(Buttons.ReviewMissed));
+        }
+        quizButtons.Add(new CallbackRoutePath(TelegramRoutes.StartQuiz, RouteMethod.Post)
+            .WithTranslationDirection(pair)
+            .ToInlineKeyboardButton(QuizMode.ButtonName));
+        tmb.AddInlineKeyboardButtons(quizButtons);
+
+        // Other pairs the user has practised, to switch the screen to them.
+        foreach (var other in progress.PracticedPairs.Where(p => p.LanguageId != progress.LanguageId))
+        {
+            tmb.AddInlineKeyboardButtons([
+                new CallbackRoutePath(TelegramRoutes.Stat)
+                    .WithTranslationDirection(new SelectedTranslation(other.LanguageId))
+                    .ToInlineKeyboardButton($"📊 English → {other.Title}")
+            ]);
         }
 
         tmb.AddMainMenuButton();
-
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
     }
+
+    private static int Percent(int part, int total) => total == 0 ? 0 : (int)Math.Round(part * 100.0 / total);
+
+    private static string Number(int value) => value.ToString("N0", CultureInfo.CurrentUICulture);
 
     public async Task SendAdminStatsAsync(ChatId telegramId, CancellationToken ct = default)
     {

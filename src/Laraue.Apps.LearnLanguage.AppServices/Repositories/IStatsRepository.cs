@@ -1,11 +1,17 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
+using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Repositories;
 
 public interface IStatsRepository
 {
     /// <summary>
-    /// Get learn total statistics for the user.
+    /// Progress in the given language pair, or in the user's default one, or in the pair of their last quiz.
+    /// Null when the user hasn't practised any pair yet.
     /// </summary>
-    Task<LearnStats> GetLearnStatsAsync(Guid userId, CancellationToken ct = default);
+    Task<ProgressStats?> GetProgressAsync(Guid userId, long? languageId, DateTime now, CancellationToken ct = default);
+
+    /// <summary>
+    /// Words of the pair the user answered wrong most often and hasn't learned yet, most missed first.
+    /// </summary>
+    Task<MissedWord[]> GetMostMissedWordsAsync(Guid userId, long languageId, int count, CancellationToken ct = default);
 }

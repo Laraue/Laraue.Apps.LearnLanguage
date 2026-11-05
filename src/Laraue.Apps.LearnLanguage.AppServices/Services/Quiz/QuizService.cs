@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Laraue.Apps.LearnLanguage.AppServices.Extensions;
 using Laraue.Apps.LearnLanguage.AppServices.Metrics;
+using Laraue.Apps.LearnLanguage.AppServices.Repositories;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Resources;
 using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes;
@@ -26,6 +27,7 @@ public class QuizService(
     ITelegramBotClient client,
     DatabaseContext context,
     IQuestionsGenerator questionsGenerator,
+    IStatsRepository statsRepository,
     LearnLanguageMetrics metrics)
     : IQuizService
 {
@@ -287,6 +289,41 @@ public class QuizService(
             replyData,
             previousAnswerResult: null,
             ct);
+    }
+
+    public async Task StartReviewQuizAsync(
+        ReplyData replyData,
+        StartQuizRequest request,
+        CancellationToken ct = default)
+    {
+        var languageId = request.LanguageToLearnId!.Value;
+        var missedWordIds = await HasActiveQuizAsync(replyData.UserId, ct)
+            ? []
+            : (await statsRepository.GetMostMissedWordsAsync(replyData.UserId, languageId, QuestionsCount, ct))
+                .Select(w => w.WordId)
+                .ToArray();
+
+        if (missedWordIds.Length == 0)
+        {
+            // An active quiz is resumed; without missed words it's a regular quiz.
+            await StartNewQuizAsync(replyData, request, ct);
+            return;
+        }
+
+        await using (var transaction = await context.Database.BeginTransactionAsync(ct))
+        {
+            var quizId = await repository.CreateQuizAsync(replyData.UserId, languageId, ct);
+            var questions = await questionsGenerator.GenerateQuestionsForWords(
+                languageId,
+                missedWordIds,
+                OptionsCount,
+                ct);
+            await repository.SaveQuizQuestionsAsync(quizId, questions, ct);
+            await transaction.CommitAsync(ct);
+        }
+
+        metrics.RecordQuizStarted();
+        await OpenNextQuizQuestionWindowAsync(replyData, previousAnswerResult: null, ct);
     }
 
     private async Task CreateQuizAsync(

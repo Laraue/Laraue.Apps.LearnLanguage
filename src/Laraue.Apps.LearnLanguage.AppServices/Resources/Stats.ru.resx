@@ -11,30 +11,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="YesterdayWereLearned" xml:space="preserve">
-        <value>Вчера вам удалось выучить {0} слов!</value>
-    </data>
-    <data name="TotalStatIs" xml:space="preserve">
-        <value>Текущая статистика {0}</value>
-    </data>
-    <data name="Title" xml:space="preserve">
-        <value>Статистика изучения</value>
-    </data>
-    <data name="TotalLearned" xml:space="preserve">
-        <value>Всего выучено {0}</value>
-    </data>
-    <data name="LearnedByCefrLevel" xml:space="preserve">
-        <value>Выученные слова по CEFR level:</value>
-    </data>
-    <data name="LastActivity" xml:space="preserve">
-        <value>Последняя активность:</value>
-    </data>
-    <data name="LastActivityRow" xml:space="preserve">
-        <value>{0} - выучено: {1} слов(а) - {2}%</value>
-    </data>
-    <data name="NA" xml:space="preserve">
-        <value>Не определено</value>
-    </data>
     <data name="AdminStats_Title" xml:space="preserve">
         <value>Админская статистика за последние 7 дней</value>
     </data>
@@ -43,5 +19,35 @@
     </data>
     <data name="AdminStats_ActiveUsers" xml:space="preserve">
         <value>Активных пользователей: {0} в день</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>📊 Мой прогресс · English → {0}</value>
+    </data>
+    <data name="Streak" xml:space="preserve">
+        <value>🔥 Дней подряд: {0}</value>
+    </data>
+    <data name="Week" xml:space="preserve">
+        <value>📅 За неделю: тестов {0} · ответов {1} · верно {2}%</value>
+    </data>
+    <data name="Learned" xml:space="preserve">
+        <value>🔷 Выучено: {0}</value>
+    </data>
+    <data name="InProgress" xml:space="preserve">
+        <value>🔶 В процессе: {0}</value>
+    </data>
+    <data name="NotStarted" xml:space="preserve">
+        <value>📚 Ещё не начато: {0}</value>
+    </data>
+    <data name="ByLevel" xml:space="preserve">
+        <value>По уровням</value>
+    </data>
+    <data name="PerDay" xml:space="preserve">
+        <value>Выучено по дням</value>
+    </data>
+    <data name="MostMissed" xml:space="preserve">
+        <value>Чаще всего ошибки: {0}</value>
+    </data>
+    <data name="NoPractice" xml:space="preserve">
+        <value>Тестов пока нет. Пройдите первый, и здесь появится прогресс.</value>
     </data>
 </root>

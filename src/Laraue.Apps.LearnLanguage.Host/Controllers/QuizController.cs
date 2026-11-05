@@ -62,6 +62,15 @@ public class QuizController(IQuizService service) : TelegramController
         return service.StartNewQuizAsync(ReplyData.FromRequest(context), request, ct);
     }
     
+    [TelegramCallbackRoute(TelegramRoutes.ReviewQuiz, RouteMethod.Post)]
+    public Task StartReviewQuizAsync(
+        RequestContext context,
+        [FromQuery] StartQuizRequest request,
+        CancellationToken ct)
+    {
+        return service.StartReviewQuizAsync(ReplyData.FromRequest(context), request, ct);
+    }
+
     [TelegramCallbackRoute(TelegramRoutes.SelectQuizAnswer, RouteMethod.Post)]
     public Task SelectQuizAnswerAsync(
         RequestContext context,
