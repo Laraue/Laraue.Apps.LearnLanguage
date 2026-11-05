@@ -121,6 +121,7 @@ public static class WebApplicationBuilderExtensions
 
                 .AddScoped<IUserSettingsService, UserSettingsService>()
                 .AddScoped<ReminderSender>()
+                .AddSingleton<IBotUsernameProvider, BotUsernameProvider>()
                 .Configure<RemindersOptions>(builder.Configuration.GetSection("Reminders"))
                 .AddScoped<IUserRepository, UserRepository>()
 

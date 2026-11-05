@@ -50,4 +50,16 @@
     <data name="NoPractice" xml:space="preserve">
         <value>Тестов пока нет. Пройдите первый, и здесь появится прогресс.</value>
     </data>
+    <data name="ShareText" xml:space="preserve">
+        <value>Выучено английских слов: {0} · учу с @{1}</value>
+    </data>
+    <data name="ShareTextNoWords" xml:space="preserve">
+        <value>Учу английские слова с @{0}</value>
+    </data>
+    <data name="ShareStreak" xml:space="preserve">
+        <value> · 🔥 дней подряд: {0}</value>
+    </data>
+    <data name="ShareTextFirstWord" xml:space="preserve">
+        <value>Выучено первое английское слово · учу с @{0}</value>
+    </data>
 </root>

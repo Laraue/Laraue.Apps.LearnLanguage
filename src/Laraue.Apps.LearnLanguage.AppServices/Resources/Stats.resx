@@ -57,4 +57,16 @@
     <data name="NoPractice" xml:space="preserve">
         <value>No quizzes yet. Start one, and your progress will show up here.</value>
     </data>
+    <data name="ShareText" xml:space="preserve">
+        <value>I've learned {0} English words with @{1}</value>
+    </data>
+    <data name="ShareTextNoWords" xml:space="preserve">
+        <value>I'm learning English words with @{0}</value>
+    </data>
+    <data name="ShareStreak" xml:space="preserve">
+        <value> · 🔥 {0} days in a row</value>
+    </data>
+    <data name="ShareTextFirstWord" xml:space="preserve">
+        <value>I've learned my first English word with @{0}</value>
+    </data>
 </root>
