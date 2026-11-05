@@ -375,7 +375,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🔶 Words in progress: +{0}. A word is learned after 3 correct answers in a row..
+        ///   Looks up a localized string similar to 🔶 +{0} words in progress (3 correct in a row to learn).
         /// </summary>
         public static string InProgress {
             get {

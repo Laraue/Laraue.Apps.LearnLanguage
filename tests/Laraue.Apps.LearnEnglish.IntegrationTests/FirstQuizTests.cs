@@ -192,7 +192,7 @@ public class FirstQuizTests : IntegrationTest
         var results = telegramTestHost.Requests().Last<EditMessageTextRequest>();
         Assert.Contains("Quiz results", results.Text);
         Assert.Contains(
-            "🔶 Words in progress: +6. A word is learned after 3 correct answers in a row.",
+            "🔶 +6 words in progress (3 correct in a row to learn)",
             results.Text);
 
         // The first finished quiz offers the daily reminder (MIN-30).
