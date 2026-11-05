@@ -17,9 +17,6 @@
     <data name="Stat" xml:space="preserve">
         <value>📊 Статистика</value>
     </data>
-    <data name="SeeTranslation" xml:space="preserve">
-        <value>Показать перевод 👁</value>
-    </data>
     <data name="Okay" xml:space="preserve">
         <value>Хорошо</value>
     </data>

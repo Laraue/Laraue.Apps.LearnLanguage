@@ -107,7 +107,7 @@ public class FirstQuizTests : IntegrationTest
         var request = telegramTestHost.Requests().Single<SendMessageRequest>();
         Assert.Equal<(string, string?)[][]>(
             [
-                [("🎯 New Quiz", "quiz"), ("📖 Word List", "wwl")],
+                [("🎯 New Quiz", "quiz")],
                 [("📊 My Progress", "stat")],
                 [("⚙️ Settings", "s")],
                 [("📋 What's New", null)],

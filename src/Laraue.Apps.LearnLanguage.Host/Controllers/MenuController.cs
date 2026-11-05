@@ -12,10 +12,4 @@ public class MenuController(IMenuService service) : TelegramController
     {
         return service.SendMenuAsync(ReplyData.FromRequest(request), ct);
     }
-    
-    [TelegramCallbackRoute(TelegramRoutes.ViewWordsListMenu)]
-    public Task SendWordsListsMenuAsync(RequestContext request, CancellationToken ct)
-    {
-        return service.SendWordsListsMenuAsync(ReplyData.FromRequest(request), ct);
-    }
 }

@@ -16,10 +16,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Buttons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\GroupMode.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>GroupMode.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Menu.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Menu.Designer.cs</LastGenOutput>
@@ -56,11 +52,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Mode.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\GroupMode.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>GroupMode.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Stats.Designer.cs">
       <DesignTime>True</DesignTime>

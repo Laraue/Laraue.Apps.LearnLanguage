@@ -21,79 +21,7 @@
     <data name="SelectMode" xml:space="preserve">
         <value>What would you like to do?</value>
     </data>
-    <data name="ShowTranslations" xml:space="preserve">
-        <value>Show translations 👁</value>
-    </data>
-    <data name="HideTranslations" xml:space="preserve">
-        <value>Hide translations 🙈</value>
-    </data>
-    <data name="Topic" xml:space="preserve">
-        <value>Topic: {0}</value>
-    </data>
-    <data name="Page" xml:space="preserve">
-        <value>Page</value>
-    </data>
-    <data name="Filter_Marked" xml:space="preserve">
-        <value>Filter: Marked 🔍</value>
-    </data>
-    <data name="Filter_NotLearned" xml:space="preserve">
-        <value>Filter: Not Learned 🔍</value>
-    </data>
-    <data name="Filter_None" xml:space="preserve">
-        <value>Filter: None 🔍</value>
-    </data>
-    <data name="OpenWord" xml:space="preserve">
-        <value>Open word:</value>
-    </data>
-    <data name="OpenedWord" xml:space="preserve">
-        <value>Opened word:</value>
-    </data>
-    <data name="Difficulty" xml:space="preserve">
-        <value>Difficulty: {0}</value>
-    </data>
-    <data name="Learned" xml:space="preserve">
-        <value>Learned: {0} day(s) ago</value>
-    </data>
-    <data name="Repeated" xml:space="preserve">
-        <value>Repeated: {0} day(s) ago</value>
-    </data>
-    <data name="Difficulty_Easy" xml:space="preserve">
-        <value>easy</value>
-    </data>
-    <data name="Difficulty_Medium" xml:space="preserve">
-        <value>medium</value>
-    </data>
-    <data name="Difficulty_Hard" xml:space="preserve">
-        <value>hard</value>
-    </data>
-    <data name="Difficulty_Impossible" xml:space="preserve">
-        <value>impossible</value>
-    </data>
-    <data name="Difficulty_VeryHard" xml:space="preserve">
-        <value>very hard</value>
-    </data>
-    <data name="ViewMode_TranslationToWord" xml:space="preserve">
-        <value>Translation -&gt; Word</value>
-    </data>
-    <data name="ViewMode_WordToTranslation" xml:space="preserve">
-        <value>Word -&gt; Translation</value>
-    </data>
-    <data name="Navigation_Previous" xml:space="preserve">
-        <value>Previous ⬅</value>
-    </data>
-    <data name="Navigation_Next" xml:space="preserve">
-        <value>Next ➡</value>
-    </data>
     <data name="SelectLanguage" xml:space="preserve">
         <value>💡 Set a default pair in ⚙️ Settings to skip this step next time.</value>
-    </data>
-    <data name="ListMode" xml:space="preserve">
-        <value>📖 Word List</value>
-    </data>
-    <data name="ListModeDescription" xml:space="preserve">
-        <value>View all words</value>
-    </data>
-    <data name="BrowseWords" xml:space="preserve">
-        <value>Browse words by</value>
     </data>
 </root>
