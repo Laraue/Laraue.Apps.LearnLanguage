@@ -202,5 +202,14 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("ReviewMissed", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📤 Share my progress.
+        /// </summary>
+        public static string ShareProgress {
+            get {
+                return ResourceManager.GetString("ShareProgress", resourceCulture);
+            }
+        }
     }
 }

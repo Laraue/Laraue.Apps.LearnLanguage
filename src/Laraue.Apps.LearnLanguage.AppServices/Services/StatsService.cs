@@ -19,7 +19,8 @@ public class StatsService(
     ITelegramBotClient client,
     IStatsRepository statsRepository,
     IAdminRepository adminRepository,
-    IDateTimeProvider dateTimeProvider) : IStatsService
+    IDateTimeProvider dateTimeProvider,
+    IBotUsernameProvider botUsernameProvider) : IStatsService
 {
     private const int BarLength = 10;
 
@@ -103,6 +104,13 @@ public class StatsService(
             .ToInlineKeyboardButton(QuizMode.ButtonName));
         tmb.AddInlineKeyboardButtons(quizButtons);
 
+        if (await botUsernameProvider.GetUsernameAsync(ct) is { } botUsername)
+        {
+            tmb.AddInlineKeyboardButtons([
+                InlineKeyboardButton.WithUrl(Buttons.ShareProgress, GetShareUrl(progress, botUsername))
+            ]);
+        }
+
         // Other pairs the user has practised, to switch the screen to them.
         foreach (var other in progress.PracticedPairs.Where(p => p.LanguageId != progress.LanguageId))
         {
@@ -115,6 +123,25 @@ public class StatsService(
 
         tmb.AddMainMenuButton();
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+    }
+
+    /// <summary>
+    /// A Telegram share link: Telegram opens its share dialog with this message and a link to the bot. The link's
+    /// start parameter is the UTM label source=share, so users who join through it show up in the funnel.
+    /// </summary>
+    private static string GetShareUrl(ProgressStats progress, string botUsername)
+    {
+        var text = progress.Learned switch
+        {
+            0 => string.Format(Stats.ShareTextNoWords, botUsername),
+            1 => string.Format(Stats.ShareTextFirstWord, botUsername),
+            _ => string.Format(Stats.ShareText, Number(progress.Learned), botUsername),
+        };
+        if (progress.StreakDays > 1)
+            text += string.Format(Stats.ShareStreak, progress.StreakDays);
+
+        var botLink = $"https://t.me/{botUsername}?start=source-share";
+        return $"https://t.me/share/url?url={Uri.EscapeDataString(botLink)}&text={Uri.EscapeDataString(text)}";
     }
 
     private static int Percent(int part, int total) => total == 0 ? 0 : (int)Math.Round(part * 100.0 / total);

@@ -175,5 +175,41 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("NoPractice", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I've learned {0} English words with @{1}.
+        /// </summary>
+        public static string ShareText {
+            get {
+                return ResourceManager.GetString("ShareText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I'm learning English words with @{0}.
+        /// </summary>
+        public static string ShareTextNoWords {
+            get {
+                return ResourceManager.GetString("ShareTextNoWords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  · 🔥 {0} days in a row.
+        /// </summary>
+        public static string ShareStreak {
+            get {
+                return ResourceManager.GetString("ShareStreak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I've learned my first English word with @{0}.
+        /// </summary>
+        public static string ShareTextFirstWord {
+            get {
+                return ResourceManager.GetString("ShareTextFirstWord", resourceCulture);
+            }
+        }
     }
 }

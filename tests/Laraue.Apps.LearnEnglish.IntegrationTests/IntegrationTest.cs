@@ -30,6 +30,7 @@ public class IntegrationTest
             .Services
             .Replace(
                 ServiceDescriptor.Singleton<UserIdentityService.UserIdentityServiceClient, FakeUserIdentityServiceClient>())
+            .Replace(ServiceDescriptor.Singleton<IBotUsernameProvider>(new FakeBotUsernameProvider()))
             .Replace(
                 new ServiceDescriptor(
                     typeof(IRandomizer), 
@@ -45,6 +46,11 @@ public class IntegrationTest
         Id = 1,
         Username = "user1",
     };
+
+    private class FakeBotUsernameProvider : IBotUsernameProvider
+    {
+        public Task<string?> GetUsernameAsync(CancellationToken ct = default) => Task.FromResult<string?>("TestBot");
+    }
 
     private class DeterminedRandomizer : IRandomizer
     {

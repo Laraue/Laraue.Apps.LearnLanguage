@@ -59,4 +59,7 @@
     <data name="ReviewMissed" xml:space="preserve">
         <value>🎯 Повторить ошибки</value>
     </data>
+    <data name="ShareProgress" xml:space="preserve">
+        <value>📤 Поделиться прогрессом</value>
+    </data>
 </root>
