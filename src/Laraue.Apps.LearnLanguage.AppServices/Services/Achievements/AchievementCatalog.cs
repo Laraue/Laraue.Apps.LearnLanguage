@@ -29,6 +29,14 @@ public static class AchievementCatalog
 
     private static readonly string[] Medals = ["🥉", "🥈", "🥇", "💎", "👑"];
 
+    // Levels completed counts CEFR levels from A1 up.
+    private static readonly string[] CefrLevels = ["A1", "A2", "B1", "B2", "C1"];
+
+    /// <summary>
+    /// Every level of every achievement: what the achievements list counts.
+    /// </summary>
+    public static int LevelsCount => All.Values.Sum(a => a.Thresholds.Length);
+
     /// <summary>
     /// "📚 Words learned · 🥈 Word collector", or "👣 First steps" for a single-level achievement.
     /// </summary>
@@ -39,6 +47,54 @@ public static class AchievementCatalog
         return definition.Thresholds.Length == 1
             ? $"{definition.Emoji} {levelName}"
             : $"{definition.Emoji} {Text(achievement.ToString())} · {Medals[level - 1]} {levelName}";
+    }
+
+    /// <summary>
+    /// The level's name with the achievement's emoji, as a title on the leaderboard: "🔥 Volcano".
+    /// </summary>
+    public static string ShortTitle(Achievement achievement, int level) =>
+        $"{All[achievement].Emoji} {Text($"{achievement}_{level}")}";
+
+    /// <summary>
+    /// The level with its medal, "🥈 Word collector", or just the name of a single-level achievement.
+    /// </summary>
+    public static string Level(Achievement achievement, int level) =>
+        All[achievement].Thresholds.Length == 1
+            ? Text($"{achievement}_{level}")
+            : $"{Medals[level - 1]} {Text($"{achievement}_{level}")}";
+
+    /// <summary>
+    /// The achievement's name; for a single-level one, the name of its level.
+    /// </summary>
+    public static string Name(Achievement achievement) =>
+        All[achievement].Thresholds.Length == 1 ? Text($"{achievement}_1") : Text(achievement.ToString());
+
+    /// <summary>
+    /// What a level takes: "1,000", "B1", or a description for a single-level achievement.
+    /// </summary>
+    public static string Requirement(Achievement achievement, int level) => achievement switch
+    {
+        Achievement.LevelsCompleted => CefrLevels[level - 1],
+        _ when All[achievement].Thresholds.Length == 1 => Text($"{achievement}_Requirement"),
+        _ => All[achievement].Thresholds[level - 1].ToString("N0", System.Globalization.CultureInfo.CurrentUICulture),
+    };
+
+    /// <summary>
+    /// How many players have a level: "4% of players have it", or that nobody (else) has it yet.
+    /// </summary>
+    public static string Rarity(int holders, int players, bool held)
+    {
+        if (holders == 0)
+            return AchievementTexts.NobodyYet;
+        if (held && holders == 1)
+            return AchievementTexts.OnlyYou;
+
+        var percent = holders * 100.0 / Math.Max(players, holders);
+        return percent < 1
+            ? AchievementTexts.RarityUnderOnePercent
+            : string.Format(
+                AchievementTexts.Rarity,
+                Math.Round(percent).ToString(System.Globalization.CultureInfo.CurrentUICulture));
     }
 
     private static string Text(string key) =>

@@ -105,4 +105,16 @@
     <data name="Achievement_Share" xml:space="preserve">
         <value>📤 Share</value>
     </data>
+    <data name="Achievements" xml:space="preserve">
+        <value>🏅 Achievements</value>
+    </data>
+    <data name="Achievements_Title" xml:space="preserve">
+        <value>🎖 Title: {0}</value>
+    </data>
+    <data name="Achievements_ChooseTitle" xml:space="preserve">
+        <value>🎖 Choose a title</value>
+    </data>
+    <data name="Achievements_NoTitle" xml:space="preserve">
+        <value>Without a title</value>
+    </data>
 </root>

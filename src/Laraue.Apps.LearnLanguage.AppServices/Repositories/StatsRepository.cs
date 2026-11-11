@@ -1,3 +1,4 @@
+using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Apps.LearnLanguage.DataAccess;
@@ -159,6 +160,8 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
                 u.Id,
                 Profile = new TelegramProfile(u.TelegramUserName, u.TelegramFirstName, u.TelegramLastName),
                 u.LeaderboardName,
+                u.TitleAchievement,
+                u.TitleLevel,
             })
             .ToDictionaryAsync(u => u.Id, ct);
 
@@ -170,6 +173,7 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
                 score.UserId,
                 user?.Profile ?? new TelegramProfile(null, null, null),
                 user?.LeaderboardName ?? LeaderboardNameMode.Hidden,
+                user is { TitleAchievement: { } achievement, TitleLevel: { } level } ? new AchievementLevel(achievement, level) : null,
                 score.Correct,
                 score.Wrong);
         }

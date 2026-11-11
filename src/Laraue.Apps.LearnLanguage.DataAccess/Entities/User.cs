@@ -86,6 +86,17 @@ public sealed class User
     public DateTime? AchievementsCheckRequestedAt { get; set; }
 
     /// <summary>
+    /// The achievement whose level name the user shows next to their name on the leaderboard, with
+    /// <see cref="TitleLevel"/>. Null for no title.
+    /// </summary>
+    public Achievement? TitleAchievement { get; set; }
+
+    /// <summary>
+    /// The level of <see cref="TitleAchievement"/>.
+    /// </summary>
+    public byte? TitleLevel { get; set; }
+
+    /// <summary>
     /// How to show word translations for this user. 
     /// </summary>
     public WordsTemplateMode WordsTemplateMode { get; set; }

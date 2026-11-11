@@ -319,5 +319,41 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("Achievement_Share", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🏅 Achievements.
+        /// </summary>
+        public static string Achievements {
+            get {
+                return ResourceManager.GetString("Achievements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🎖 Title: {0}.
+        /// </summary>
+        public static string Achievements_Title {
+            get {
+                return ResourceManager.GetString("Achievements_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🎖 Choose a title.
+        /// </summary>
+        public static string Achievements_ChooseTitle {
+            get {
+                return ResourceManager.GetString("Achievements_ChooseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Without a title.
+        /// </summary>
+        public static string Achievements_NoTitle {
+            get {
+                return ResourceManager.GetString("Achievements_NoTitle", resourceCulture);
+            }
+        }
     }
 }

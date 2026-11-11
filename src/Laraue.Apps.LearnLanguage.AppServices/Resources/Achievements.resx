@@ -129,4 +129,34 @@
     <data name="ShareText" xml:space="preserve">
         <value>My new achievement with @{1}: {0}. {2}</value>
     </data>
+    <data name="FirstQuiz_Requirement" xml:space="preserve">
+        <value>Finish a quiz</value>
+    </data>
+    <data name="TenQuizzesInADay_Requirement" xml:space="preserve">
+        <value>10 quizzes in a day</value>
+    </data>
+    <data name="FirstC1Word_Requirement" xml:space="preserve">
+        <value>Learn a C1 word</value>
+    </data>
+    <data name="WelcomeBack_Requirement" xml:space="preserve">
+        <value>Come back after a week away</value>
+    </data>
+    <data name="AllWordsLearned_Requirement" xml:space="preserve">
+        <value>Learn every word of a language pair</value>
+    </data>
+    <data name="NobodyYet" xml:space="preserve">
+        <value>Nobody has it yet</value>
+    </data>
+    <data name="ScreenTitle" xml:space="preserve">
+        <value>🏅 Achievements · {0} of {1}</value>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>Next: {0}</value>
+    </data>
+    <data name="NoTitles" xml:space="preserve">
+        <value>Earn achievements to get titles: each level's name can be shown next to your name in the leaderboard.</value>
+    </data>
+    <data name="ChooseTitle" xml:space="preserve">
+        <value>Choose a title to show next to your name in the leaderboard:</value>
+    </data>
 </root>

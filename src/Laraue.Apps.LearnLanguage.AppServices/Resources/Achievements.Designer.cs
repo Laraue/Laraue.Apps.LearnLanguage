@@ -391,5 +391,95 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("ShareText", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finish a quiz.
+        /// </summary>
+        public static string FirstQuiz_Requirement {
+            get {
+                return ResourceManager.GetString("FirstQuiz_Requirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 10 quizzes in a day.
+        /// </summary>
+        public static string TenQuizzesInADay_Requirement {
+            get {
+                return ResourceManager.GetString("TenQuizzesInADay_Requirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn a C1 word.
+        /// </summary>
+        public static string FirstC1Word_Requirement {
+            get {
+                return ResourceManager.GetString("FirstC1Word_Requirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Come back after a week away.
+        /// </summary>
+        public static string WelcomeBack_Requirement {
+            get {
+                return ResourceManager.GetString("WelcomeBack_Requirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn every word of a language pair.
+        /// </summary>
+        public static string AllWordsLearned_Requirement {
+            get {
+                return ResourceManager.GetString("AllWordsLearned_Requirement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nobody has it yet.
+        /// </summary>
+        public static string NobodyYet {
+            get {
+                return ResourceManager.GetString("NobodyYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🏅 Achievements · {0} of {1}.
+        /// </summary>
+        public static string ScreenTitle {
+            get {
+                return ResourceManager.GetString("ScreenTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next: {0}.
+        /// </summary>
+        public static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Earn achievements to get titles: each level's name can be shown next to your name in the leaderboard..
+        /// </summary>
+        public static string NoTitles {
+            get {
+                return ResourceManager.GetString("NoTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a title to show next to your name in the leaderboard:.
+        /// </summary>
+        public static string ChooseTitle {
+            get {
+                return ResourceManager.GetString("ChooseTitle", resourceCulture);
+            }
+        }
     }
 }

@@ -108,4 +108,7 @@
     <data name="Leaderboard_NoPlayers" xml:space="preserve">
         <value>Nobody in this league has played yet.</value>
     </data>
+    <data name="Achievements" xml:space="preserve">
+        <value>🏅 Achievements: {0} of {1}</value>
+    </data>
 </root>

@@ -27,47 +27,23 @@ public sealed class AchievementService(
                 .Where(a => a.UserId == userId)
                 .Select(a => new { a.Achievement, a.Level })
                 .ToListAsync(ct))
-            .Select(a => (a.Achievement, a.Level))
+            .Select(a => new AchievementLevel(a.Achievement, a.Level))
             .ToHashSet();
 
         var now = dateTimeProvider.UtcNow;
-        var values = new Dictionary<Achievement, Func<Task<int>>>
-        {
-            [Achievement.WordsLearned] = () => CountLearnedWordsAsync(userId, ct),
-            [Achievement.QuizzesFinished] = () => AnsweredQuizzes(userId).CountAsync(ct),
-            [Achievement.DaysInARow] = () => statsRepository.GetStreakAsync(userId, DateOnly.FromDateTime(now), ct),
-            [Achievement.WithoutMistakes] = () => CountPerfectQuizzesInARowAsync(userId, ct),
-            [Achievement.LanguagePairs] = () => AnsweredQuizzes(userId).Select(q => q.LanguageId).Distinct().CountAsync(ct),
-            [Achievement.LevelsCompleted] = () => CountLevelsCompletedAsync(userId, ct),
-            [Achievement.FirstQuiz] = () => Task.FromResult(1),
-            [Achievement.TenQuizzesInADay] = () => AnsweredQuizzes(userId).CountAsync(q => q.FinishedAt >= now.Date, ct),
-            [Achievement.FirstC1Word] = async () => await LearnedTranslations(userId)
-                .AnyAsync(t => t.Word.CefrLevel!.Name == C1Level, ct) ? 1 : 0,
-            [Achievement.WelcomeBack] = async () =>
-            {
-                // The latest quiz came after a week or more without one.
-                var lastTwo = await context.UserQuizzes
-                    .Where(q => q.UserId == userId)
-                    .OrderByDescending(q => q.CreatedAt)
-                    .Select(q => q.CreatedAt)
-                    .Take(2)
-                    .ToListAsync(ct);
-                return lastTwo.Count == 2 && lastTwo[0] - lastTwo[1] >= WelcomeBackAfter ? 1 : 0;
-            },
-            [Achievement.AllWordsLearned] = async () => await HasLearnedAllWordsOfAPairAsync(userId, ct) ? 1 : 0,
-        };
+        var values = Progress(userId, now, ct);
 
         var granted = new List<UserAchievement>();
         foreach (var (achievement, definition) in AchievementCatalog.All)
         {
             // Nothing to count when every level is already held.
             var levels = Enumerable.Range(1, definition.Thresholds.Length).Select(l => (byte)l);
-            if (levels.All(level => held.Contains((achievement, level))))
+            if (levels.All(level => held.Contains(new AchievementLevel(achievement, level))))
                 continue;
 
             var value = await values[achievement]();
             granted.AddRange(definition.LevelsReached(value)
-                .Where(level => !held.Contains((achievement, level)))
+                .Where(level => !held.Contains(new AchievementLevel(achievement, level)))
                 .Select(level => new UserAchievement
                 {
                     UserId = userId,
@@ -86,10 +62,96 @@ public sealed class AchievementService(
         // Several levels at once (catching up): tell about the highest one.
         var highest = granted
             .GroupBy(a => a.Achievement)
-            .Select(g => (Achievement: g.Key, Level: g.Max(a => a.Level)))
+            .Select(g => new AchievementLevel(g.Key, g.Max(a => a.Level)))
             .ToArray();
         return await GetRarityAsync(highest, ct);
     }
+
+    /// <summary>
+    /// How to count the user's progress in each achievement: the value compared to its thresholds.
+    /// </summary>
+    private Dictionary<Achievement, Func<Task<int>>> Progress(Guid userId, DateTime now, CancellationToken ct) =>
+        new()
+        {
+            [Achievement.WordsLearned] = () => CountLearnedWordsAsync(userId, ct),
+            [Achievement.QuizzesFinished] = () => AnsweredQuizzes(userId).CountAsync(ct),
+            [Achievement.DaysInARow] = () => statsRepository.GetStreakAsync(userId, DateOnly.FromDateTime(now), ct),
+            [Achievement.WithoutMistakes] = () => CountPerfectQuizzesInARowAsync(userId, ct),
+            [Achievement.LanguagePairs] = () => AnsweredQuizzes(userId).Select(q => q.LanguageId).Distinct().CountAsync(ct),
+            [Achievement.LevelsCompleted] = () => CountLevelsCompletedAsync(userId, ct),
+            [Achievement.FirstQuiz] = async () => await AnsweredQuizzes(userId).AnyAsync(ct) ? 1 : 0,
+            [Achievement.TenQuizzesInADay] = () => AnsweredQuizzes(userId).CountAsync(q => q.FinishedAt >= now.Date, ct),
+            [Achievement.FirstC1Word] = async () => await LearnedTranslations(userId)
+                .AnyAsync(t => t.Word.CefrLevel!.Name == C1Level, ct) ? 1 : 0,
+            [Achievement.WelcomeBack] = async () =>
+            {
+                // The latest quiz came after a week or more without one.
+                var lastTwo = await context.UserQuizzes
+                    .Where(q => q.UserId == userId)
+                    .OrderByDescending(q => q.CreatedAt)
+                    .Select(q => q.CreatedAt)
+                    .Take(2)
+                    .ToListAsync(ct);
+                return lastTwo.Count == 2 && lastTwo[0] - lastTwo[1] >= WelcomeBackAfter ? 1 : 0;
+            },
+            [Achievement.AllWordsLearned] = async () => await HasLearnedAllWordsOfAPairAsync(userId, ct) ? 1 : 0,
+        };
+
+    /// <inheritdoc />
+    public async Task<AchievementsOverview> GetOverviewAsync(Guid userId, CancellationToken ct = default)
+    {
+        var heldLevels = await context.UserAchievements
+            .Where(a => a.UserId == userId)
+            .GroupBy(a => a.Achievement)
+            .Select(g => new { Achievement = g.Key, Level = g.Max(a => a.Level) })
+            .ToDictionaryAsync(x => x.Achievement, x => x.Level, ct);
+
+        var progress = Progress(userId, dateTimeProvider.UtcNow, ct);
+        var items = new List<AchievementProgress>();
+        foreach (var achievement in AchievementCatalog.All.Keys)
+        {
+            // One query at a time: the context isn't thread-safe.
+            items.Add(new AchievementProgress(
+                achievement,
+                heldLevels.GetValueOrDefault(achievement),
+                await progress[achievement]()));
+        }
+
+        var holders = (await context.UserAchievements
+                .GroupBy(a => new { a.Achievement, a.Level })
+                .Select(g => new { g.Key.Achievement, g.Key.Level, Count = g.Count() })
+                .ToListAsync(ct))
+            .ToDictionary(x => new AchievementLevel(x.Achievement, x.Level), x => x.Count);
+
+        return new AchievementsOverview(items, holders, await CountPlayersAsync(ct));
+    }
+
+    /// <inheritdoc />
+    public Task<int> CountHeldAsync(Guid userId, CancellationToken ct = default) =>
+        context.UserAchievements.CountAsync(a => a.UserId == userId, ct);
+
+    /// <inheritdoc />
+    public async Task<bool> SetTitleAsync(Guid userId, Achievement? achievement, byte? level, CancellationToken ct = default)
+    {
+        if (achievement is not null && !await context.UserAchievements.AnyAsync(
+                a => a.UserId == userId && a.Achievement == achievement && a.Level == level, ct))
+        {
+            return false;
+        }
+
+        await context.Users
+            .Where(u => u.Id == userId)
+            .ExecuteUpdateAsync(u => u
+                .SetProperty(x => x.TitleAchievement, achievement)
+                .SetProperty(x => x.TitleLevel, achievement is null ? null : level), ct);
+        return true;
+    }
+
+    private Task<int> CountPlayersAsync(CancellationToken ct) => context.UserQuizzes
+        .Where(q => q.Status == UserQuizStatus.Finished)
+        .Select(q => q.UserId)
+        .Distinct()
+        .CountAsync(ct);
 
     private IQueryable<UserQuiz> AnsweredQuizzes(Guid userId) => context.UserQuizzes
         .Where(q => q.UserId == userId && q.Status == UserQuizStatus.Finished)
@@ -159,7 +221,7 @@ public sealed class AchievementService(
     }
 
     private async Task<IReadOnlyList<EarnedAchievement>> GetRarityAsync(
-        IReadOnlyCollection<(Achievement Achievement, byte Level)> achievements,
+        IReadOnlyCollection<AchievementLevel> achievements,
         CancellationToken ct)
     {
         var kinds = achievements.Select(a => a.Achievement).ToArray();
@@ -168,11 +230,7 @@ public sealed class AchievementService(
             .GroupBy(a => new { a.Achievement, a.Level })
             .Select(g => new { g.Key.Achievement, g.Key.Level, Count = g.Count() })
             .ToListAsync(ct);
-        var players = await context.UserQuizzes
-            .Where(q => q.Status == UserQuizStatus.Finished)
-            .Select(q => q.UserId)
-            .Distinct()
-            .CountAsync(ct);
+        var players = await CountPlayersAsync(ct);
 
         return achievements
             .Select(a => new EarnedAchievement(

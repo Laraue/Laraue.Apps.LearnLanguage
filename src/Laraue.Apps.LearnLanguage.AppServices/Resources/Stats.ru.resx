@@ -101,4 +101,7 @@
     <data name="Leaderboard_NoPlayers" xml:space="preserve">
         <value>В этой лиге пока никто не играл.</value>
     </data>
+    <data name="Achievements" xml:space="preserve">
+        <value>🏅 Достижения: {0} из {1}</value>
+    </data>
 </root>

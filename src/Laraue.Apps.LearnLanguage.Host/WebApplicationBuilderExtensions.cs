@@ -130,6 +130,7 @@ public static class WebApplicationBuilderExtensions
                 .AddScoped<IAchievementService, AchievementService>()
                 .AddScoped<IAchievementNotifier, AchievementNotifier>()
                 .AddScoped<IAchievementChecker, AchievementChecker>()
+                .AddScoped<IAchievementsScreen, AchievementsScreen>()
                 .AddSingleton<IBotUsernameProvider, BotUsernameProvider>()
                 .Configure<RemindersOptions>(builder.Configuration.GetSection("Reminders"))
                 .AddScoped<IUserRepository, UserRepository>()
