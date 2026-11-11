@@ -465,6 +465,24 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ⏳ New achievements are on their way: a message about them comes in a few seconds..
+        /// </summary>
+        public static string PendingMessage {
+            get {
+                return ResourceManager.GetString("PendingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⏳ New achievements are on their way: open this screen again in a few seconds..
+        /// </summary>
+        public static string PendingRefresh {
+            get {
+                return ResourceManager.GetString("PendingRefresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 100 words learned.
         /// </summary>
         public static string WordsLearned_Description_1 {
@@ -794,15 +812,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         public static string Next {
             get {
                 return ResourceManager.GetString("Next", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ⏳ New achievements are on their way: the updated list comes in a few seconds..
-        /// </summary>
-        public static string Pending {
-            get {
-                return ResourceManager.GetString("Pending", resourceCulture);
             }
         }
     }

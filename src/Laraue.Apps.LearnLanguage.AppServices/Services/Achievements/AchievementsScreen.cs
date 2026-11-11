@@ -1,5 +1,3 @@
-using Telegram.Bot.Types;
-using Laraue.Core.DateTime.Services.Abstractions;
 using System.Globalization;
 using Laraue.Apps.LearnLanguage.AppServices.Extensions;
 using Laraue.Apps.LearnLanguage.AppServices.Resources;
@@ -19,7 +17,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
 
 public sealed class AchievementsScreen(
     IAchievementService achievementService,
-    IDateTimeProvider dateTimeProvider,
+    IAchievementChecker achievementChecker,
     DatabaseContext context,
     ITelegramBotClient client)
     : IAchievementsScreen
@@ -27,22 +25,7 @@ public sealed class AchievementsScreen(
     /// <inheritdoc />
     public async Task SendListAsync(ReplyData replyData, CancellationToken ct = default)
     {
-        var tmb = await BuildListAsync(replyData.UserId, requestMissing: true, ct);
-        await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
-    }
-
-    /// <inheritdoc />
-    public async Task SendListMessageAsync(Guid userId, ChatId chatId, CancellationToken ct = default)
-    {
-        var tmb = await BuildListAsync(userId, requestMissing: false, ct);
-        await client.SendTextMessageAsync(chatId, tmb, parseMode: ParseMode.Html, cancellationToken: ct);
-    }
-
-    /// <param name="requestMissing">Ask the achievements job to grant what's reached but not granted yet and
-    /// send the list again after it.</param>
-    private async Task<TelegramMessageBuilder> BuildListAsync(Guid userId, bool requestMissing, CancellationToken ct)
-    {
-        var overview = await achievementService.GetOverviewAsync(userId, ct);
+        var overview = await achievementService.GetOverviewAsync(replyData.UserId, ct);
         var held = overview.Items.Sum(i => i.Level);
 
         var tmb = new TelegramMessageBuilder()
@@ -50,7 +33,7 @@ public sealed class AchievementsScreen(
 
         // Seasonal trophies: won again and again, so not part of the count.
         var trophies = await context.UserTrophies
-            .Where(t => t.UserId == userId)
+            .Where(t => t.UserId == replyData.UserId)
             .GroupBy(t => t.Place)
             .Select(g => new { Place = g.Key, Count = g.Count() })
             .OrderBy(x => x.Place)
@@ -65,15 +48,14 @@ public sealed class AchievementsScreen(
 
         // Reached but not granted yet (e.g. progress made before achievements existed): the achievements job
         // grants them in a few seconds.
-        if (requestMissing && overview.Items.Any(IsReachedButNotGranted))
+        if (overview.Items.Any(IsReachedButNotGranted))
         {
-            var now = dateTimeProvider.UtcNow;
-            await context.Users
-                .Where(u => u.Id == userId)
-                .ExecuteUpdateAsync(u => u
-                    .SetProperty(x => x.AchievementsCheckRequestedAt, now)
-                    .SetProperty(x => x.AchievementsListRequested, true), ct);
-            tmb.AppendRow().AppendRow(AchievementTexts.Pending);
+            await achievementChecker.RequestCheckAsync(replyData.UserId, ct);
+            var messagesOff = await context.Users
+                .Where(u => u.Id == replyData.UserId)
+                .Select(u => u.AchievementMessagesOff)
+                .FirstAsync(ct);
+            tmb.AppendRow().AppendRow(messagesOff ? AchievementTexts.PendingRefresh : AchievementTexts.PendingMessage);
         }
 
         // Achievements with levels first: the level held and what it means, then the next one.
@@ -94,7 +76,7 @@ public sealed class AchievementsScreen(
         }
 
         var title = await context.Users
-            .Where(u => u.Id == userId)
+            .Where(u => u.Id == replyData.UserId)
             .Select(u => new { u.TitleAchievement, u.TitleLevel })
             .FirstAsync(ct);
         tmb.AddInlineKeyboardButtons([
@@ -108,7 +90,8 @@ public sealed class AchievementsScreen(
             InlineKeyboardButton.WithCallbackData(Buttons.Stat, TelegramRoutes.Stat)
         ]);
         tmb.AddMainMenuButton();
-        return tmb;
+
+        await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
     }
 
     /// <inheritdoc />

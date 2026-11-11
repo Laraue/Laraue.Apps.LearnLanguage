@@ -146,6 +146,12 @@
     <data name="Trophies" xml:space="preserve">
         <value>🏆 Трофеи: {0}</value>
     </data>
+    <data name="PendingMessage" xml:space="preserve">
+        <value>⏳ Новые достижения уже в пути: сообщение о них придёт через несколько секунд.</value>
+    </data>
+    <data name="PendingRefresh" xml:space="preserve">
+        <value>⏳ Новые достижения уже в пути: откройте этот экран снова через несколько секунд.</value>
+    </data>
     <data name="WordsLearned_Description_1" xml:space="preserve">
         <value>100 выученных слов</value>
     </data>
@@ -256,8 +262,5 @@
     </data>
     <data name="Next" xml:space="preserve">
         <value>Дальше: {0} · {1}</value>
-    </data>
-    <data name="Pending" xml:space="preserve">
-        <value>⏳ Новые достижения уже в пути: обновлённый список придёт через несколько секунд.</value>
     </data>
 </root>

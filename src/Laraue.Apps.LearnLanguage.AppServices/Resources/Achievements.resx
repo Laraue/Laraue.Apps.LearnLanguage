@@ -153,6 +153,12 @@
     <data name="Trophies" xml:space="preserve">
         <value>🏆 Trophies: {0}</value>
     </data>
+    <data name="PendingMessage" xml:space="preserve">
+        <value>⏳ New achievements are on their way: a message about them comes in a few seconds.</value>
+    </data>
+    <data name="PendingRefresh" xml:space="preserve">
+        <value>⏳ New achievements are on their way: open this screen again in a few seconds.</value>
+    </data>
     <data name="WordsLearned_Description_1" xml:space="preserve">
         <value>100 words learned</value>
     </data>
@@ -263,8 +269,5 @@
     </data>
     <data name="Next" xml:space="preserve">
         <value>Next: {0} · {1}</value>
-    </data>
-    <data name="Pending" xml:space="preserve">
-        <value>⏳ New achievements are on their way: the updated list comes in a few seconds.</value>
     </data>
 </root>

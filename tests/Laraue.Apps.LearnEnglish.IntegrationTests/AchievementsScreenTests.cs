@@ -63,7 +63,7 @@ public class AchievementsScreenTests : IntegrationTest
     }
 
     [Fact]
-    public async Task List_ShouldRequestACheck_AndTheUpdatedListShouldFollow()
+    public async Task List_ShouldRequestACheck_WhenSomethingReachedIsNotGrantedYet()
     {
         using var telegramTestHost = GetTelegramTestHost();
         // Progress from before achievements existed, nothing granted.
@@ -74,39 +74,18 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
 
         Assert.Contains(
-            "⏳ New achievements are on their way: the updated list comes in a few seconds.",
+            "⏳ New achievements are on their way: a message about them comes in a few seconds.",
             telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
-        var user = telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id));
-        Assert.NotNull(user.AchievementsCheckRequestedAt);
-        Assert.True(user.AchievementsListRequested);
+        Assert.NotNull(telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).AchievementsCheckRequestedAt);
 
-        // The achievements job grants them, tells about them, then sends the updated list.
+        // The achievements job grants them; the screen no longer waits.
         using (var scope = telegramTestHost.CreateScope())
             await scope.ServiceProvider.GetRequiredService<IAchievementChecker>().CheckRequestedAsync();
+        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
 
-        var messages = telegramTestHost.Requests().OfType<SendMessageRequest>().Select(m => m.Text).ToArray();
-        Assert.Equal(2, messages.Length);
-        Assert.StartsWith("<b>🎉 New achievements</b>", messages[0]);
-        Assert.StartsWith("<b>🏅 Achievements · ", messages[1]);
-        Assert.Contains("<b>Words learned</b>: 🥉 Bookworm", messages[1]);
-        Assert.DoesNotContain("⏳", messages[1]);
-        Assert.False(telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).AchievementsListRequested);
-    }
-
-    [Fact]
-    public async Task CheckAfterAQuiz_ShouldNotSendTheList()
-    {
-        using var telegramTestHost = GetTelegramTestHost();
-        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
-        AddFinishedQuiz(telegramTestHost, me);
-        using (var scope = telegramTestHost.CreateScope())
-        {
-            await scope.ServiceProvider.GetRequiredService<IAchievementChecker>().RequestCheckAsync(me.Id);
-            await scope.ServiceProvider.GetRequiredService<IAchievementChecker>().CheckRequestedAsync();
-        }
-
-        var message = Assert.Single(telegramTestHost.Requests().OfType<SendMessageRequest>());
-        Assert.StartsWith("<b>🎉 New achievement", message.Text);
+        var text = telegramTestHost.Requests().Last<EditMessageTextRequest>().Text!;
+        Assert.Contains("<b>Words learned</b>: 🥉 Bookworm", text);
+        Assert.DoesNotContain("⏳", text);
     }
 
     [Fact]

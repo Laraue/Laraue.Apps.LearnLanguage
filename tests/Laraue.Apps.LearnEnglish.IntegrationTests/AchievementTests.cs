@@ -99,7 +99,6 @@ public class AchievementTests : IntegrationTest
             services.GetRequiredService<DatabaseContext>(),
             services.GetRequiredService<IAchievementService>(),
             new RequestingAgainNotifier(services.GetRequiredService<IAchievementChecker>(), me.Id),
-            services.GetRequiredService<IAchievementsScreen>(),
             services.GetRequiredService<IDateTimeProvider>(),
             NullLogger<AchievementChecker>.Instance);
         await checker.CheckRequestedAsync();

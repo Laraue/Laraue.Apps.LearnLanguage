@@ -9,7 +9,6 @@ public sealed class AchievementChecker(
     DatabaseContext context,
     IAchievementService achievementService,
     IAchievementNotifier achievementNotifier,
-    IAchievementsScreen achievementsScreen,
     IDateTimeProvider dateTimeProvider,
     ILogger<AchievementChecker> logger)
     : IAchievementChecker
@@ -31,14 +30,7 @@ public sealed class AchievementChecker(
         var requested = await context.Users
             .Where(u => u.AchievementsCheckRequestedAt != null)
             .OrderBy(u => u.AchievementsCheckRequestedAt)
-            .Select(u => new
-            {
-                u.Id,
-                u.TelegramId,
-                u.TelegramLanguageCode,
-                u.AchievementsListRequested,
-                RequestedAt = u.AchievementsCheckRequestedAt!.Value,
-            })
+            .Select(u => new { u.Id, u.TelegramId, RequestedAt = u.AchievementsCheckRequestedAt!.Value })
             .Take(BatchSize)
             .ToListAsync(ct);
 
@@ -48,16 +40,6 @@ public sealed class AchievementChecker(
             {
                 var earned = await achievementService.GrantAsync(user.Id, ct);
                 await achievementNotifier.NotifyAsync(user.Id, user.TelegramId, earned, ct);
-
-                // Opened from the list: the list the user saw is out of date, so the updated one follows.
-                if (user.AchievementsListRequested)
-                {
-                    using (InterfaceCulture.Use(user.TelegramLanguageCode))
-                        await achievementsScreen.SendListMessageAsync(user.Id, user.TelegramId, ct);
-                    await context.Users
-                        .Where(u => u.Id == user.Id)
-                        .ExecuteUpdateAsync(u => u.SetProperty(x => x.AchievementsListRequested, false), ct);
-                }
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
