@@ -58,8 +58,8 @@ public class LeaderboardTests : IntegrationTest
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         Assert.Equal(
             """
-            <b>🏆 Leaderboard · this week</b>
-            🌱 Beginner league · words left to 🌳 Intermediate: 1,000
+            <b>🏆 Leaderboard · this week · 🌱 Beginner league</b>
+            Words left to 🌳 Intermediate: 1,000
             +3 for a right answer, −1 for a wrong one
 
             🥇 Alice · 15 pts · 100% correct
@@ -100,7 +100,7 @@ public class LeaderboardTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
 
         var text = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!;
-        Assert.Contains("🌳 Intermediate league", text);
+        Assert.StartsWith("<b>🏆 Leaderboard · this week · 🌳 Intermediate league</b>\n+3 for a right answer", text);
         Assert.Contains("Anna · 3 pts", text);
         Assert.Contains("Olga · 3 pts", text);
         Assert.Contains("Me <b>(you)</b> · 3 pts", text);
@@ -119,12 +119,14 @@ public class LeaderboardTests : IntegrationTest
         // Enough words, but leagues change only when the weekly job runs.
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
         Assert.Contains(
-            "🌱 Beginner league · 🎉 enough words: you move to 🌳 Intermediate on Monday",
+            "🎉 Enough words: you move to 🌳 Intermediate on Monday",
             telegramTestHost.Requests().Last<EditMessageTextRequest>().Text!.Split('\n'));
 
         Assert.Equal(1, await UpdateLeaguesAsync(telegramTestHost));
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
-        Assert.Contains("🌳 Intermediate league", telegramTestHost.Requests().Last<EditMessageTextRequest>().Text);
+        Assert.StartsWith(
+            "<b>🏆 Leaderboard · this week · 🌳 Intermediate league</b>",
+            telegramTestHost.Requests().Last<EditMessageTextRequest>().Text);
 
         // A wrong answer un-learns a word: the league stays.
         await telegramTestHost.ExecuteInDbAsync(db => db.LearnedTranslations
@@ -150,7 +152,7 @@ public class LeaderboardTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
 
         Assert.Contains(
-            "🌱 Beginner league · words left to 🌳 Intermediate: 1",
+            "Words left to 🌳 Intermediate: 1",
             telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
     }
 
@@ -184,7 +186,7 @@ public class LeaderboardTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(monthCallback));
 
         var request = telegramTestHost.Requests().Last<EditMessageTextRequest>();
-        Assert.StartsWith("<b>🏆 Leaderboard · this month</b>", request.Text);
+        Assert.StartsWith("<b>🏆 Leaderboard · this month · 🌱 Beginner league</b>", request.Text);
         Assert.Contains("🥇 ******* · 6 pts · 100% correct", request.Text);
         Assert.Contains("🥈 ******* · 3 pts · 100% correct", request.Text);
         Assert.Contains("🥉 ******* · 2 pts · 50% correct", request.Text);

@@ -213,7 +213,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🏆 Leaderboard · {0}.
+        ///   Looks up a localized string similar to 🏆 Leaderboard · {0} · {1}.
         /// </summary>
         public static string Leaderboard_Title {
             get {
@@ -285,7 +285,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🌱 Beginner league · words left to 🌳 Intermediate: {0}.
+        ///   Looks up a localized string similar to Words left to 🌳 Intermediate: {0}.
         /// </summary>
         public static string Leaderboard_LeagueBeginner {
             get {
@@ -303,11 +303,20 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🌱 Beginner league · 🎉 enough words: you move to 🌳 Intermediate on Monday.
+        ///   Looks up a localized string similar to 🎉 Enough words: you move to 🌳 Intermediate on Monday.
         /// </summary>
         public static string Leaderboard_LeagueBeginnerMovingUp {
             get {
                 return ResourceManager.GetString("Leaderboard_LeagueBeginnerMovingUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🌱 Beginner league.
+        /// </summary>
+        public static string Leaderboard_LeagueBeginnerName {
+            get {
+                return ResourceManager.GetString("Leaderboard_LeagueBeginnerName", resourceCulture);
             }
         }
     }

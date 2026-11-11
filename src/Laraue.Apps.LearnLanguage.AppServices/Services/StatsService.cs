@@ -148,10 +148,14 @@ public class StatsService(
 
         var tmb = new TelegramMessageBuilder();
         tmb.AppendRow($"<b>{string.Format(
-                Stats.Leaderboard_Title,
-                request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week)}</b>")
-            .AppendRow(LeagueLine(board))
-            .AppendRow(Stats.Leaderboard_Scoring)
+            Stats.Leaderboard_Title,
+            request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week,
+            board.League == League.Intermediate
+                ? Stats.Leaderboard_LeagueIntermediate
+                : Stats.Leaderboard_LeagueBeginnerName)}</b>");
+        if (board.League == League.Beginner)
+            tmb.AppendRow(BeginnerProgressLine(board));
+        tmb.AppendRow(Stats.Leaderboard_Scoring)
             .AppendRow();
 
         if (board.PlayersCount < MinLeaderboardPlayers)
@@ -189,11 +193,8 @@ public class StatsService(
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
     }
 
-    private static string LeagueLine(Leaderboard board)
+    private static string BeginnerProgressLine(Leaderboard board)
     {
-        if (board.League == League.Intermediate)
-            return Stats.Leaderboard_LeagueIntermediate;
-
         // The words are counted live, but leagues change on Mondays.
         var wordsLeft = LeagueRules.IntermediateMinWords - board.LearnedWords;
         return wordsLeft > 0

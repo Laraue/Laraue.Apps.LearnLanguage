@@ -63,7 +63,7 @@
         <value>Выучено первое английское слово · учу с @{0}</value>
     </data>
     <data name="Leaderboard_Title" xml:space="preserve">
-        <value>🏆 Рейтинг · {0}</value>
+        <value>🏆 Рейтинг · {0} · {1}</value>
     </data>
     <data name="Leaderboard_Week" xml:space="preserve">
         <value>эта неделя</value>
@@ -87,12 +87,15 @@
         <value>🙈 Ваше имя скрыто от других. Показать его можно в ⚙️ Настройках.</value>
     </data>
     <data name="Leaderboard_LeagueBeginner" xml:space="preserve">
-        <value>🌱 Лига новичков · до следующей лиги 🌳 осталось слов: {0}</value>
+        <value>До следующей лиги 🌳 осталось слов: {0}</value>
     </data>
     <data name="Leaderboard_LeagueIntermediate" xml:space="preserve">
         <value>🌳 Лига продолжающих</value>
     </data>
     <data name="Leaderboard_LeagueBeginnerMovingUp" xml:space="preserve">
-        <value>🌱 Лига новичков · 🎉 слов уже достаточно: в понедельник вы перейдёте в следующую лигу 🌳</value>
+        <value>🎉 Слов уже достаточно: в понедельник вы перейдёте в следующую лигу 🌳</value>
+    </data>
+    <data name="Leaderboard_LeagueBeginnerName" xml:space="preserve">
+        <value>🌱 Лига новичков</value>
     </data>
 </root>
