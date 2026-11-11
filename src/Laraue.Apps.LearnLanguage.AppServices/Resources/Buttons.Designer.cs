@@ -211,5 +211,50 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("ShareProgress", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🏆 Leaderboard.
+        /// </summary>
+        public static string Leaderboard {
+            get {
+                return ResourceManager.GetString("Leaderboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This week.
+        /// </summary>
+        public static string Leaderboard_Week {
+            get {
+                return ResourceManager.GetString("Leaderboard_Week", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This month.
+        /// </summary>
+        public static string Leaderboard_Month {
+            get {
+                return ResourceManager.GetString("Leaderboard_Month", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🏆 Show my name in the leaderboard.
+        /// </summary>
+        public static string ShowNameOnLeaderboard {
+            get {
+                return ResourceManager.GetString("ShowNameOnLeaderboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🙈 Hide my name in the leaderboard.
+        /// </summary>
+        public static string HideNameOnLeaderboard {
+            get {
+                return ResourceManager.GetString("HideNameOnLeaderboard", resourceCulture);
+            }
+        }
     }
 }

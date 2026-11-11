@@ -65,6 +65,11 @@ public sealed class User
     public DateTime? BotBlockedAt { get; set; }
 
     /// <summary>
+    /// Whether other users see the user's first name on the leaderboard. When false, the name is masked.
+    /// </summary>
+    public bool ShowNameOnLeaderboard { get; set; }
+
+    /// <summary>
     /// How to show word translations for this user. 
     /// </summary>
     public WordsTemplateMode WordsTemplateMode { get; set; }

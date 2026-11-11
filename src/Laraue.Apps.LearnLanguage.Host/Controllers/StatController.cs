@@ -21,4 +21,13 @@ public class StatController : TelegramController
     {
         return _statsService.SendStatsAsync(ReplyData.FromRequest(request), statsRequest, ct);
     }
+
+    [TelegramCallbackRoute(TelegramRoutes.Leaderboard)]
+    public Task SendLeaderboardAsync(
+        RequestContext request,
+        [FromQuery] LeaderboardRequest leaderboardRequest,
+        CancellationToken ct)
+    {
+        return _statsService.SendLeaderboardAsync(ReplyData.FromRequest(request), leaderboardRequest, ct);
+    }
 }

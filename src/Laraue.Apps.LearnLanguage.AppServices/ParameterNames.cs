@@ -7,6 +7,7 @@ public static class ParameterNames
     public const string TopicId = "ti";
     public const string CefrLevelId = "ci";
     public const string Enable = "e";
+    public const string Month = "mo";
     
     public const string LanguageToLearn = "lt";
 }

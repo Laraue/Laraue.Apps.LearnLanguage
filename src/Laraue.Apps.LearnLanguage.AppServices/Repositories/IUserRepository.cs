@@ -9,6 +9,11 @@ public interface IUserRepository
     Task SetLanguageCodeAsync(Guid userId, string code, CancellationToken ct = default);
 
     Task SetReminderTimeAsync(Guid userId, TimeOnly? reminderTime, CancellationToken ct = default);
+
+    /// <summary>
+    /// Whether other users see the user's first name on the leaderboard.
+    /// </summary>
+    Task SetShowNameOnLeaderboardAsync(Guid userId, bool show, CancellationToken ct = default);
     
     Task UpdateLanguageSettingsAsync(
         Guid userId,

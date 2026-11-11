@@ -101,6 +101,94 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
             await GetMostMissedWordsAsync(userId, lang, MostMissedOnScreen, ct));
     }
 
+    public async Task<Leaderboard> GetLeaderboardAsync(
+        Guid userId,
+        DateTime since,
+        int count,
+        CancellationToken ct = default)
+    {
+        // Points per user who answered in the period. Each query below aggregates it in the database, so only
+        // the shown rows come back, however many users play.
+        var scores = GetScores(context.UserQuizQuestions, since);
+
+        var top = await scores
+            .OrderByDescending(x => x.Points)
+            .ThenByDescending(x => x.Correct)
+            .ThenBy(x => x.UserId)
+            .Take(count)
+            .ToListAsync(ct);
+        var playersCount = top.Count < count ? top.Count : await scores.CountAsync(ct);
+
+        // Ties share a place: the place is 1 + the number of users strictly ahead.
+        var ranks = top.ToDictionary(x => x.UserId, x => 1 + top.Count(o => IsAhead(o, x)));
+        var me = top.FirstOrDefault(x => x.UserId == userId);
+        if (me is null)
+        {
+            me = await GetScores(context.UserQuizQuestions.Where(x => x.Quiz.UserId == userId), since)
+                .FirstOrDefaultAsync(ct);
+            if (me is not null)
+            {
+                var (points, correct) = (me.Points, me.Correct);
+                ranks[me.UserId] = 1 + await scores.CountAsync(
+                    x => x.Points > points || (x.Points == points && x.Correct > correct), ct);
+            }
+        }
+
+        var userIds = ranks.Keys.Append(userId).ToArray();
+        var users = await context.Users
+            .Where(u => userIds.Contains(u.Id))
+            .Select(u => new { u.Id, u.TelegramFirstName, u.ShowNameOnLeaderboard })
+            .ToDictionaryAsync(u => u.Id, ct);
+
+        LeaderboardRow ToRow(Score score)
+        {
+            var user = users.GetValueOrDefault(score.UserId);
+            return new LeaderboardRow(
+                ranks[score.UserId],
+                score.UserId,
+                user?.TelegramFirstName,
+                user?.ShowNameOnLeaderboard ?? false,
+                score.Correct,
+                score.Wrong);
+        }
+
+        return new Leaderboard(
+            top.Select(ToRow).ToArray(),
+            me is null ? null : ToRow(me),
+            playersCount,
+            users.GetValueOrDefault(userId)?.ShowNameOnLeaderboard ?? false);
+    }
+
+    private static bool IsAhead(Score other, Score score) =>
+        other.Points > score.Points || (other.Points == score.Points && other.Correct > score.Correct);
+
+    private static IQueryable<Score> GetScores(IQueryable<UserQuizQuestion> questions, DateTime since) => questions
+        .Where(x => x.AnsweredAt >= since)
+        .Where(x => x.Status == UserQuizQuestionStatus.Correct || x.Status == UserQuizQuestionStatus.Incorrect)
+        .GroupBy(x => x.Quiz.UserId)
+        .Select(g => new
+        {
+            UserId = g.Key,
+            Correct = g.Count(x => x.Status == UserQuizQuestionStatus.Correct),
+            Wrong = g.Count(x => x.Status == UserQuizQuestionStatus.Incorrect),
+        })
+        .Select(x => new Score
+        {
+            UserId = x.UserId,
+            Correct = x.Correct,
+            Wrong = x.Wrong,
+            Points = x.Correct * LeaderboardRow.PointsPerCorrect - x.Wrong * LeaderboardRow.PointsPerWrong,
+        });
+
+    // Init properties rather than a constructor, so EF can translate filters and sorting on them.
+    private sealed class Score
+    {
+        public required Guid UserId { get; init; }
+        public required int Correct { get; init; }
+        public required int Wrong { get; init; }
+        public required int Points { get; init; }
+    }
+
     public async Task<MissedWord[]> GetMostMissedWordsAsync(
         Guid userId,
         long languageId,

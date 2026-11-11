@@ -69,4 +69,19 @@
     <data name="ShareProgress" xml:space="preserve">
         <value>📤 Share my progress</value>
     </data>
+    <data name="Leaderboard" xml:space="preserve">
+        <value>🏆 Leaderboard</value>
+    </data>
+    <data name="Leaderboard_Week" xml:space="preserve">
+        <value>This week</value>
+    </data>
+    <data name="Leaderboard_Month" xml:space="preserve">
+        <value>This month</value>
+    </data>
+    <data name="ShowNameOnLeaderboard" xml:space="preserve">
+        <value>🏆 Show my name in the leaderboard</value>
+    </data>
+    <data name="HideNameOnLeaderboard" xml:space="preserve">
+        <value>🙈 Hide my name in the leaderboard</value>
+    </data>
 </root>

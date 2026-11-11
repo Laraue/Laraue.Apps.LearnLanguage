@@ -5,4 +5,5 @@ public record UserSettings(
     long? LanguageToLearnId,
     string? LanguageToLearnCode,
     string? LanguageToLearnTitle,
-    TimeOnly? ReminderTime);
+    TimeOnly? ReminderTime,
+    bool ShowNameOnLeaderboard);

@@ -21,6 +21,14 @@ public interface IUserSettingsService
         UpdateRemindersSettingsRequest request,
         CancellationToken ct = default);
 
+    /// <summary>
+    /// Show or mask the user's name on the leaderboard and show the settings.
+    /// </summary>
+    Task UpdateLeaderboardNameSettingsAsync(
+        ReplyData replyData,
+        UpdateLeaderboardNameSettingsRequest request,
+        CancellationToken ct = default);
+
     Task UpdateLearnLanguageSettingsAsync(
         ReplyData replyData,
         UpdateLearnLanguageSettingsRequest request,
