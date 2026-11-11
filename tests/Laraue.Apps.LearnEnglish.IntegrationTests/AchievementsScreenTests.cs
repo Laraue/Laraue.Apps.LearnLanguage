@@ -42,14 +42,15 @@ public class AchievementsScreenTests : IntegrationTest
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         var lines = request.Text!.Split('\n');
         Assert.Equal("<b>🏅 Achievements · 6 of 26</b>", lines[0]);
-        // The level held, then the progress to the next one.
-        AssertFollows(lines, "📚 Words learned · 🥉 Bookworm", "120 of 500 words → 🥈 Word collector");
-        AssertFollows(lines, "🎯 Without mistakes · 🥉 Sharp eye", "1 of 5 quizzes in a row without mistakes → 🥈 Sniper");
-        // Nothing held yet: the name, then the progress to the first level.
-        AssertFollows(lines, "🧩 Quizzes finished", "1 of 100 quizzes → 🥉 Persistence");
-        AssertFollows(lines, "🎓 Levels completed", "Learn every A1 word → 🥉 Peppa Pig without subtitles");
-        // Every level held: the top level only.
-        AssertFollows(lines, "🌍 Language pairs · 🥈 Polyglot", "");
+        // The level held, then the next one with the progress to it.
+        AssertFollow(lines, "📚 Words learned", "Earned: 🥉 Bookworm", "Next: 🥈 Word collector · 120 of 500 words");
+        AssertFollow(lines, "🎯 Without mistakes",
+            "Earned: 🥉 Sharp eye", "Next: 🥈 Sniper · 1 of 5 quizzes in a row without mistakes");
+        // Nothing held yet: only the next one.
+        AssertFollow(lines, "🧩 Quizzes finished", "Next: 🥉 Persistence · 1 of 100 quizzes");
+        AssertFollow(lines, "🎓 Levels completed", "Next: 🥉 Peppa Pig without subtitles · learn every A1 word");
+        // Every level held: no next one.
+        AssertFollow(lines, "🌍 Language pairs", "Earned: 🥈 Polyglot", "");
         // Single achievements as a checklist.
         Assert.Contains("✅ 👣 First steps · First quiz finished", lines);
         Assert.Contains("✅ 🔤 Pioneer · First C1 word learned", lines);
@@ -83,7 +84,7 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
 
         var text = telegramTestHost.Requests().Last<EditMessageTextRequest>().Text!;
-        Assert.Contains("📚 Words learned · 🥉 Bookworm", text);
+        Assert.Contains("Earned: 🥉 Bookworm", text);
         Assert.DoesNotContain("⏳", text);
     }
 
@@ -159,11 +160,11 @@ public class AchievementsScreenTests : IntegrationTest
         Assert.Contains("🏅 Achievements: 1 of 26", request.Text!.Split('\n'));
     }
 
-    private static void AssertFollows(string[] lines, string line, string next)
+    private static void AssertFollow(string[] lines, string line, params string[] next)
     {
         var index = Array.IndexOf(lines, line);
         Assert.True(index >= 0, $"No line \"{line}\"");
-        Assert.Equal(next, lines[index + 1]);
+        Assert.Equal(next, lines.Skip(index + 1).Take(next.Length));
     }
 
     private static User AddUser(

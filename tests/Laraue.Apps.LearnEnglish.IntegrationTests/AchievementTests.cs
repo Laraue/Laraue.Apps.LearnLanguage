@@ -232,6 +232,32 @@ public class AchievementTests : IntegrationTest
     }
 
     [Fact]
+    public async Task LanguagePairs_ShouldCountPairsWithALearnedWord()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id);
+        var de = DefaultContextData.GetWordLanguages().GetId("de");
+        var word = telegramTestHost.GetFromDb(db => db.Translations
+            .Where(t => t.LanguageId == de)
+            .OrderBy(t => t.WordId)
+            .First()).WordId;
+        // No mistakes: a wrong answer would un-learn a word asked again for review.
+        // A quiz in German only: not a pair yet.
+        AddFinishedQuiz(telegramTestHost, me, DateTime.UtcNow.AddHours(-1), de);
+        AddLearned(telegramTestHost, me, word, Ru);
+
+        await PlayQuizAsync(telegramTestHost, mistakes: 0);
+        await CheckAchievementsAsync(telegramTestHost);
+        Assert.DoesNotContain((Achievement.LanguagePairs, (byte)1), Granted(telegramTestHost, me));
+
+        // A word learned in German: two pairs.
+        AddLearned(telegramTestHost, me, word, de);
+        await PlayQuizAsync(telegramTestHost, mistakes: 0);
+        await CheckAchievementsAsync(telegramTestHost);
+        Assert.Contains((Achievement.LanguagePairs, (byte)1), Granted(telegramTestHost, me));
+    }
+
+    [Fact]
     public async Task MutedUser_ShouldEarnAchievements_WithoutAMessage()
     {
         using var telegramTestHost = GetTelegramTestHost();
@@ -337,13 +363,19 @@ public class AchievementTests : IntegrationTest
         return user;
     }
 
-    private static void AddFinishedQuiz(AppTelegramTestHost host, User user, DateTime at)
+    private static void AddLearned(AppTelegramTestHost host, User user, long wordId, long languageId) =>
+        host.InsertIntoDb(new LearnedTranslation
+        {
+            UserId = user.Id, WordId = wordId, LanguageId = languageId, WinStreakCount = 3, LearnedAt = DateTime.UtcNow,
+        });
+
+    private static void AddFinishedQuiz(AppTelegramTestHost host, User user, DateTime at, long? languageId = null)
     {
         var wordId = host.GetFromDb(db => db.Words.OrderBy(w => w.Id).First()).Id;
         host.InsertIntoDb(new UserQuiz
         {
             UserId = user.Id,
-            LanguageId = Ru,
+            LanguageId = languageId ?? Ru,
             Status = UserQuizStatus.Finished,
             CreatedAt = at,
             FinishedAt = at,

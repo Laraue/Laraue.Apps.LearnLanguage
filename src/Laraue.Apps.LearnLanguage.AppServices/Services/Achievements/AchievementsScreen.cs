@@ -152,14 +152,16 @@ public sealed class AchievementsScreen(
     }
 
     /// <summary>
-    /// "📚 Words learned · 🥇 Scholar", then "2,289 of 3,000 words → 💎 Walking dictionary" until every level is
-    /// held.
+    /// "📚 Words learned", then "Earned: 🥇 Scholar" when a level is held, then
+    /// "Next: 💎 Walking dictionary · 2,289 of 3,000 words" until every level is held.
     /// </summary>
     private static IEnumerable<string> LevelsLines(AchievementProgress item)
     {
         var definition = AchievementCatalog.All[item.Achievement];
-        var name = $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}";
-        yield return item.Level > 0 ? $"{name} · {AchievementCatalog.Level(item.Achievement, item.Level)}" : name;
+        yield return $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}";
+
+        if (item.Level > 0)
+            yield return string.Format(AchievementTexts.Earned, AchievementCatalog.Level(item.Achievement, item.Level));
 
         if (item.Level == definition.Thresholds.Length)
             yield break;
@@ -169,7 +171,7 @@ public sealed class AchievementsScreen(
             AchievementCatalog.ProgressFormat(item.Achievement, next),
             Number(item.Value),
             AchievementCatalog.Requirement(item.Achievement, next));
-        yield return $"{progress} → {AchievementCatalog.Level(item.Achievement, next)}";
+        yield return string.Format(AchievementTexts.Next, AchievementCatalog.Level(item.Achievement, next), progress);
     }
 
     private static bool IsReachedButNotGranted(AchievementProgress item) =>

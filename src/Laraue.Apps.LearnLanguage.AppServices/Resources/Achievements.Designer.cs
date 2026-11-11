@@ -609,24 +609,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2 language pairs.
-        /// </summary>
-        public static string LanguagePairs_Description_1 {
-            get {
-                return ResourceManager.GetString("LanguagePairs_Description_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 5 language pairs.
-        /// </summary>
-        public static string LanguagePairs_Description_2 {
-            get {
-                return ResourceManager.GetString("LanguagePairs_Description_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Every A1 word learned.
         /// </summary>
         public static string LevelsCompleted_Description_1 {
@@ -789,7 +771,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} of {1} language pairs.
+        ///   Looks up a localized string similar to words learned in {0} of {1} language pairs.
         /// </summary>
         public static string LanguagePairs_Progress {
             get {
@@ -798,11 +780,47 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Learn every {1} word.
+        ///   Looks up a localized string similar to learn every {1} word.
         /// </summary>
         public static string LevelsCompleted_Progress {
             get {
                 return ResourceManager.GetString("LevelsCompleted_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Words learned in 2 language pairs.
+        /// </summary>
+        public static string LanguagePairs_Description_1 {
+            get {
+                return ResourceManager.GetString("LanguagePairs_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Words learned in 5 language pairs.
+        /// </summary>
+        public static string LanguagePairs_Description_2 {
+            get {
+                return ResourceManager.GetString("LanguagePairs_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Earned: {0}.
+        /// </summary>
+        public static string Earned {
+            get {
+                return ResourceManager.GetString("Earned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next: {0} · {1}.
+        /// </summary>
+        public static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
     }

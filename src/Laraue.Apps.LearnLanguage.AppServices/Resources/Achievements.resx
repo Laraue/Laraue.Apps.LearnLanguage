@@ -201,12 +201,6 @@
     <data name="WithoutMistakes_Description_3" xml:space="preserve">
         <value>20 quizzes in a row without mistakes</value>
     </data>
-    <data name="LanguagePairs_Description_1" xml:space="preserve">
-        <value>2 language pairs</value>
-    </data>
-    <data name="LanguagePairs_Description_2" xml:space="preserve">
-        <value>5 language pairs</value>
-    </data>
     <data name="LevelsCompleted_Description_1" xml:space="preserve">
         <value>Every A1 word learned</value>
     </data>
@@ -262,9 +256,21 @@
         <value>{0} of 1 quiz without mistakes</value>
     </data>
     <data name="LanguagePairs_Progress" xml:space="preserve">
-        <value>{0} of {1} language pairs</value>
+        <value>words learned in {0} of {1} language pairs</value>
     </data>
     <data name="LevelsCompleted_Progress" xml:space="preserve">
-        <value>Learn every {1} word</value>
+        <value>learn every {1} word</value>
+    </data>
+    <data name="LanguagePairs_Description_1" xml:space="preserve">
+        <value>Words learned in 2 language pairs</value>
+    </data>
+    <data name="LanguagePairs_Description_2" xml:space="preserve">
+        <value>Words learned in 5 language pairs</value>
+    </data>
+    <data name="Earned" xml:space="preserve">
+        <value>Earned: {0}</value>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>Next: {0} · {1}</value>
     </data>
 </root>

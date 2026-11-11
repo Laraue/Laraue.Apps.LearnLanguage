@@ -194,12 +194,6 @@
     <data name="WithoutMistakes_Description_3" xml:space="preserve">
         <value>20 тестов подряд без ошибок</value>
     </data>
-    <data name="LanguagePairs_Description_1" xml:space="preserve">
-        <value>2 языковые пары</value>
-    </data>
-    <data name="LanguagePairs_Description_2" xml:space="preserve">
-        <value>5 языковых пар</value>
-    </data>
     <data name="LevelsCompleted_Description_1" xml:space="preserve">
         <value>Выучены все слова уровня A1</value>
     </data>
@@ -255,9 +249,21 @@
         <value>{0} из 1 теста без ошибок</value>
     </data>
     <data name="LanguagePairs_Progress" xml:space="preserve">
-        <value>{0} из {1} языковых пар</value>
+        <value>слова выучены в {0} из {1} языковых пар</value>
     </data>
     <data name="LevelsCompleted_Progress" xml:space="preserve">
-        <value>Выучите все слова уровня {1}</value>
+        <value>выучите все слова уровня {1}</value>
+    </data>
+    <data name="LanguagePairs_Description_1" xml:space="preserve">
+        <value>Слова выучены в 2 языковых парах</value>
+    </data>
+    <data name="LanguagePairs_Description_2" xml:space="preserve">
+        <value>Слова выучены в 5 языковых парах</value>
+    </data>
+    <data name="Earned" xml:space="preserve">
+        <value>Получено: {0}</value>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>Дальше: {0} · {1}</value>
     </data>
 </root>
