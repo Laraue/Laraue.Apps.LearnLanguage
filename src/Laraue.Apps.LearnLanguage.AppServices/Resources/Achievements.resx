@@ -114,17 +114,11 @@
     <data name="AllWordsLearned_1" xml:space="preserve">
         <value>Word master</value>
     </data>
-    <data name="New" xml:space="preserve">
-        <value>🎉 New achievement: {0}</value>
-    </data>
     <data name="Rarity" xml:space="preserve">
         <value>{0}% of players have it</value>
     </data>
     <data name="RarityUnderOnePercent" xml:space="preserve">
         <value>Less than 1% of players have it</value>
-    </data>
-    <data name="OnlyYou" xml:space="preserve">
-        <value>🥇 Nobody else has it yet</value>
     </data>
     <data name="ShareText" xml:space="preserve">
         <value>My new achievement with @{1}: {0}. {2}</value>
@@ -182,5 +176,92 @@
     </data>
     <data name="PendingRefresh" xml:space="preserve">
         <value>⏳ New achievements are on their way: open this screen again in a few seconds.</value>
+    </data>
+    <data name="WordsLearned_Description_1" xml:space="preserve">
+        <value>100 words learned</value>
+    </data>
+    <data name="WordsLearned_Description_2" xml:space="preserve">
+        <value>500 words learned</value>
+    </data>
+    <data name="WordsLearned_Description_3" xml:space="preserve">
+        <value>1,000 words learned</value>
+    </data>
+    <data name="WordsLearned_Description_4" xml:space="preserve">
+        <value>3,000 words learned</value>
+    </data>
+    <data name="WordsLearned_Description_5" xml:space="preserve">
+        <value>5,000 words learned</value>
+    </data>
+    <data name="QuizzesFinished_Description_1" xml:space="preserve">
+        <value>100 quizzes finished</value>
+    </data>
+    <data name="QuizzesFinished_Description_2" xml:space="preserve">
+        <value>1,000 quizzes finished</value>
+    </data>
+    <data name="QuizzesFinished_Description_3" xml:space="preserve">
+        <value>10,000 quizzes finished</value>
+    </data>
+    <data name="DaysInARow_Description_1" xml:space="preserve">
+        <value>7 days in a row</value>
+    </data>
+    <data name="DaysInARow_Description_2" xml:space="preserve">
+        <value>30 days in a row</value>
+    </data>
+    <data name="DaysInARow_Description_3" xml:space="preserve">
+        <value>100 days in a row</value>
+    </data>
+    <data name="WithoutMistakes_Description_1" xml:space="preserve">
+        <value>A quiz without mistakes</value>
+    </data>
+    <data name="WithoutMistakes_Description_2" xml:space="preserve">
+        <value>5 quizzes in a row without mistakes</value>
+    </data>
+    <data name="WithoutMistakes_Description_3" xml:space="preserve">
+        <value>20 quizzes in a row without mistakes</value>
+    </data>
+    <data name="LanguagePairs_Description_1" xml:space="preserve">
+        <value>2 language pairs</value>
+    </data>
+    <data name="LanguagePairs_Description_2" xml:space="preserve">
+        <value>5 language pairs</value>
+    </data>
+    <data name="LevelsCompleted_Description_1" xml:space="preserve">
+        <value>Every A1 word learned</value>
+    </data>
+    <data name="LevelsCompleted_Description_2" xml:space="preserve">
+        <value>Every A1–A2 word learned</value>
+    </data>
+    <data name="LevelsCompleted_Description_3" xml:space="preserve">
+        <value>Every A1–B1 word learned</value>
+    </data>
+    <data name="LevelsCompleted_Description_4" xml:space="preserve">
+        <value>Every A1–B2 word learned</value>
+    </data>
+    <data name="LevelsCompleted_Description_5" xml:space="preserve">
+        <value>Every A1–C1 word learned</value>
+    </data>
+    <data name="FirstQuiz_Description_1" xml:space="preserve">
+        <value>First quiz finished</value>
+    </data>
+    <data name="TenQuizzesInADay_Description_1" xml:space="preserve">
+        <value>10 quizzes in one day</value>
+    </data>
+    <data name="FirstC1Word_Description_1" xml:space="preserve">
+        <value>First C1 word learned</value>
+    </data>
+    <data name="WelcomeBack_Description_1" xml:space="preserve">
+        <value>Back after a week away</value>
+    </data>
+    <data name="AllWordsLearned_Description_1" xml:space="preserve">
+        <value>Every word of a language pair learned</value>
+    </data>
+    <data name="NewOne" xml:space="preserve">
+        <value>🎉 New achievement</value>
+    </data>
+    <data name="NewMany" xml:space="preserve">
+        <value>🎉 New achievements</value>
+    </data>
+    <data name="OnlyYou" xml:space="preserve">
+        <value>✨ Only you have it</value>
     </data>
 </root>

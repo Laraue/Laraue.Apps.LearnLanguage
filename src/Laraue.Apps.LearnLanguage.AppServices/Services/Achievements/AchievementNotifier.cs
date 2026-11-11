@@ -40,15 +40,14 @@ public sealed class AchievementNotifier(
         // Sent by the achievements job, outside of the user's request.
         using var _ = InterfaceCulture.Use(user.TelegramLanguageCode);
 
-        var tmb = new TelegramMessageBuilder();
+        // A heading once, then each achievement: its level and what it was earned for, with how rare it is.
+        var tmb = new TelegramMessageBuilder()
+            .AppendRow($"<b>{(earned.Count == 1 ? AchievementTexts.NewOne : AchievementTexts.NewMany)}</b>");
         foreach (var achievement in earned)
         {
-            if (tmb.Text.Length > 0)
-                tmb.AppendRow();
-            tmb.AppendRow($"<b>{string.Format(
-                    AchievementTexts.New,
-                    AchievementCatalog.Title(achievement.Achievement, achievement.Level))}</b>")
-                .AppendRow(Rarity(achievement));
+            tmb.AppendRow()
+                .AppendRow($"<b>{AchievementCatalog.Heading(achievement.Achievement, achievement.Level)}</b>")
+                .AppendRow($"{AchievementCatalog.Description(achievement.Achievement, achievement.Level)} · {Rarity(achievement)}");
         }
 
         var firstRow = new List<InlineKeyboardButton>

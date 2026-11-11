@@ -348,15 +348,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🎉 New achievement: {0}.
-        /// </summary>
-        public static string New {
-            get {
-                return ResourceManager.GetString("New", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}% of players have it.
         /// </summary>
         public static string Rarity {
@@ -371,15 +362,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         public static string RarityUnderOnePercent {
             get {
                 return ResourceManager.GetString("RarityUnderOnePercent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 🥇 Nobody else has it yet.
-        /// </summary>
-        public static string OnlyYou {
-            get {
-                return ResourceManager.GetString("OnlyYou", resourceCulture);
             }
         }
         
@@ -551,6 +533,267 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         public static string PendingRefresh {
             get {
                 return ResourceManager.GetString("PendingRefresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100 words learned.
+        /// </summary>
+        public static string WordsLearned_Description_1 {
+            get {
+                return ResourceManager.GetString("WordsLearned_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 500 words learned.
+        /// </summary>
+        public static string WordsLearned_Description_2 {
+            get {
+                return ResourceManager.GetString("WordsLearned_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1,000 words learned.
+        /// </summary>
+        public static string WordsLearned_Description_3 {
+            get {
+                return ResourceManager.GetString("WordsLearned_Description_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3,000 words learned.
+        /// </summary>
+        public static string WordsLearned_Description_4 {
+            get {
+                return ResourceManager.GetString("WordsLearned_Description_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5,000 words learned.
+        /// </summary>
+        public static string WordsLearned_Description_5 {
+            get {
+                return ResourceManager.GetString("WordsLearned_Description_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100 quizzes finished.
+        /// </summary>
+        public static string QuizzesFinished_Description_1 {
+            get {
+                return ResourceManager.GetString("QuizzesFinished_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1,000 quizzes finished.
+        /// </summary>
+        public static string QuizzesFinished_Description_2 {
+            get {
+                return ResourceManager.GetString("QuizzesFinished_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 10,000 quizzes finished.
+        /// </summary>
+        public static string QuizzesFinished_Description_3 {
+            get {
+                return ResourceManager.GetString("QuizzesFinished_Description_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 7 days in a row.
+        /// </summary>
+        public static string DaysInARow_Description_1 {
+            get {
+                return ResourceManager.GetString("DaysInARow_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 30 days in a row.
+        /// </summary>
+        public static string DaysInARow_Description_2 {
+            get {
+                return ResourceManager.GetString("DaysInARow_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100 days in a row.
+        /// </summary>
+        public static string DaysInARow_Description_3 {
+            get {
+                return ResourceManager.GetString("DaysInARow_Description_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A quiz without mistakes.
+        /// </summary>
+        public static string WithoutMistakes_Description_1 {
+            get {
+                return ResourceManager.GetString("WithoutMistakes_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5 quizzes in a row without mistakes.
+        /// </summary>
+        public static string WithoutMistakes_Description_2 {
+            get {
+                return ResourceManager.GetString("WithoutMistakes_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 20 quizzes in a row without mistakes.
+        /// </summary>
+        public static string WithoutMistakes_Description_3 {
+            get {
+                return ResourceManager.GetString("WithoutMistakes_Description_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2 language pairs.
+        /// </summary>
+        public static string LanguagePairs_Description_1 {
+            get {
+                return ResourceManager.GetString("LanguagePairs_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5 language pairs.
+        /// </summary>
+        public static string LanguagePairs_Description_2 {
+            get {
+                return ResourceManager.GetString("LanguagePairs_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Every A1 word learned.
+        /// </summary>
+        public static string LevelsCompleted_Description_1 {
+            get {
+                return ResourceManager.GetString("LevelsCompleted_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Every A1–A2 word learned.
+        /// </summary>
+        public static string LevelsCompleted_Description_2 {
+            get {
+                return ResourceManager.GetString("LevelsCompleted_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Every A1–B1 word learned.
+        /// </summary>
+        public static string LevelsCompleted_Description_3 {
+            get {
+                return ResourceManager.GetString("LevelsCompleted_Description_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Every A1–B2 word learned.
+        /// </summary>
+        public static string LevelsCompleted_Description_4 {
+            get {
+                return ResourceManager.GetString("LevelsCompleted_Description_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Every A1–C1 word learned.
+        /// </summary>
+        public static string LevelsCompleted_Description_5 {
+            get {
+                return ResourceManager.GetString("LevelsCompleted_Description_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First quiz finished.
+        /// </summary>
+        public static string FirstQuiz_Description_1 {
+            get {
+                return ResourceManager.GetString("FirstQuiz_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 10 quizzes in one day.
+        /// </summary>
+        public static string TenQuizzesInADay_Description_1 {
+            get {
+                return ResourceManager.GetString("TenQuizzesInADay_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First C1 word learned.
+        /// </summary>
+        public static string FirstC1Word_Description_1 {
+            get {
+                return ResourceManager.GetString("FirstC1Word_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back after a week away.
+        /// </summary>
+        public static string WelcomeBack_Description_1 {
+            get {
+                return ResourceManager.GetString("WelcomeBack_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Every word of a language pair learned.
+        /// </summary>
+        public static string AllWordsLearned_Description_1 {
+            get {
+                return ResourceManager.GetString("AllWordsLearned_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🎉 New achievement.
+        /// </summary>
+        public static string NewOne {
+            get {
+                return ResourceManager.GetString("NewOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🎉 New achievements.
+        /// </summary>
+        public static string NewMany {
+            get {
+                return ResourceManager.GetString("NewMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ✨ Only you have it.
+        /// </summary>
+        public static string OnlyYou {
+            get {
+                return ResourceManager.GetString("OnlyYou", resourceCulture);
             }
         }
     }

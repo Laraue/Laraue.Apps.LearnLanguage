@@ -50,6 +50,18 @@ public static class AchievementCatalog
     }
 
     /// <summary>
+    /// The level as a heading: "📚 🥇 Scholar", or "👣 First steps" for a single-level achievement.
+    /// </summary>
+    public static string Heading(Achievement achievement, int level) =>
+        $"{All[achievement].Emoji} {Level(achievement, level)}";
+
+    /// <summary>
+    /// What the level was earned for: "1,000 words learned".
+    /// </summary>
+    public static string Description(Achievement achievement, int level) =>
+        Text($"{achievement}_Description_{level}");
+
+    /// <summary>
     /// The medal of a level: 🥉 for 1, 🥈 for 2, and so on.
     /// </summary>
     public static string Medal(int level) => Medals[level - 1];

@@ -41,11 +41,13 @@ public class AchievementTests : IntegrationTest
         var message = telegramTestHost.Requests().Single<SendMessageRequest>();
         Assert.Equal(
             """
-            <b>🎉 New achievement: 🎯 Without mistakes · 🥉 Sharp eye</b>
-            🥇 Nobody else has it yet
+            <b>🎉 New achievements</b>
 
-            <b>🎉 New achievement: 👣 First steps</b>
-            🥇 Nobody else has it yet
+            <b>🎯 🥉 Sharp eye</b>
+            A quiz without mistakes · ✨ Only you have it
+
+            <b>👣 First steps</b>
+            First quiz finished · ✨ Only you have it
             """.ReplaceLineEndings("\n"),
             message.Text.TrimEnd());
         var buttons = Buttons(message.ReplyMarkup);
@@ -58,7 +60,7 @@ public class AchievementTests : IntegrationTest
         Assert.StartsWith("https://t.me/share/url?", shareUrl);
         Assert.Equal("https://t.me/TestBot?start=source-achievement", query["url"]);
         Assert.Equal(
-            "My new achievement with @TestBot: 🎯 Without mistakes · 🥉 Sharp eye. 🥇 Nobody else has it yet",
+            "My new achievement with @TestBot: 🎯 Without mistakes · 🥉 Sharp eye. ✨ Only you have it",
             query["text"]);
     }
 
@@ -127,8 +129,10 @@ public class AchievementTests : IntegrationTest
         Assert.Equal([(Achievement.FirstQuiz, (byte)1)], Granted(telegramTestHost, me));
         Assert.Equal(
             """
-            <b>🎉 New achievement: 👣 First steps</b>
-            67% of players have it
+            <b>🎉 New achievement</b>
+
+            <b>👣 First steps</b>
+            First quiz finished · 67% of players have it
             """.ReplaceLineEndings("\n"),
             telegramTestHost.Requests().Single<SendMessageRequest>().Text.TrimEnd());
     }
@@ -160,7 +164,8 @@ public class AchievementTests : IntegrationTest
         Assert.DoesNotContain((Achievement.WordsLearned, (byte)4), granted);
 
         var text = telegramTestHost.Requests().Single<SendMessageRequest>().Text;
-        Assert.Contains("📚 Words learned · 🥇 Scholar", text);
+        Assert.Contains("<b>📚 🥇 Scholar</b>", text);
+        Assert.Contains("1,000 words learned", text);
         Assert.DoesNotContain("Bookworm", text);
         Assert.DoesNotContain("Word collector", text);
     }
@@ -222,7 +227,7 @@ public class AchievementTests : IntegrationTest
         await CheckAchievementsAsync(telegramTestHost);
 
         Assert.Contains(
-            "🎉 Новое достижение: 👣 Первые шаги",
+            "<b>👣 Первые шаги</b>\nПервый тест пройден",
             telegramTestHost.Requests().Single<SendMessageRequest>().Text);
     }
 
