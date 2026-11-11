@@ -1,3 +1,5 @@
+using Laraue.Apps.LearnLanguage.Contracts.Enums;
+
 namespace Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 
 /// <summary>
@@ -6,24 +8,22 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 /// <param name="Top">The best users, best first.</param>
 /// <param name="Me">The viewer's own row, null when they haven't answered in the period.</param>
 /// <param name="PlayersCount">How many users answered in the period.</param>
-/// <param name="ShowMyName">Whether the viewer shows their name to others.</param>
 public record Leaderboard(
     IReadOnlyList<LeaderboardRow> Top,
     LeaderboardRow? Me,
-    int PlayersCount,
-    bool ShowMyName);
+    int PlayersCount);
 
 /// <param name="Rank">1-based place.</param>
 /// <param name="UserId">The user the row is about.</param>
-/// <param name="FirstName">Telegram first name.</param>
-/// <param name="ShowName">Whether the user lets others see <paramref name="FirstName"/>.</param>
+/// <param name="Profile">The user's Telegram names.</param>
+/// <param name="NameMode">What of <paramref name="Profile"/> others see.</param>
 /// <param name="Correct">Right answers in the period.</param>
 /// <param name="Wrong">Wrong answers in the period; skipped questions aren't answers.</param>
 public record LeaderboardRow(
     int Rank,
     Guid UserId,
-    string? FirstName,
-    bool ShowName,
+    TelegramProfile Profile,
+    LeaderboardNameMode NameMode,
     int Correct,
     int Wrong)
 {

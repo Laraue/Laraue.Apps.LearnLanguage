@@ -1,4 +1,5 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
+﻿using Laraue.Apps.LearnLanguage.Contracts.Enums;
+using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
 using LinqToDB;
@@ -18,7 +19,8 @@ public class UserRepository(DatabaseContext context) : IUserRepository
                 x.LanguageToLearn.Name,
                 x.LanguageToLearn.Description,
                 x.ReminderTime,
-                x.ShowNameOnLeaderboard))
+                x.LeaderboardName,
+                new TelegramProfile(x.TelegramUserName, x.TelegramFirstName, x.TelegramLastName)))
             .FirstAsyncEF(ct);
     }
 
@@ -32,11 +34,24 @@ public class UserRepository(DatabaseContext context) : IUserRepository
                 .SetProperty(u => u.BotBlockedAt, u => reminderTime != null ? null : u.BotBlockedAt), ct);
     }
 
-    public Task SetShowNameOnLeaderboardAsync(Guid userId, bool show, CancellationToken ct = default)
+    public Task SetLeaderboardNameAsync(Guid userId, LeaderboardNameMode mode, CancellationToken ct = default)
     {
         return context.Users
             .Where(x => x.Id == userId)
-            .ExecuteUpdateAsync(x => x.SetProperty(u => u.ShowNameOnLeaderboard, show), ct);
+            .ExecuteUpdateAsync(x => x.SetProperty(u => u.LeaderboardName, mode), ct);
+    }
+
+    public Task UpdateProfileAsync(Guid userId, TelegramProfile profile, CancellationToken ct = default)
+    {
+        return context.Users
+            .Where(x => x.Id == userId)
+            .Where(x => x.TelegramUserName != profile.Username
+                || x.TelegramFirstName != profile.FirstName
+                || x.TelegramLastName != profile.LastName)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(u => u.TelegramUserName, profile.Username)
+                .SetProperty(u => u.TelegramFirstName, profile.FirstName)
+                .SetProperty(u => u.TelegramLastName, profile.LastName), ct);
     }
 
     public Task SetLanguageCodeAsync(Guid userId, string code, CancellationToken ct = default)

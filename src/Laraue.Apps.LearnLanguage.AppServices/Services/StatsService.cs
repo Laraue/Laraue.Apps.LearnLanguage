@@ -20,7 +20,8 @@ public class StatsService(
     IStatsRepository statsRepository,
     IAdminRepository adminRepository,
     IDateTimeProvider dateTimeProvider,
-    IBotUsernameProvider botUsernameProvider) : IStatsService
+    IBotUsernameProvider botUsernameProvider,
+    IUserRepository userRepository) : IStatsService
 {
     private const int BarLength = 10;
     private const int LeaderboardSize = 10;
@@ -108,11 +109,12 @@ public class StatsService(
             .ToInlineKeyboardButton(QuizMode.ButtonName));
         tmb.AddInlineKeyboardButtons(quizButtons);
 
-        var socialButtons = new List<InlineKeyboardButton>();
         if (await botUsernameProvider.GetUsernameAsync(ct) is { } botUsername)
-            socialButtons.Add(InlineKeyboardButton.WithUrl(Buttons.ShareProgress, GetShareUrl(progress, botUsername)));
-        socialButtons.Add(InlineKeyboardButton.WithCallbackData(Buttons.Leaderboard, TelegramRoutes.Leaderboard));
-        tmb.AddInlineKeyboardButtons(socialButtons);
+        {
+            tmb.AddInlineKeyboardButtons([
+                InlineKeyboardButton.WithUrl(Buttons.ShareProgress, GetShareUrl(progress, botUsername))
+            ]);
+        }
 
         // Other pairs the user has practised, to switch the screen to them.
         foreach (var other in progress.PracticedPairs.Where(p => p.LanguageId != progress.LanguageId))
@@ -131,8 +133,13 @@ public class StatsService(
     public async Task SendLeaderboardAsync(
         ReplyData replyData,
         LeaderboardRequest request,
+        TelegramProfile? profile,
         CancellationToken ct = default)
     {
+        // The viewer's own row shows their current name.
+        if (profile is not null)
+            await userRepository.UpdateProfileAsync(replyData.UserId, profile, ct);
+
         var today = DateOnly.FromDateTime(dateTimeProvider.UtcNow);
         var since = request.Month
             ? new DateOnly(today.Year, today.Month, 1)
@@ -165,7 +172,7 @@ public class StatsService(
                 tmb.AppendRow("…").AppendRow(LeaderboardRow(me, replyData.UserId));
         }
 
-        if (board.Me is not null && !board.ShowMyName)
+        if (board.Me is { } my && LeaderboardNames.GetName(my.NameMode, my.Profile) is null)
             tmb.AppendRow().AppendRow(Stats.Leaderboard_NameHidden);
 
         var periodPath = new CallbackRoutePath(TelegramRoutes.Leaderboard);
@@ -195,7 +202,7 @@ public class StatsService(
             _ => $"{row.Rank}.",
         };
         // The viewer sees their own name as others do, to know how they look on the board.
-        var name = LeaderboardNames.Format(row.FirstName, row.ShowName);
+        var name = LeaderboardNames.Format(row.NameMode, row.Profile);
         if (row.UserId == viewerId)
             name += $" <b>{Stats.Leaderboard_You}</b>";
         return string.Format(Stats.Leaderboard_Row, place, name, Number(row.Points), Percent(row.Correct, row.Answers));

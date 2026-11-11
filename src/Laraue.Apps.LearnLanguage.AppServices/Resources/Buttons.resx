@@ -78,10 +78,10 @@
     <data name="Leaderboard_Month" xml:space="preserve">
         <value>This month</value>
     </data>
-    <data name="ShowNameOnLeaderboard" xml:space="preserve">
-        <value>🏆 Show my name in the leaderboard</value>
+    <data name="Settings_LeaderboardName" xml:space="preserve">
+        <value>🏆 Name in the leaderboard</value>
     </data>
-    <data name="HideNameOnLeaderboard" xml:space="preserve">
-        <value>🙈 Hide my name in the leaderboard</value>
+    <data name="LeaderboardName_Hidden" xml:space="preserve">
+        <value>🙈 Hidden</value>
     </data>
 </root>

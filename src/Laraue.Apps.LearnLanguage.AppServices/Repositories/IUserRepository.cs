@@ -1,4 +1,5 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
+﻿using Laraue.Apps.LearnLanguage.Contracts.Enums;
+using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Repositories;
 
@@ -11,9 +12,15 @@ public interface IUserRepository
     Task SetReminderTimeAsync(Guid userId, TimeOnly? reminderTime, CancellationToken ct = default);
 
     /// <summary>
-    /// Whether other users see the user's first name on the leaderboard.
+    /// What of the user's names others see on the leaderboard.
     /// </summary>
-    Task SetShowNameOnLeaderboardAsync(Guid userId, bool show, CancellationToken ct = default);
+    Task SetLeaderboardNameAsync(Guid userId, LeaderboardNameMode mode, CancellationToken ct = default);
+
+    /// <summary>
+    /// Save the user's current Telegram names, when they changed. The interface language isn't touched: the
+    /// user may have chosen another one in the settings.
+    /// </summary>
+    Task UpdateProfileAsync(Guid userId, TelegramProfile profile, CancellationToken ct = default);
     
     Task UpdateLanguageSettingsAsync(
         Guid userId,

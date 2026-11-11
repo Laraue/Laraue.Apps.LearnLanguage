@@ -4,6 +4,7 @@ using Laraue.Apps.LearnLanguage.AppServices.Repositories;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Resources;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
+using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Core.DateTime.Services.Abstractions;
 using Laraue.Telegram.NET.Core.Extensions;
 using Laraue.Telegram.NET.Core.Routing;
@@ -43,7 +44,9 @@ public class UserSettingsService(
                     : $"<b>{Settings.RemindersOff}</b>"))
             .AppendRow(string.Format(
                 Settings.LeaderboardName,
-                $"<b>{(settings.ShowNameOnLeaderboard ? Settings.LeaderboardNameShown : Settings.LeaderboardNameHidden)}</b>"))
+                LeaderboardNames.GetName(settings.LeaderboardName, settings.Profile) is not null
+                    ? $"<b>{LeaderboardNames.Format(settings.LeaderboardName, settings.Profile)}</b>"
+                    : $"<b>{Settings.LeaderboardNameHidden}</b>"))
             .AppendRow();
 
         tmb.AddInlineKeyboardButtons([
@@ -61,11 +64,8 @@ public class UserSettingsService(
         ]);
 
         tmb.AddInlineKeyboardButtons([
-            new CallbackRoutePath(TelegramRoutes.LeaderboardNameSettings, RouteMethod.Post)
-                .WithQueryParameter(ParameterNames.Enable, !settings.ShowNameOnLeaderboard)
-                .ToInlineKeyboardButton(settings.ShowNameOnLeaderboard
-                    ? Buttons.HideNameOnLeaderboard
-                    : Buttons.ShowNameOnLeaderboard)
+            InlineKeyboardButton.WithCallbackData(
+                Buttons.Settings_LeaderboardName, TelegramRoutes.LeaderboardNameSettings)
         ]);
 
         tmb.AddBackMenuButton(TelegramRoutes.Menu);
@@ -131,12 +131,50 @@ public class UserSettingsService(
         await HandleSettingsViewAsync(replyData, ct);
     }
 
+    public async Task HandleLeaderboardNameSettingsViewAsync(
+        ReplyData replyData,
+        TelegramProfile? profile,
+        CancellationToken ct = default)
+    {
+        // The choices preview the user's current names.
+        if (profile is not null)
+            await repository.UpdateProfileAsync(replyData.UserId, profile, ct);
+        var settings = await repository.GetSettingsAsync(replyData.UserId, ct);
+
+        var tmb = new TelegramMessageBuilder()
+            .AppendRow($"<b>{Settings.UpdateTitle}</b>")
+            .AppendRow()
+            .AppendRow(Settings.SelectLeaderboardName);
+
+        var path = new CallbackRoutePath(TelegramRoutes.LeaderboardNameSettings, RouteMethod.Post).Freeze();
+        var choices = LeaderboardNames.GetChoices(settings.Profile)
+            .Prepend((Mode: LeaderboardNameMode.Hidden, Preview: Buttons.LeaderboardName_Hidden));
+        foreach (var (mode, preview) in choices)
+        {
+            var selected = mode == settings.LeaderboardName
+                || (mode == LeaderboardNameMode.Hidden && LeaderboardNames.GetName(settings.LeaderboardName, settings.Profile) is null);
+            tmb.AddInlineKeyboardButtons([
+                path.WithQueryParameter(ParameterNames.LeaderboardName, (int)mode)
+                    .ToInlineKeyboardButton(selected ? $"✅ {preview}" : preview)
+            ]);
+        }
+
+        tmb.AddInlineKeyboardButtons([
+            InlineKeyboardButton.WithCallbackData(Buttons.Settings_BackButton, TelegramRoutes.Settings)
+        ]);
+
+        await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+    }
+
     public async Task UpdateLeaderboardNameSettingsAsync(
         ReplyData replyData,
         UpdateLeaderboardNameSettingsRequest request,
         CancellationToken ct = default)
     {
-        await repository.SetShowNameOnLeaderboardAsync(replyData.UserId, request.Show, ct);
+        var mode = Enum.IsDefined((LeaderboardNameMode)request.Mode)
+            ? (LeaderboardNameMode)request.Mode
+            : LeaderboardNameMode.Hidden;
+        await repository.SetLeaderboardNameAsync(replyData.UserId, mode, ct);
         await HandleSettingsViewAsync(replyData, ct);
     }
 

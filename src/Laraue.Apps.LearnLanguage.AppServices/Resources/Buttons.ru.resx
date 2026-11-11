@@ -71,10 +71,10 @@
     <data name="Leaderboard_Month" xml:space="preserve">
         <value>За месяц</value>
     </data>
-    <data name="ShowNameOnLeaderboard" xml:space="preserve">
-        <value>🏆 Показывать моё имя в рейтинге</value>
+    <data name="Settings_LeaderboardName" xml:space="preserve">
+        <value>🏆 Имя в рейтинге</value>
     </data>
-    <data name="HideNameOnLeaderboard" xml:space="preserve">
-        <value>🙈 Скрыть моё имя в рейтинге</value>
+    <data name="LeaderboardName_Hidden" xml:space="preserve">
+        <value>🙈 Скрыто</value>
     </data>
 </root>

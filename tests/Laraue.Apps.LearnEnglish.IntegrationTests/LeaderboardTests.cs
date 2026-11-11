@@ -1,5 +1,7 @@
 using Laraue.Apps.LearnLanguage.AppServices;
+using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
+using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
 using Laraue.Telegram.NET.Core.Routing;
@@ -13,7 +15,8 @@ using User = Laraue.Apps.LearnLanguage.DataAccess.Entities.User;
 namespace Laraue.Apps.LearnEnglish.IntegrationTests;
 
 /// <summary>
-/// The leaderboard: +3 for a right answer, −1 for a wrong one, names masked unless shown (MIN-44).
+/// The leaderboard: +3 for a right answer, −1 for a wrong one, names masked unless the user chose what to
+/// show (MIN-44).
 /// </summary>
 public class LeaderboardTests : IntegrationTest
 {
@@ -34,7 +37,7 @@ public class LeaderboardTests : IntegrationTest
     {
         using var telegramTestHost = GetTelegramTestHost();
         var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
-        var alice = AddUser(telegramTestHost, 2, "Alice", showName: true);
+        var alice = AddUser(telegramTestHost, 2, "Alice", nameMode: LeaderboardNameMode.FirstName);
         var bob = AddUser(telegramTestHost, 3, "Bob");
         var carl = AddUser(telegramTestHost, 4, "Carl");
 
@@ -101,7 +104,7 @@ public class LeaderboardTests : IntegrationTest
     public async Task Leaderboard_ShouldShowTheViewerBelowTheTop()
     {
         using var telegramTestHost = GetTelegramTestHost();
-        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me", showName: true);
+        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me", nameMode: LeaderboardNameMode.FirstName);
         AddAnswers(telegramTestHost, me, Now, correct: 1, wrong: 0);
         for (var id = 2; id <= 12; id++)
         {
@@ -126,7 +129,7 @@ public class LeaderboardTests : IntegrationTest
     {
         using var telegramTestHost = GetTelegramTestHost();
         // The largest id, so the viewer is listed last of the tied users.
-        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me", showName: true, id: Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffffffff"));
+        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me", nameMode: LeaderboardNameMode.FirstName, id: Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffffffff"));
         AddAnswers(telegramTestHost, me, Now, correct: 1, wrong: 0);
         // Ten users ahead of the viewer, the tenth tied with them: the viewer shares 10th place but isn't
         // among the 10 rows, so they're shown below.
@@ -162,56 +165,101 @@ public class LeaderboardTests : IntegrationTest
     }
 
     [Fact]
-    public async Task Settings_ShouldShowAndHideTheNameOnTheLeaderboard()
+    public async Task Settings_ShouldLetChooseTheName_PreviewingTheCurrentProfile()
     {
         using var telegramTestHost = GetTelegramTestHost();
-        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
+        // Stored names are old: the choices show the current ones from Telegram.
+        var me = AddUser(telegramTestHost, DefaultUser.Id, "Old");
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Settings)));
         var settings = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         Assert.Contains("🏆 Name in the leaderboard: <b>hidden</b>", settings.Text);
-        var showButton = Buttons(settings).SelectMany(r => r).Single(b => b.Item1 == "🏆 Show my name in the leaderboard");
+        var nameButton = Buttons(settings).SelectMany(r => r).Single(b => b.Item1 == "🏆 Name in the leaderboard");
 
-        await telegramTestHost.SendUpdateAsync(Callback(showButton.Item2!));
+        await telegramTestHost.SendUpdateAsync(Callback(nameButton.Item2!));
+        var choices = telegramTestHost.Requests().Last<EditMessageTextRequest>();
+        Assert.Contains("How should others see you in the leaderboard?", choices.Text);
+        Assert.Equal(
+            ["✅ 🙈 Hidden", "Me", "Smith", "Me Smith", "@me_smith", "Settings 🔙"],
+            Buttons(choices).Select(r => r.Single().Item1).ToArray());
 
-        Assert.True(telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).ShowNameOnLeaderboard);
-        var updated = telegramTestHost.Requests().Last<EditMessageTextRequest>();
-        Assert.Contains("🏆 Name in the leaderboard: <b>shown</b>", updated.Text);
-        Assert.Contains(Buttons(updated).SelectMany(r => r), b => b.Item1 == "🙈 Hide my name in the leaderboard");
+        var usernameButton = Buttons(choices).SelectMany(r => r).Single(b => b.Item1 == "@me_smith");
+        await telegramTestHost.SendUpdateAsync(Callback(usernameButton.Item2!));
+
+        Assert.Equal(
+            LeaderboardNameMode.Username,
+            telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).LeaderboardName);
+        Assert.Contains(
+            "🏆 Name in the leaderboard: <b>@me_smith</b>",
+            telegramTestHost.Requests().Last<EditMessageTextRequest>().Text);
     }
 
     [Fact]
-    public async Task Stats_ShouldLinkTheLeaderboard()
+    public async Task Settings_ShouldOfferOnlyTheNamesTheProfileHas()
     {
         using var telegramTestHost = GetTelegramTestHost();
-        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
-        AddAnswers(telegramTestHost, me, Now, correct: 1, wrong: 0);
+        AddUser(telegramTestHost, DefaultUser.Id, "Me", nameMode: LeaderboardNameMode.FirstName);
+        var withoutLastNameAndUsername = new global::Telegram.Bot.Types.User { Id = DefaultUser.Id, FirstName = "Me" };
 
-        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Stat)));
+        await telegramTestHost.SendUpdateAsync(
+            Callback(new CallbackRoutePath(TelegramRoutes.LeaderboardNameSettings), withoutLastNameAndUsername));
 
-        var buttons = Buttons(telegramTestHost.Requests().Single<EditMessageTextRequest>());
-        Assert.Equal("📤 Share my progress", buttons[1][0].Item1);
-        Assert.Equal(("🏆 Leaderboard", "lb"), buttons[1][1]);
+        var choices = telegramTestHost.Requests().Single<EditMessageTextRequest>();
+        Assert.Equal(
+            ["🙈 Hidden", "✅ Me", "Settings 🔙"],
+            Buttons(choices).Select(r => r.Single().Item1).ToArray());
+    }
+
+    [Fact]
+    public async Task Profile_ShouldBeUpdatedFromTelegram()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id, "Old", nameMode: LeaderboardNameMode.FullName);
+
+        // Any update: the library asks to store the profile on the first update of a user after a start.
+        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Menu)));
+
+        var user = telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id));
+        Assert.Equal(("me_smith", "Me", "Smith"), (user.TelegramUserName, user.TelegramFirstName, user.TelegramLastName));
+    }
+
+    [Fact]
+    public async Task Menu_ShouldLinkTheLeaderboard_NextToMyProgress()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        AddUser(telegramTestHost, DefaultUser.Id, "Me");
+
+        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Menu)));
+
+        var buttons = Buttons(telegramTestHost.Requests().Last<EditMessageTextRequest>());
+        Assert.Contains(buttons, row => row.SequenceEqual([("📊 My Progress", "stat"), ("🏆 Leaderboard", "lb")]));
     }
 
     [Theory]
-    [InlineData("Wilhelm", false, "*******")]
-    [InlineData("Wilhelm", true, "Wilhelm")]
-    [InlineData("Al", false, "*******")]
-    [InlineData("<b>", true, "&lt;b&gt;")]
-    [InlineData("👨‍👩‍👧Ann", true, "👨‍👩‍👧Ann")]
-    [InlineData(null, true, "*******")]
-    [InlineData("  ", true, "*******")]
-    public void LeaderboardNames_ShouldMaskAndEncode(string? firstName, bool show, string expected)
+    [InlineData(LeaderboardNameMode.Hidden, "*******")]
+    [InlineData(LeaderboardNameMode.FirstName, "Wilhelm")]
+    [InlineData(LeaderboardNameMode.LastName, "&lt;Tell&gt;")]
+    [InlineData(LeaderboardNameMode.FullName, "Wilhelm &lt;Tell&gt;")]
+    [InlineData(LeaderboardNameMode.Username, "@will")]
+    public void LeaderboardNames_ShouldShowTheChosenPartEscaped(LeaderboardNameMode mode, string expected)
     {
-        Assert.Equal(expected, LeaderboardNames.Format(firstName, show));
+        Assert.Equal(expected, LeaderboardNames.Format(mode, new TelegramProfile("will", "Wilhelm", "<Tell>")));
+    }
+
+    [Theory]
+    [InlineData(LeaderboardNameMode.FirstName)]
+    [InlineData(LeaderboardNameMode.LastName)]
+    [InlineData(LeaderboardNameMode.Username)]
+    public void LeaderboardNames_ShouldMask_WhenTheChosenPartIsMissing(LeaderboardNameMode mode)
+    {
+        Assert.Equal("*******", LeaderboardNames.Format(mode, new TelegramProfile(null, "  ", null)));
     }
 
     private static User AddUser(
         AppTelegramTestHost host,
         long telegramId,
         string firstName,
-        bool showName = false,
+        LeaderboardNameMode nameMode = LeaderboardNameMode.Hidden,
         Guid? id = null)
     {
         var user = new User
@@ -220,7 +268,7 @@ public class LeaderboardTests : IntegrationTest
             TelegramId = telegramId,
             GlobalUserId = Guid.NewGuid(),
             TelegramFirstName = firstName,
-            ShowNameOnLeaderboard = showName,
+            LeaderboardName = nameMode,
         };
         host.InsertIntoDb(user);
         return user;
@@ -257,11 +305,20 @@ public class LeaderboardTests : IntegrationTest
             .Select(row => row.Select(b => (b.Text, b.CallbackData)).ToArray())
             .ToArray();
 
-    private static Update Callback(string data) => new()
+    // The viewer's Telegram account as the updates carry it.
+    private static global::Telegram.Bot.Types.User Viewer => new()
+    {
+        Id = DefaultUser.Id,
+        Username = "me_smith",
+        FirstName = "Me",
+        LastName = "Smith",
+    };
+
+    private static Update Callback(string data, global::Telegram.Bot.Types.User? from = null) => new()
     {
         CallbackQuery = new CallbackQuery
         {
-            From = DefaultUser,
+            From = from ?? Viewer,
             Data = data,
             Message = new Message { Id = 1 },
         },

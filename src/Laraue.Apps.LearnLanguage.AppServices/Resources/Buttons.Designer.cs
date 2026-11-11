@@ -240,20 +240,20 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🏆 Show my name in the leaderboard.
+        ///   Looks up a localized string similar to 🏆 Name in the leaderboard.
         /// </summary>
-        public static string ShowNameOnLeaderboard {
+        public static string Settings_LeaderboardName {
             get {
-                return ResourceManager.GetString("ShowNameOnLeaderboard", resourceCulture);
+                return ResourceManager.GetString("Settings_LeaderboardName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🙈 Hide my name in the leaderboard.
+        ///   Looks up a localized string similar to 🙈 Hidden.
         /// </summary>
-        public static string HideNameOnLeaderboard {
+        public static string LeaderboardName_Hidden {
             get {
-                return ResourceManager.GetString("HideNameOnLeaderboard", resourceCulture);
+                return ResourceManager.GetString("LeaderboardName_Hidden", resourceCulture);
             }
         }
     }
