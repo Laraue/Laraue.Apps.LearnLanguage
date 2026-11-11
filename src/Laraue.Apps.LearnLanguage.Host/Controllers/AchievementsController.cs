@@ -15,6 +15,12 @@ public class AchievementsController(IAchievementsScreen screen) : TelegramContro
         return screen.SendListAsync(ReplyData.FromRequest(context), ct);
     }
 
+    [TelegramCallbackRoute(TelegramRoutes.AchievementsLocked)]
+    public Task SendLockedAsync(RequestContext context, CancellationToken ct)
+    {
+        return screen.SendLockedAsync(ReplyData.FromRequest(context), ct);
+    }
+
     [TelegramCallbackRoute(TelegramRoutes.AchievementTitles)]
     public Task SendTitlesAsync(RequestContext context, CancellationToken ct)
     {

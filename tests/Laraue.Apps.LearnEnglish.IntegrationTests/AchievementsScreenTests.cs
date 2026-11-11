@@ -47,19 +47,41 @@ public class AchievementsScreenTests : IntegrationTest
             "Next: 🥈 Word collector · 120 of 500 words");
         AssertFollow(lines, "<b>Without mistakes</b>: 🥉 Sharp eye (a quiz without mistakes)",
             "Next: 🥈 Sniper · 1 of 5 quizzes in a row without mistakes");
-        // Nothing held yet: locked, then the next one.
-        AssertFollow(lines, "<b>Quizzes finished</b>: 🔒", "Next: 🥉 Persistence · 1 of 100 quizzes");
-        AssertFollow(lines, "<b>Levels completed</b>: 🔒", "Next: 🥉 A1 Beginner · learn every A1 word");
         // Every level held: no next one.
         AssertFollow(lines, "<b>Language pairs</b>: 🥈 Polyglot (words learned in 5 language pairs)", "");
-        // Single achievements: the status, the name and what it's for, separated by blank lines.
-        Assert.Contains("✅ <b>Pioneer</b> (first C1 word learned)", lines);
-        AssertFollow(lines, "✅ <b>First steps</b> (first quiz finished)", "", "🔒 <b>Marathon</b> (10 quizzes in one day)");
+        // Earned single achievements, separated by blank lines.
+        AssertFollow(lines, "✅ <b>First steps</b> (first quiz finished)", "", "✅ <b>Pioneer</b> (first C1 word learned)");
+        // Locked ones are only counted: quizzes finished, levels completed, days in a row and 3 single ones.
+        Assert.DoesNotContain(lines, l => l.Contains("Quizzes finished") || l.Contains("Marathon"));
+        Assert.Contains("🔒 Still locked: 6", lines);
         // Everything reached is granted: no waiting.
         Assert.DoesNotContain(lines, l => l.StartsWith("⏳"));
 
-        Assert.Equal(("🎖 Choose a title", "achs/t"), Buttons(request)[0][0]);
-        Assert.Equal(("📊 My Progress", "stat"), Buttons(request)[1][0]);
+        Assert.Equal(("🔒 Show locked", "achs/l"), Buttons(request)[0][0]);
+        Assert.Equal(("🎖 Choose a title", "achs/t"), Buttons(request)[1][0]);
+        Assert.Equal(("📊 My Progress", "stat"), Buttons(request)[2][0]);
+    }
+
+    [Fact]
+    public async Task Locked_ShouldListWhatIsNotEarnedYet()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
+        AddFinishedQuiz(telegramTestHost, me);
+        Grant(telegramTestHost, me, Achievement.FirstQuiz, 1);
+        Grant(telegramTestHost, me, Achievement.WithoutMistakes, 1);
+
+        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.AchievementsLocked)));
+
+        var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
+        var lines = request.Text!.Split('\n');
+        Assert.Equal("<b>🔒 Locked achievements</b>", lines[0]);
+        AssertFollow(lines, "<b>Quizzes finished</b>: 🔒", "Next: 🥉 Persistence · 1 of 100 quizzes");
+        AssertFollow(lines, "<b>Levels completed</b>: 🔒", "Next: 🥉 A1 Beginner · learn every A1 word");
+        Assert.Contains("🔒 <b>Marathon</b> (10 quizzes in one day)", lines);
+        // Earned ones aren't here.
+        Assert.DoesNotContain(lines, l => l.Contains("First steps") || l.Contains("Without mistakes"));
+        Assert.Equal(("← Back", "achs"), Buttons(request).Last()[0]);
     }
 
     [Fact]
@@ -108,9 +130,9 @@ public class AchievementsScreenTests : IntegrationTest
 
         var user = telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id));
         Assert.Equal((Achievement.DaysInARow, (byte)2), (user.TitleAchievement!.Value, user.TitleLevel!.Value));
-        Assert.Equal(
-            "🎖 Title: 🔥 Flame",
-            Buttons(telegramTestHost.Requests().Last<EditMessageTextRequest>())[0][0].Item1);
+        Assert.Contains(
+            Buttons(telegramTestHost.Requests().Last<EditMessageTextRequest>()).SelectMany(r => r),
+            b => b.Item1 == "🎖 Title: 🔥 Flame");
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
         Assert.Contains(

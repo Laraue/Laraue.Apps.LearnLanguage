@@ -814,5 +814,23 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("Next", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔒 Still locked: {0}.
+        /// </summary>
+        public static string LockedCount {
+            get {
+                return ResourceManager.GetString("LockedCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔒 Locked achievements.
+        /// </summary>
+        public static string LockedTitle {
+            get {
+                return ResourceManager.GetString("LockedTitle", resourceCulture);
+            }
+        }
     }
 }

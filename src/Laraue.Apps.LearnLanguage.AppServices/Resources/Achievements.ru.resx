@@ -263,4 +263,10 @@
     <data name="Next" xml:space="preserve">
         <value>Дальше: {0} · {1}</value>
     </data>
+    <data name="LockedCount" xml:space="preserve">
+        <value>🔒 Ещё не получено: {0}</value>
+    </data>
+    <data name="LockedTitle" xml:space="preserve">
+        <value>🔒 Неполученные достижения</value>
+    </data>
 </root>

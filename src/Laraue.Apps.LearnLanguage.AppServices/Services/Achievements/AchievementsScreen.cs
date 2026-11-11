@@ -58,27 +58,23 @@ public sealed class AchievementsScreen(
             tmb.AppendRow().AppendRow(messagesOff ? AchievementTexts.PendingRefresh : AchievementTexts.PendingMessage);
         }
 
-        // Achievements with levels first: the level held and what it means, then the next one.
-        foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length > 1))
-        {
-            tmb.AppendRow();
-            foreach (var line in LevelsLines(item))
-                tmb.AppendRow(line);
-        }
-
-        // Then the single ones as a checklist, spaced like the others.
-        foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length == 1))
-        {
-            // Only the status as an icon, and what it's for.
-            tmb.AppendRow().AppendRow(
-                $"{(item.Level > 0 ? "✅" : "🔒")} <b>{AchievementCatalog.Name(item.Achievement)}</b> " +
-                $"({AchievementCatalog.Meaning(item.Achievement, 1)})");
-        }
+        // Earned only: achievements with levels (the level held, then the next one), then the single ones.
+        // Locked ones are counted here and listed on their own screen.
+        AppendItems(tmb, overview.Items.Where(i => i.Level > 0));
+        var locked = overview.Items.Count(i => i.Level == 0);
+        if (locked > 0)
+            tmb.AppendRow().AppendRow(string.Format(AchievementTexts.LockedCount, locked));
 
         var title = await context.Users
             .Where(u => u.Id == replyData.UserId)
             .Select(u => new { u.TitleAchievement, u.TitleLevel })
             .FirstAsync(ct);
+        if (locked > 0)
+        {
+            tmb.AddInlineKeyboardButtons([
+                InlineKeyboardButton.WithCallbackData(Buttons.Achievements_ShowLocked, TelegramRoutes.AchievementsLocked)
+            ]);
+        }
         tmb.AddInlineKeyboardButtons([
             InlineKeyboardButton.WithCallbackData(
                 title.TitleAchievement is { } a && title.TitleLevel is { } l
@@ -92,6 +88,39 @@ public sealed class AchievementsScreen(
         tmb.AddMainMenuButton();
 
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+    }
+
+    /// <inheritdoc />
+    public async Task SendLockedAsync(ReplyData replyData, CancellationToken ct = default)
+    {
+        var overview = await achievementService.GetOverviewAsync(replyData.UserId, ct);
+        var tmb = new TelegramMessageBuilder().AppendRow($"<b>{AchievementTexts.LockedTitle}</b>");
+        AppendItems(tmb, overview.Items.Where(i => i.Level == 0));
+        tmb.AddBackMenuButton(TelegramRoutes.Achievements);
+
+        await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+    }
+
+    /// <summary>
+    /// Achievements with levels first (the level held and what it means, then the next one), then the single ones
+    /// with their status and what they're for; each separated by a blank line.
+    /// </summary>
+    private static void AppendItems(TelegramMessageBuilder tmb, IEnumerable<AchievementProgress> items)
+    {
+        var list = items.ToList();
+        foreach (var item in list.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length > 1))
+        {
+            tmb.AppendRow();
+            foreach (var line in LevelsLines(item))
+                tmb.AppendRow(line);
+        }
+
+        foreach (var item in list.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length == 1))
+        {
+            tmb.AppendRow().AppendRow(
+                $"{(item.Level > 0 ? "✅" : "🔒")} <b>{AchievementCatalog.Name(item.Achievement)}</b> " +
+                $"({AchievementCatalog.Meaning(item.Achievement, 1)})");
+        }
     }
 
     /// <inheritdoc />
