@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
+using System.Text;
 using Laraue.Apps.LearnLanguage.AppServices.Extensions;
 using Laraue.Apps.LearnLanguage.AppServices.Metrics;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories;
@@ -28,7 +29,9 @@ public class QuizService(
     DatabaseContext context,
     IQuestionsGenerator questionsGenerator,
     IStatsRepository statsRepository,
-    LearnLanguageMetrics metrics)
+    LearnLanguageMetrics metrics,
+    IAchievementService achievementService,
+    IAchievementNotifier achievementNotifier)
     : IQuizService
 {
     private const long NullOptionId = 0;
@@ -689,6 +692,10 @@ public class QuizService(
             .AddMainMenuButton();
         
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+
+        // New achievements come as a message of their own, after the results.
+        var earned = await achievementService.GrantAfterQuizAsync(replyData.UserId, quizId, ct);
+        await achievementNotifier.NotifyAsync(replyData.UserId, replyData.TelegramId, earned, ct);
     }
 
     /// <returns>True if request handled and processing should be stopped.</returns>

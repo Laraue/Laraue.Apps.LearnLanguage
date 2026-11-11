@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Achievements.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Achievements.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Buttons.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Buttons.Designer.cs</LastGenOutput>
@@ -43,6 +47,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Achievements.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Achievements.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Buttons.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

@@ -17,6 +17,11 @@ public interface IUserRepository
     Task SetLeaderboardNameAsync(Guid userId, LeaderboardNameMode mode, CancellationToken ct = default);
 
     /// <summary>
+    /// Whether the user gets messages about new achievements. They earn them either way.
+    /// </summary>
+    Task SetAchievementMessagesOffAsync(Guid userId, bool off, CancellationToken ct = default);
+
+    /// <summary>
     /// Save the user's current Telegram names, when they changed. The interface language isn't touched: the
     /// user may have chosen another one in the settings.
     /// </summary>

@@ -47,6 +47,9 @@ public class UserSettingsService(
                 LeaderboardNames.GetName(settings.LeaderboardName, settings.Profile) is not null
                     ? $"<b>{LeaderboardNames.Format(settings.LeaderboardName, settings.Profile)}</b>"
                     : $"<b>{Settings.LeaderboardNameHidden}</b>"))
+            .AppendRow(string.Format(
+                Settings.AchievementMessages,
+                $"<b>{(settings.AchievementMessagesOff ? Settings.AchievementMessagesOff : Settings.AchievementMessagesOn)}</b>"))
             .AppendRow();
 
         tmb.AddInlineKeyboardButtons([
@@ -66,6 +69,14 @@ public class UserSettingsService(
         tmb.AddInlineKeyboardButtons([
             InlineKeyboardButton.WithCallbackData(
                 Buttons.Settings_LeaderboardName, TelegramRoutes.LeaderboardNameSettings)
+        ]);
+
+        tmb.AddInlineKeyboardButtons([
+            new CallbackRoutePath(TelegramRoutes.AchievementMessagesSettings, RouteMethod.Post)
+                .WithQueryParameter(ParameterNames.Enable, settings.AchievementMessagesOff)
+                .ToInlineKeyboardButton(settings.AchievementMessagesOff
+                    ? Buttons.Settings_AchievementMessagesOn
+                    : Buttons.Settings_AchievementMessagesOff)
         ]);
 
         tmb.AddBackMenuButton(TelegramRoutes.Menu);
@@ -129,6 +140,20 @@ public class UserSettingsService(
 
         await repository.SetReminderTimeAsync(replyData.UserId, reminderTime, ct);
         await HandleSettingsViewAsync(replyData, ct);
+    }
+
+    public async Task UpdateAchievementMessagesSettingsAsync(
+        ReplyData replyData,
+        UpdateAchievementMessagesSettingsRequest request,
+        CancellationToken ct = default)
+    {
+        await repository.SetAchievementMessagesOffAsync(replyData.UserId, !request.Enabled, ct);
+        await HandleSettingsViewAsync(replyData, ct);
+    }
+
+    public Task TurnOffAchievementMessagesAsync(Guid userId, CancellationToken ct = default)
+    {
+        return repository.SetAchievementMessagesOffAsync(userId, true, ct);
     }
 
     public async Task HandleLeaderboardNameSettingsViewAsync(ReplyData replyData, CancellationToken ct = default)

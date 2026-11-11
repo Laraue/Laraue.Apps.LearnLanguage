@@ -90,4 +90,16 @@
     <data name="Leaderboard_LeagueIntermediate" xml:space="preserve">
         <value>🌳 Intermediate</value>
     </data>
+    <data name="Achievement_Ok" xml:space="preserve">
+        <value>👌 OK</value>
+    </data>
+    <data name="Achievement_DontNotify" xml:space="preserve">
+        <value>🔕 Don't notify me</value>
+    </data>
+    <data name="Settings_AchievementMessagesOn" xml:space="preserve">
+        <value>🔔 Turn on achievement messages</value>
+    </data>
+    <data name="Settings_AchievementMessagesOff" xml:space="preserve">
+        <value>🔕 Turn off achievement messages</value>
+    </data>
 </root>

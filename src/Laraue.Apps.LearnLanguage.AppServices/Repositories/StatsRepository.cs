@@ -246,7 +246,7 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
     /// Days in a row with a quiz started or a question answered (UTC), up to today. A streak that ended yesterday
     /// still counts, so it doesn't look broken before the user has practised today.
     /// </summary>
-    private async Task<int> GetStreakAsync(Guid userId, DateOnly today, CancellationToken ct)
+    public async Task<int> GetStreakAsync(Guid userId, DateOnly today, CancellationToken ct = default)
     {
         var since = today.AddDays(-366).ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
         var quizDays = await context.UserQuizzes

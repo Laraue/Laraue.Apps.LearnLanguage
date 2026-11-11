@@ -1,4 +1,5 @@
-﻿using Laraue.Core.Extensions.Hosting.EfCore;
+﻿using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
+using Laraue.Core.Extensions.Hosting.EfCore;
 using Laraue.Apps.Identity.Internal.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.AppServices.Identity;
@@ -126,6 +127,8 @@ public static class WebApplicationBuilderExtensions
                 .AddScoped<IUserSettingsService, UserSettingsService>()
                 .AddScoped<ReminderSender>()
                 .AddScoped<ILeagueUpdater, LeagueUpdater>()
+                .AddScoped<IAchievementService, AchievementService>()
+                .AddScoped<IAchievementNotifier, AchievementNotifier>()
                 .AddSingleton<IBotUsernameProvider, BotUsernameProvider>()
                 .Configure<RemindersOptions>(builder.Configuration.GetSection("Reminders"))
                 .AddScoped<IUserRepository, UserRepository>()

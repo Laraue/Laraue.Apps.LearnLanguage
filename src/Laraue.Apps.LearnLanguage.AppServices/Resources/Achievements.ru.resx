@@ -1,0 +1,122 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="WordsLearned" xml:space="preserve">
+        <value>Выучено слов</value>
+    </data>
+    <data name="WordsLearned_1" xml:space="preserve">
+        <value>Книжный червь</value>
+    </data>
+    <data name="WordsLearned_2" xml:space="preserve">
+        <value>Собиратель слов</value>
+    </data>
+    <data name="WordsLearned_3" xml:space="preserve">
+        <value>Знаток</value>
+    </data>
+    <data name="WordsLearned_4" xml:space="preserve">
+        <value>Ходячий словарь</value>
+    </data>
+    <data name="WordsLearned_5" xml:space="preserve">
+        <value>Повелитель слов</value>
+    </data>
+    <data name="QuizzesFinished" xml:space="preserve">
+        <value>Пройдено тестов</value>
+    </data>
+    <data name="QuizzesFinished_1" xml:space="preserve">
+        <value>Упорство</value>
+    </data>
+    <data name="QuizzesFinished_2" xml:space="preserve">
+        <value>Железная воля</value>
+    </data>
+    <data name="QuizzesFinished_3" xml:space="preserve">
+        <value>Неудержимая сила</value>
+    </data>
+    <data name="DaysInARow" xml:space="preserve">
+        <value>Дней подряд</value>
+    </data>
+    <data name="DaysInARow_1" xml:space="preserve">
+        <value>Искра</value>
+    </data>
+    <data name="DaysInARow_2" xml:space="preserve">
+        <value>Пламя</value>
+    </data>
+    <data name="DaysInARow_3" xml:space="preserve">
+        <value>Вулкан</value>
+    </data>
+    <data name="WithoutMistakes" xml:space="preserve">
+        <value>Без ошибок</value>
+    </data>
+    <data name="WithoutMistakes_1" xml:space="preserve">
+        <value>Меткий глаз</value>
+    </data>
+    <data name="WithoutMistakes_2" xml:space="preserve">
+        <value>Снайпер</value>
+    </data>
+    <data name="WithoutMistakes_3" xml:space="preserve">
+        <value>Перфекционист</value>
+    </data>
+    <data name="LanguagePairs" xml:space="preserve">
+        <value>Языковые пары</value>
+    </data>
+    <data name="LanguagePairs_1" xml:space="preserve">
+        <value>Исследователь</value>
+    </data>
+    <data name="LanguagePairs_2" xml:space="preserve">
+        <value>Полиглот</value>
+    </data>
+    <data name="LevelsCompleted" xml:space="preserve">
+        <value>Пройденные уровни</value>
+    </data>
+    <data name="LevelsCompleted_1" xml:space="preserve">
+        <value>«Свинка Пеппа» без субтитров</value>
+    </data>
+    <data name="LevelsCompleted_2" xml:space="preserve">
+        <value>Поболтать о погоде с англичанином</value>
+    </data>
+    <data name="LevelsCompleted_3" xml:space="preserve">
+        <value>«Гарри Поттер» в оригинале</value>
+    </data>
+    <data name="LevelsCompleted_4" xml:space="preserve">
+        <value>«Друзья» без субтитров</value>
+    </data>
+    <data name="LevelsCompleted_5" xml:space="preserve">
+        <value>«Оливер Твист» в оригинале</value>
+    </data>
+    <data name="FirstQuiz_1" xml:space="preserve">
+        <value>Первые шаги</value>
+    </data>
+    <data name="TenQuizzesInADay_1" xml:space="preserve">
+        <value>Марафон</value>
+    </data>
+    <data name="FirstC1Word_1" xml:space="preserve">
+        <value>Первопроходец</value>
+    </data>
+    <data name="WelcomeBack_1" xml:space="preserve">
+        <value>Возвращение</value>
+    </data>
+    <data name="AllWordsLearned_1" xml:space="preserve">
+        <value>Мастер слов</value>
+    </data>
+    <data name="New" xml:space="preserve">
+        <value>🎉 Новое достижение: {0}</value>
+    </data>
+    <data name="Rarity" xml:space="preserve">
+        <value>Есть у {0}% игроков</value>
+    </data>
+    <data name="RarityUnderOnePercent" xml:space="preserve">
+        <value>Есть менее чем у 1% игроков</value>
+    </data>
+    <data name="OnlyYou" xml:space="preserve">
+        <value>🥇 Больше ни у кого его нет</value>
+    </data>
+</root>

@@ -83,4 +83,16 @@
     <data name="Leaderboard_LeagueIntermediate" xml:space="preserve">
         <value>🌳 Опытные</value>
     </data>
+    <data name="Achievement_Ok" xml:space="preserve">
+        <value>👌 Хорошо</value>
+    </data>
+    <data name="Achievement_DontNotify" xml:space="preserve">
+        <value>🔕 Не уведомлять</value>
+    </data>
+    <data name="Settings_AchievementMessagesOn" xml:space="preserve">
+        <value>🔔 Включить сообщения о достижениях</value>
+    </data>
+    <data name="Settings_AchievementMessagesOff" xml:space="preserve">
+        <value>🔕 Выключить сообщения о достижениях</value>
+    </data>
 </root>

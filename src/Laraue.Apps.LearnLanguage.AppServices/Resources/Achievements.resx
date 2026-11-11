@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="WordsLearned" xml:space="preserve">
+        <value>Words learned</value>
+    </data>
+    <data name="WordsLearned_1" xml:space="preserve">
+        <value>Bookworm</value>
+    </data>
+    <data name="WordsLearned_2" xml:space="preserve">
+        <value>Word collector</value>
+    </data>
+    <data name="WordsLearned_3" xml:space="preserve">
+        <value>Scholar</value>
+    </data>
+    <data name="WordsLearned_4" xml:space="preserve">
+        <value>Walking dictionary</value>
+    </data>
+    <data name="WordsLearned_5" xml:space="preserve">
+        <value>Lord of words</value>
+    </data>
+    <data name="QuizzesFinished" xml:space="preserve">
+        <value>Quizzes finished</value>
+    </data>
+    <data name="QuizzesFinished_1" xml:space="preserve">
+        <value>Persistence</value>
+    </data>
+    <data name="QuizzesFinished_2" xml:space="preserve">
+        <value>Iron will</value>
+    </data>
+    <data name="QuizzesFinished_3" xml:space="preserve">
+        <value>Unstoppable force</value>
+    </data>
+    <data name="DaysInARow" xml:space="preserve">
+        <value>Days in a row</value>
+    </data>
+    <data name="DaysInARow_1" xml:space="preserve">
+        <value>Spark</value>
+    </data>
+    <data name="DaysInARow_2" xml:space="preserve">
+        <value>Flame</value>
+    </data>
+    <data name="DaysInARow_3" xml:space="preserve">
+        <value>Volcano</value>
+    </data>
+    <data name="WithoutMistakes" xml:space="preserve">
+        <value>Without mistakes</value>
+    </data>
+    <data name="WithoutMistakes_1" xml:space="preserve">
+        <value>Sharp eye</value>
+    </data>
+    <data name="WithoutMistakes_2" xml:space="preserve">
+        <value>Sniper</value>
+    </data>
+    <data name="WithoutMistakes_3" xml:space="preserve">
+        <value>Perfectionist</value>
+    </data>
+    <data name="LanguagePairs" xml:space="preserve">
+        <value>Language pairs</value>
+    </data>
+    <data name="LanguagePairs_1" xml:space="preserve">
+        <value>Explorer</value>
+    </data>
+    <data name="LanguagePairs_2" xml:space="preserve">
+        <value>Polyglot</value>
+    </data>
+    <data name="LevelsCompleted" xml:space="preserve">
+        <value>Levels completed</value>
+    </data>
+    <data name="LevelsCompleted_1" xml:space="preserve">
+        <value>Peppa Pig without subtitles</value>
+    </data>
+    <data name="LevelsCompleted_2" xml:space="preserve">
+        <value>Small talk about the weather</value>
+    </data>
+    <data name="LevelsCompleted_3" xml:space="preserve">
+        <value>Harry Potter in the original</value>
+    </data>
+    <data name="LevelsCompleted_4" xml:space="preserve">
+        <value>Friends without subtitles</value>
+    </data>
+    <data name="LevelsCompleted_5" xml:space="preserve">
+        <value>Oliver Twist in the original</value>
+    </data>
+    <data name="FirstQuiz_1" xml:space="preserve">
+        <value>First steps</value>
+    </data>
+    <data name="TenQuizzesInADay_1" xml:space="preserve">
+        <value>Marathon</value>
+    </data>
+    <data name="FirstC1Word_1" xml:space="preserve">
+        <value>Pioneer</value>
+    </data>
+    <data name="WelcomeBack_1" xml:space="preserve">
+        <value>Comeback</value>
+    </data>
+    <data name="AllWordsLearned_1" xml:space="preserve">
+        <value>Word master</value>
+    </data>
+    <data name="New" xml:space="preserve">
+        <value>🎉 New achievement: {0}</value>
+    </data>
+    <data name="Rarity" xml:space="preserve">
+        <value>{0}% of players have it</value>
+    </data>
+    <data name="RarityUnderOnePercent" xml:space="preserve">
+        <value>Less than 1% of players have it</value>
+    </data>
+    <data name="OnlyYou" xml:space="preserve">
+        <value>🥇 Nobody else has it yet</value>
+    </data>
+</root>

@@ -27,4 +27,10 @@ public interface IStatsRepository
         DateTime since,
         int count,
         CancellationToken ct = default);
+
+    /// <summary>
+    /// Days in a row with a quiz started or a question answered (UTC), up to today. A streak that ended yesterday
+    /// still counts, so it doesn't look broken before the user has practised today.
+    /// </summary>
+    Task<int> GetStreakAsync(Guid userId, DateOnly today, CancellationToken ct = default);
 }
