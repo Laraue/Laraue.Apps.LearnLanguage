@@ -17,23 +17,10 @@ public sealed class AchievementService(
     private static readonly TimeSpan WelcomeBackAfter = TimeSpan.FromDays(7);
 
     /// <inheritdoc />
-    public async Task<IReadOnlyList<EarnedAchievement>> GrantAfterQuizAsync(
-        Guid userId,
-        long quizId,
-        CancellationToken ct = default)
+    public async Task<IReadOnlyList<EarnedAchievement>> GrantAsync(Guid userId, CancellationToken ct = default)
     {
-        var quiz = await context.UserQuizzes
-            .Where(q => q.Id == quizId)
-            .Select(q => new
-            {
-                q.CreatedAt,
-                Answered = q.UserQuizQuestions.Count(x =>
-                    x.Status == UserQuizQuestionStatus.Correct || x.Status == UserQuizQuestionStatus.Incorrect),
-            })
-            .FirstAsync(ct);
-
         // Only quizzes with answers count, so pressing Finish right away earns nothing.
-        if (quiz.Answered == 0)
+        if (!await AnsweredQuizzes(userId).AnyAsync(ct))
             return [];
 
         var held = (await context.UserAchievements
@@ -58,10 +45,14 @@ public sealed class AchievementService(
                 .AnyAsync(t => t.Word.CefrLevel!.Name == C1Level, ct) ? 1 : 0,
             [Achievement.WelcomeBack] = async () =>
             {
-                var previousQuizAt = await context.UserQuizzes
-                    .Where(q => q.UserId == userId && q.Id != quizId && q.CreatedAt < quiz.CreatedAt)
-                    .MaxAsync(q => (DateTime?)q.CreatedAt, ct);
-                return quiz.CreatedAt - previousQuizAt >= WelcomeBackAfter ? 1 : 0;
+                // The latest quiz came after a week or more without one.
+                var lastTwo = await context.UserQuizzes
+                    .Where(q => q.UserId == userId)
+                    .OrderByDescending(q => q.CreatedAt)
+                    .Select(q => q.CreatedAt)
+                    .Take(2)
+                    .ToListAsync(ct);
+                return lastTwo.Count == 2 && lastTwo[0] - lastTwo[1] >= WelcomeBackAfter ? 1 : 0;
             },
             [Achievement.AllWordsLearned] = async () => await HasLearnedAllWordsOfAPairAsync(userId, ct) ? 1 : 0,
         };

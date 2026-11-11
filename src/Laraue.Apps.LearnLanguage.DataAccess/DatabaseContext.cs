@@ -117,6 +117,11 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext, IJobsDbContext
         modelBuilder.Entity<UserAchievement>()
             .HasKey(x => new { x.UserId, x.Achievement, x.Level });
 
+        // The achievements job looks up users waiting for a check: only those rows are indexed.
+        modelBuilder.Entity<User>()
+            .HasIndex(x => x.AchievementsCheckRequestedAt)
+            .HasFilter("achievements_check_requested_at IS NOT NULL");
+
         // How many players have a level of an achievement, for its rarity.
         modelBuilder.Entity<UserAchievement>()
             .HasIndex(x => new { x.Achievement, x.Level });

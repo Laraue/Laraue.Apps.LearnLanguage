@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20261111152738_AddAchievements")]
+    [Migration("20261111154611_AddAchievements")]
     partial class AddAchievements
     {
         /// <inheritdoc />
@@ -13014,6 +13014,10 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("achievement_messages_off");
 
+                    b.Property<DateTime?>("AchievementsCheckRequestedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("achievements_check_requested_at");
+
                     b.Property<DateTime?>("BotBlockedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("bot_blocked_at");
@@ -13076,6 +13080,10 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_users");
+
+                    b.HasIndex("AchievementsCheckRequestedAt")
+                        .HasDatabaseName("ix_users_achievements_check_requested_at")
+                        .HasFilter("achievements_check_requested_at IS NOT NULL");
 
                     b.HasIndex("GlobalUserId")
                         .IsUnique()

@@ -1,5 +1,9 @@
 using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
+using Laraue.Core.DateTime.Services.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
@@ -27,6 +31,7 @@ public class AchievementTests : IntegrationTest
         var me = AddUser(telegramTestHost, DefaultUser.Id);
 
         await PlayQuizAsync(telegramTestHost, mistakes: 0);
+        await CheckAchievementsAsync(telegramTestHost);
 
         Assert.Equal(
             [(Achievement.WithoutMistakes, (byte)1), (Achievement.FirstQuiz, (byte)1)],
@@ -57,6 +62,49 @@ public class AchievementTests : IntegrationTest
     }
 
     [Fact]
+    public async Task FinishedQuiz_ShouldOnlyRequestACheck_WhichTheJobDoesAndClears()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id);
+
+        await PlayQuizAsync(telegramTestHost, mistakes: 0);
+
+        // Nothing granted or sent while finishing the quiz.
+        Assert.Empty(Granted(telegramTestHost, me));
+        Assert.Empty(telegramTestHost.Requests().OfType<SendMessageRequest>());
+        Assert.NotNull(telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).AchievementsCheckRequestedAt);
+
+        Assert.Equal(1, await CheckAchievementsAsync(telegramTestHost));
+
+        Assert.NotEmpty(Granted(telegramTestHost, me));
+        Assert.Single(telegramTestHost.Requests().OfType<SendMessageRequest>());
+        Assert.Null(telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).AchievementsCheckRequestedAt);
+        Assert.Equal(0, await CheckAchievementsAsync(telegramTestHost));
+    }
+
+    [Fact]
+    public async Task QuizFinishedDuringACheck_ShouldKeepTheRequest()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id);
+        await PlayQuizAsync(telegramTestHost, mistakes: 0);
+
+        // Another quiz finishes while the job is telling about the first one.
+        using var scope = telegramTestHost.CreateScope();
+        var services = scope.ServiceProvider;
+        var checker = new AchievementChecker(
+            services.GetRequiredService<DatabaseContext>(),
+            services.GetRequiredService<IAchievementService>(),
+            new RequestingAgainNotifier(services.GetRequiredService<IAchievementChecker>(), me.Id),
+            services.GetRequiredService<IDateTimeProvider>(),
+            NullLogger<AchievementChecker>.Instance);
+        await checker.CheckRequestedAsync();
+
+        Assert.NotEmpty(Granted(telegramTestHost, me));
+        Assert.NotNull(telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).AchievementsCheckRequestedAt);
+    }
+
+    [Fact]
     public async Task QuizWithMistakes_ShouldNotGrantWithoutMistakes_AndShowRarity()
     {
         using var telegramTestHost = GetTelegramTestHost();
@@ -73,6 +121,7 @@ public class AchievementTests : IntegrationTest
         });
 
         await PlayQuizAsync(telegramTestHost, mistakes: 1);
+        await CheckAchievementsAsync(telegramTestHost);
 
         Assert.Equal([(Achievement.FirstQuiz, (byte)1)], Granted(telegramTestHost, me));
         Assert.Equal(
@@ -101,6 +150,7 @@ public class AchievementTests : IntegrationTest
         }));
 
         await PlayQuizAsync(telegramTestHost, mistakes: 1);
+        await CheckAchievementsAsync(telegramTestHost);
 
         var granted = Granted(telegramTestHost, me);
         Assert.Contains((Achievement.WordsLearned, (byte)1), granted);
@@ -121,7 +171,9 @@ public class AchievementTests : IntegrationTest
         var me = AddUser(telegramTestHost, DefaultUser.Id);
 
         await PlayQuizAsync(telegramTestHost, mistakes: 0);
+        await CheckAchievementsAsync(telegramTestHost);
         await PlayQuizAsync(telegramTestHost, mistakes: 1);
+        await CheckAchievementsAsync(telegramTestHost);
 
         Assert.Equal(2, Granted(telegramTestHost, me).Length);
         Assert.Single(telegramTestHost.Requests().OfType<SendMessageRequest>());
@@ -135,6 +187,7 @@ public class AchievementTests : IntegrationTest
 
         await telegramTestHost.SendUpdateAsync(Callback(StartQuizRoute()));
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.FinishQuiz, RouteMethod.Post)));
+        await CheckAchievementsAsync(telegramTestHost);
 
         Assert.Empty(Granted(telegramTestHost, me));
         Assert.Empty(telegramTestHost.Requests().OfType<SendMessageRequest>());
@@ -150,6 +203,7 @@ public class AchievementTests : IntegrationTest
         AddFinishedQuiz(telegramTestHost, me, DateTime.UtcNow.AddDays(-daysAway));
 
         await PlayQuizAsync(telegramTestHost, mistakes: 1);
+        await CheckAchievementsAsync(telegramTestHost);
 
         Assert.Equal(welcomed, Granted(telegramTestHost, me).Contains((Achievement.WelcomeBack, (byte)1)));
     }
@@ -161,6 +215,7 @@ public class AchievementTests : IntegrationTest
         var me = AddUser(telegramTestHost, DefaultUser.Id, messagesOff: true);
 
         await PlayQuizAsync(telegramTestHost, mistakes: 0);
+        await CheckAchievementsAsync(telegramTestHost);
 
         Assert.NotEmpty(Granted(telegramTestHost, me));
         Assert.Empty(telegramTestHost.Requests().OfType<SendMessageRequest>());
@@ -219,6 +274,26 @@ public class AchievementTests : IntegrationTest
                 new CallbackRoutePath(TelegramRoutes.SelectQuizAnswer, RouteMethod.Post)
                     .WithQueryParameter(ParameterNames.QuestionId, question.Id)
                     .WithQueryParameter(ParameterNames.AnswerWordId, answer)));
+        }
+    }
+
+    private static async Task<int> CheckAchievementsAsync(AppTelegramTestHost host)
+    {
+        using var scope = host.CreateScope();
+        return await scope.ServiceProvider.GetRequiredService<IAchievementChecker>().CheckRequestedAsync();
+    }
+
+    private sealed class RequestingAgainNotifier(IAchievementChecker checker, Guid userId) : IAchievementNotifier
+    {
+        public async Task NotifyAsync(
+            Guid notifiedUserId,
+            ChatId chatId,
+            IReadOnlyList<EarnedAchievement> earned,
+            CancellationToken ct = default)
+        {
+            // A later time than the request being checked.
+            await Task.Delay(10, ct);
+            await checker.RequestCheckAsync(userId, ct);
         }
     }
 

@@ -18,6 +18,12 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                 nullable: false,
                 defaultValue: false);
 
+            migrationBuilder.AddColumn<DateTime>(
+                name: "achievements_check_requested_at",
+                table: "users",
+                type: "timestamp with time zone",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "user_achievements",
                 columns: table => new
@@ -39,6 +45,12 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "ix_users_achievements_check_requested_at",
+                table: "users",
+                column: "achievements_check_requested_at",
+                filter: "achievements_check_requested_at IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_user_achievements_achievement_level",
                 table: "user_achievements",
                 columns: new[] { "achievement", "level" });
@@ -50,8 +62,16 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
             migrationBuilder.DropTable(
                 name: "user_achievements");
 
+            migrationBuilder.DropIndex(
+                name: "ix_users_achievements_check_requested_at",
+                table: "users");
+
             migrationBuilder.DropColumn(
                 name: "achievement_messages_off",
+                table: "users");
+
+            migrationBuilder.DropColumn(
+                name: "achievements_check_requested_at",
                 table: "users");
         }
     }

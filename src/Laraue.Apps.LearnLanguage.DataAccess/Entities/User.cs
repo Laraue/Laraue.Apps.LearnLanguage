@@ -80,6 +80,12 @@ public sealed class User
     public bool AchievementMessagesOff { get; set; }
 
     /// <summary>
+    /// When the user last finished a quiz whose achievements haven't been checked yet. The achievements job
+    /// checks the user and clears it, unless another quiz moved it meanwhile.
+    /// </summary>
+    public DateTime? AchievementsCheckRequestedAt { get; set; }
+
+    /// <summary>
     /// How to show word translations for this user. 
     /// </summary>
     public WordsTemplateMode WordsTemplateMode { get; set; }

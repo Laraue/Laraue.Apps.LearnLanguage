@@ -30,8 +30,7 @@ public class QuizService(
     IQuestionsGenerator questionsGenerator,
     IStatsRepository statsRepository,
     LearnLanguageMetrics metrics,
-    IAchievementService achievementService,
-    IAchievementNotifier achievementNotifier)
+    IAchievementChecker achievementChecker)
     : IQuizService
 {
     private const long NullOptionId = 0;
@@ -693,9 +692,8 @@ public class QuizService(
         
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
 
-        // New achievements come as a message of their own, after the results.
-        var earned = await achievementService.GrantAfterQuizAsync(replyData.UserId, quizId, ct);
-        await achievementNotifier.NotifyAsync(replyData.UserId, replyData.TelegramId, earned, ct);
+        // Achievements are checked by a background job, which sends a message about new ones.
+        await achievementChecker.RequestCheckAsync(replyData.UserId, ct);
     }
 
     /// <returns>True if request handled and processing should be stopped.</returns>

@@ -28,7 +28,7 @@ public sealed class AchievementNotifier(
         CancellationToken ct = default)
     {
         if (earned.Count == 0
-            || await context.Users.AnyAsync(u => u.Id == userId && u.AchievementMessagesOff, ct))
+            || await context.Users.AnyAsync(u => u.Id == userId && (u.AchievementMessagesOff || u.BotBlockedAt != null), ct))
         {
             return;
         }
