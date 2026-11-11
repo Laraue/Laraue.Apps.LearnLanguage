@@ -17,6 +17,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
 
 public sealed class AchievementsScreen(
     IAchievementService achievementService,
+    IAchievementChecker achievementChecker,
     DatabaseContext context,
     ITelegramBotClient client)
     : IAchievementsScreen
@@ -45,38 +46,32 @@ public sealed class AchievementsScreen(
                 string.Join(" · ", trophies.Select(t => $"{medals[t.Place - 1]} ×{t.Count}"))));
         }
 
-        // Achievements with levels first, then the single ones as a checklist.
-        foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length > 1))
+        // Reached but not granted yet (e.g. progress made before achievements existed): the achievements job
+        // grants them in a few seconds.
+        if (overview.Items.Any(IsReachedButNotGranted))
         {
-            var definition = AchievementCatalog.All[item.Achievement];
-            var levels = definition.Thresholds.Length;
-            var header = $"{definition.Emoji} <b>{AchievementCatalog.Name(item.Achievement)}</b>";
-            tmb.AppendRow();
-
-            if (item.Level == levels)
-            {
-                tmb.AppendRow($"{header} · {AchievementCatalog.Level(item.Achievement, levels)} · {Rarity(overview, item, item.Level)}");
-                continue;
-            }
-
-            tmb.AppendRow(item.Level > 0 ? $"{header} · {AchievementCatalog.Level(item.Achievement, item.Level)}" : header);
-            var next = item.Level + 1;
-            var progress = item.Achievement == Achievement.LevelsCompleted
-                ? AchievementCatalog.Requirement(item.Achievement, next)
-                : $"{Number(item.Value)} / {AchievementCatalog.Requirement(item.Achievement, next)}";
-            tmb.AppendRow(string.Format(
-                AchievementTexts.Next,
-                $"{AchievementCatalog.Level(item.Achievement, next)} · {progress} · {Rarity(overview, item, next)}"));
+            await achievementChecker.RequestCheckAsync(replyData.UserId, ct);
+            var messagesOff = await context.Users
+                .Where(u => u.Id == replyData.UserId)
+                .Select(u => u.AchievementMessagesOff)
+                .FirstAsync(ct);
+            tmb.AppendRow().AppendRow(messagesOff ? AchievementTexts.PendingRefresh : AchievementTexts.PendingMessage);
         }
 
+        // Achievements with levels first, one line each: medals held and progress to the next level.
+        tmb.AppendRow();
+        foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length > 1))
+            tmb.AppendRow(LevelsLine(item));
+
+        // Then the single ones as a checklist.
         tmb.AppendRow();
         foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length == 1))
         {
             var definition = AchievementCatalog.All[item.Achievement];
-            var name = $"{definition.Emoji} <b>{AchievementCatalog.Name(item.Achievement)}</b>";
+            var name = $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}";
             tmb.AppendRow(item.Level > 0
-                ? $"✅ {name} · {Rarity(overview, item, 1)}"
-                : $"🔒 {name} · {AchievementCatalog.Requirement(item.Achievement, 1)} · {Rarity(overview, item, 1)}");
+                ? $"✅ {name}"
+                : $"🔒 {name} · {AchievementCatalog.Requirement(item.Achievement, 1)}");
         }
 
         var title = await context.Users
@@ -154,11 +149,29 @@ public sealed class AchievementsScreen(
         await SendListAsync(replyData, ct);
     }
 
-    private static string Rarity(AchievementsOverview overview, AchievementProgress item, int level) =>
-        AchievementCatalog.Rarity(
-            overview.Holders.GetValueOrDefault(new AchievementLevel(item.Achievement, (byte)level)),
-            overview.Players,
-            held: item.Level >= level);
+    /// <summary>
+    /// "📚 Words learned: 🥉🥈🥇 · 2,289 / 3,000", or the next level for levels completed.
+    /// </summary>
+    private static string LevelsLine(AchievementProgress item)
+    {
+        var definition = AchievementCatalog.All[item.Achievement];
+        var levels = definition.Thresholds.Length;
+        var medals = string.Concat(Enumerable.Range(1, item.Level).Select(l => AchievementCatalog.Medal(l)));
+
+        string? progress = item.Achievement == Achievement.LevelsCompleted
+            ? item.Level < levels
+                ? string.Format(AchievementTexts.NextLevel, AchievementCatalog.Requirement(item.Achievement, item.Level + 1))
+                : null
+            : item.Level < levels
+                ? $"{Number(item.Value)} / {AchievementCatalog.Requirement(item.Achievement, item.Level + 1)}"
+                : Number(item.Value);
+
+        var details = string.Join(" · ", new[] { medals, progress }.Where(x => !string.IsNullOrEmpty(x)));
+        return $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}: {details}";
+    }
+
+    private static bool IsReachedButNotGranted(AchievementProgress item) =>
+        AchievementCatalog.All[item.Achievement].LevelsReached(item.Value).Any(level => level > item.Level);
 
     private static string Number(int value) => value.ToString("N0", CultureInfo.CurrentUICulture);
 }

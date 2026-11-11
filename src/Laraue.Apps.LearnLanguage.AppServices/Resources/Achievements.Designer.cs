@@ -456,15 +456,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next: {0}.
-        /// </summary>
-        public static string Next {
-            get {
-                return ResourceManager.GetString("Next", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Earn achievements to get titles: each level's name can be shown next to your name in the leaderboard..
         /// </summary>
         public static string NoTitles {
@@ -533,6 +524,33 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         public static string Trophies {
             get {
                 return ResourceManager.GetString("Trophies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to next {0}.
+        /// </summary>
+        public static string NextLevel {
+            get {
+                return ResourceManager.GetString("NextLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⏳ New achievements are on their way: a message about them comes in a few seconds..
+        /// </summary>
+        public static string PendingMessage {
+            get {
+                return ResourceManager.GetString("PendingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⏳ New achievements are on their way: open this screen again in a few seconds..
+        /// </summary>
+        public static string PendingRefresh {
+            get {
+                return ResourceManager.GetString("PendingRefresh", resourceCulture);
             }
         }
     }

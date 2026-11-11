@@ -143,9 +143,6 @@
     <data name="ScreenTitle" xml:space="preserve">
         <value>🏅 Достижения · {0} из {1}</value>
     </data>
-    <data name="Next" xml:space="preserve">
-        <value>Дальше: {0}</value>
-    </data>
     <data name="NoTitles" xml:space="preserve">
         <value>Получайте достижения, чтобы открывать титулы: название каждого уровня можно показать рядом с вашим именем в рейтинге.</value>
     </data>
@@ -169,5 +166,14 @@
     </data>
     <data name="Trophies" xml:space="preserve">
         <value>🏆 Трофеи: {0}</value>
+    </data>
+    <data name="NextLevel" xml:space="preserve">
+        <value>дальше {0}</value>
+    </data>
+    <data name="PendingMessage" xml:space="preserve">
+        <value>⏳ Новые достижения уже в пути: сообщение о них придёт через несколько секунд.</value>
+    </data>
+    <data name="PendingRefresh" xml:space="preserve">
+        <value>⏳ Новые достижения уже в пути: откройте этот экран снова через несколько секунд.</value>
     </data>
 </root>

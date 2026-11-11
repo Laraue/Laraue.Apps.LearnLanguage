@@ -115,13 +115,12 @@ public class StatsService(
             .ToInlineKeyboardButton(QuizMode.ButtonName));
         tmb.AddInlineKeyboardButtons(quizButtons);
 
-        var secondRow = new List<InlineKeyboardButton>
-        {
-            InlineKeyboardButton.WithCallbackData(Buttons.Achievements, TelegramRoutes.Achievements),
-        };
         if (await botUsernameProvider.GetUsernameAsync(ct) is { } botUsername)
-            secondRow.Add(InlineKeyboardButton.WithUrl(Buttons.ShareProgress, GetShareUrl(progress, botUsername)));
-        tmb.AddInlineKeyboardButtons(secondRow);
+        {
+            tmb.AddInlineKeyboardButtons([
+                InlineKeyboardButton.WithUrl(Buttons.ShareProgress, GetShareUrl(progress, botUsername))
+            ]);
+        }
 
         // Other pairs the user has practised, to switch the screen to them.
         foreach (var other in progress.PracticedPairs.Where(p => p.LanguageId != progress.LanguageId))

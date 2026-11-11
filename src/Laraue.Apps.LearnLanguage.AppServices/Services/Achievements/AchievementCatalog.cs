@@ -50,6 +50,11 @@ public static class AchievementCatalog
     }
 
     /// <summary>
+    /// The medal of a level: 🥉 for 1, 🥈 for 2, and so on.
+    /// </summary>
+    public static string Medal(int level) => Medals[level - 1];
+
+    /// <summary>
     /// The level's name with the achievement's emoji, as a title on the leaderboard: "🔥 Volcano".
     /// </summary>
     public static string ShortTitle(Achievement achievement, int level) =>

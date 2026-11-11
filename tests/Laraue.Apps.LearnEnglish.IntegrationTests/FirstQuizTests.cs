@@ -109,6 +109,7 @@ public class FirstQuizTests : IntegrationTest
             [
                 [("🎯 New Quiz", "quiz")],
                 [("📊 My Progress", "stat"), ("🏆 Leaderboard", "lb")],
+                [("🏅 Achievements", "achs")],
                 [("⚙️ Settings", "s")],
                 [("📋 What's New", null)],
             ],

@@ -150,9 +150,6 @@
     <data name="ScreenTitle" xml:space="preserve">
         <value>🏅 Achievements · {0} of {1}</value>
     </data>
-    <data name="Next" xml:space="preserve">
-        <value>Next: {0}</value>
-    </data>
     <data name="NoTitles" xml:space="preserve">
         <value>Earn achievements to get titles: each level's name can be shown next to your name in the leaderboard.</value>
     </data>
@@ -176,5 +173,14 @@
     </data>
     <data name="Trophies" xml:space="preserve">
         <value>🏆 Trophies: {0}</value>
+    </data>
+    <data name="NextLevel" xml:space="preserve">
+        <value>next {0}</value>
+    </data>
+    <data name="PendingMessage" xml:space="preserve">
+        <value>⏳ New achievements are on their way: a message about them comes in a few seconds.</value>
+    </data>
+    <data name="PendingRefresh" xml:space="preserve">
+        <value>⏳ New achievements are on their way: open this screen again in a few seconds.</value>
     </data>
 </root>
