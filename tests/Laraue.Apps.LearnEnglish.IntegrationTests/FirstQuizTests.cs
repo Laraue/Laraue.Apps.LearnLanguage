@@ -108,8 +108,8 @@ public class FirstQuizTests : IntegrationTest
         Assert.Equal<(string, string?)[][]>(
             [
                 [("🎯 New Quiz", "quiz")],
-                [("📊 My Progress", "stat"), ("🏆 Leaderboard", "lb")],
-                [("🏅 Achievements", "achs")],
+                [("📊 My Progress", "stat"), ("🏅 Achievements", "achs")],
+                [("🏆 Leaderboard", "lb")],
                 [("⚙️ Settings", "s")],
                 [("📋 What's New", null)],
             ],

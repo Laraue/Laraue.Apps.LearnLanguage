@@ -227,7 +227,7 @@ public class LeaderboardTests : IntegrationTest
     }
 
     [Fact]
-    public async Task Menu_ShouldLinkTheLeaderboard_NextToMyProgress()
+    public async Task Menu_ShouldLinkTheLeaderboard_BelowMyProgressAndAchievements()
     {
         using var telegramTestHost = GetTelegramTestHost();
         AddUser(telegramTestHost, DefaultUser.Id, "Me");
@@ -235,7 +235,9 @@ public class LeaderboardTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Menu)));
 
         var buttons = Buttons(telegramTestHost.Requests().Last<EditMessageTextRequest>());
-        Assert.Contains(buttons, row => row.SequenceEqual([("📊 My Progress", "stat"), ("🏆 Leaderboard", "lb")]));
+        var progressRow = Array.FindIndex(buttons, row => row.SequenceEqual([("📊 My Progress", "stat"), ("🏅 Achievements", "achs")]));
+        Assert.True(progressRow >= 0);
+        Assert.Equal([("🏆 Leaderboard", "lb")], buttons[progressRow + 1]);
     }
 
     [Theory]

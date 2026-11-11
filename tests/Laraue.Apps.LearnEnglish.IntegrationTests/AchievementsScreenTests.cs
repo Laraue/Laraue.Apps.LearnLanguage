@@ -89,19 +89,6 @@ public class AchievementsScreenTests : IntegrationTest
     }
 
     [Fact]
-    public async Task Menu_ShouldLinkAchievements_BelowMyProgressAndLeaderboard()
-    {
-        using var telegramTestHost = GetTelegramTestHost();
-        AddUser(telegramTestHost, DefaultUser.Id, "Me");
-
-        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Menu)));
-
-        var buttons = Buttons(telegramTestHost.Requests().Last<EditMessageTextRequest>());
-        var leaderboardRow = Array.FindIndex(buttons, row => row.Any(b => b.Item2 == "lb"));
-        Assert.Equal([("🏅 Achievements", "achs")], buttons[leaderboardRow + 1]);
-    }
-
-    [Fact]
     public async Task Title_ShouldBeChosenFromEarnedLevels_AndShownOnTheLeaderboard()
     {
         using var telegramTestHost = GetTelegramTestHost();
