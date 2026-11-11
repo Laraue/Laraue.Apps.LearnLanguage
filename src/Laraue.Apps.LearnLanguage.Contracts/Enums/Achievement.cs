@@ -18,7 +18,7 @@ public enum Achievement : byte
     /// <summary>Quizzes in a row without mistakes: 1 · 5 · 20.</summary>
     WithoutMistakes = 4,
 
-    /// <summary>Language pairs practised: 2 · 5.</summary>
+    /// <summary>Language pairs with at least one learned word: 2 · 5.</summary>
     LanguagePairs = 5,
 
     /// <summary>CEFR levels completed from A1 up: A1 · A2 · B1 · B2 · C1.</summary>

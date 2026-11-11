@@ -80,13 +80,12 @@ public class StatsTests : IntegrationTest
         var buttons = Buttons(telegramTestHost.Requests().Single<EditMessageTextRequest>());
         Assert.Equal(("🎯 Review missed words", $"1 rvq?lt={ruId}"), buttons[0][0]);
         Assert.Equal(("🎯 New Quiz", $"1 sq?lt={ruId}"), buttons[0][1]);
-        Assert.Equal(("🏅 Achievements", "achs"), buttons[1][0]);
-        Assert.Equal("📤 Share my progress", buttons[1][1].Item1);
+        Assert.Equal("📤 Share my progress", buttons[1][0].Item1);
         Assert.Equal(("📊 English → German", $"stat?lt={deId}"), buttons[2][0]);
 
         // The share button is a Telegram share link with the user's numbers and a tracked link to the bot.
         var shareUrl = ((InlineKeyboardMarkup)telegramTestHost.Requests().Single<EditMessageTextRequest>().ReplyMarkup!)
-            .InlineKeyboard.ElementAt(1).Last().Url!;
+            .InlineKeyboard.ElementAt(1).First().Url!;
         var query = System.Web.HttpUtility.ParseQueryString(new Uri(shareUrl).Query);
         Assert.StartsWith("https://t.me/share/url?", shareUrl);
         Assert.Equal("https://t.me/TestBot?start=source-share", query["url"]);

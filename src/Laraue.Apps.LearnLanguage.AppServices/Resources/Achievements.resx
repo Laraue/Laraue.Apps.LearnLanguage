@@ -85,19 +85,19 @@
         <value>Levels completed</value>
     </data>
     <data name="LevelsCompleted_1" xml:space="preserve">
-        <value>Peppa Pig without subtitles</value>
+        <value>A1 Beginner</value>
     </data>
     <data name="LevelsCompleted_2" xml:space="preserve">
-        <value>Small talk about the weather</value>
+        <value>A2 Elementary</value>
     </data>
     <data name="LevelsCompleted_3" xml:space="preserve">
-        <value>Harry Potter in the original</value>
+        <value>B1 Intermediate</value>
     </data>
     <data name="LevelsCompleted_4" xml:space="preserve">
-        <value>Friends without subtitles</value>
+        <value>B2 Upper-Intermediate</value>
     </data>
     <data name="LevelsCompleted_5" xml:space="preserve">
-        <value>Oliver Twist in the original</value>
+        <value>C1 Advanced</value>
     </data>
     <data name="FirstQuiz_1" xml:space="preserve">
         <value>First steps</value>
@@ -114,44 +114,20 @@
     <data name="AllWordsLearned_1" xml:space="preserve">
         <value>Word master</value>
     </data>
-    <data name="New" xml:space="preserve">
-        <value>🎉 New achievement: {0}</value>
-    </data>
     <data name="Rarity" xml:space="preserve">
         <value>{0}% of players have it</value>
     </data>
     <data name="RarityUnderOnePercent" xml:space="preserve">
         <value>Less than 1% of players have it</value>
     </data>
-    <data name="OnlyYou" xml:space="preserve">
-        <value>🥇 Nobody else has it yet</value>
-    </data>
     <data name="ShareText" xml:space="preserve">
         <value>My new achievement with @{1}: {0}. {2}</value>
-    </data>
-    <data name="FirstQuiz_Requirement" xml:space="preserve">
-        <value>Finish a quiz</value>
-    </data>
-    <data name="TenQuizzesInADay_Requirement" xml:space="preserve">
-        <value>10 quizzes in a day</value>
-    </data>
-    <data name="FirstC1Word_Requirement" xml:space="preserve">
-        <value>Learn a C1 word</value>
-    </data>
-    <data name="WelcomeBack_Requirement" xml:space="preserve">
-        <value>Come back after a week away</value>
-    </data>
-    <data name="AllWordsLearned_Requirement" xml:space="preserve">
-        <value>Learn every word of a language pair</value>
     </data>
     <data name="NobodyYet" xml:space="preserve">
         <value>Nobody has it yet</value>
     </data>
     <data name="ScreenTitle" xml:space="preserve">
         <value>🏅 Achievements · {0} of {1}</value>
-    </data>
-    <data name="Next" xml:space="preserve">
-        <value>Next: {0}</value>
     </data>
     <data name="NoTitles" xml:space="preserve">
         <value>Earn achievements to get titles: each level's name can be shown next to your name in the leaderboard.</value>
@@ -176,5 +152,122 @@
     </data>
     <data name="Trophies" xml:space="preserve">
         <value>🏆 Trophies: {0}</value>
+    </data>
+    <data name="PendingMessage" xml:space="preserve">
+        <value>⏳ New achievements are on their way: open this section again after the message about them arrives.</value>
+    </data>
+    <data name="PendingRefresh" xml:space="preserve">
+        <value>⏳ New achievements are on their way: open this section again in a few seconds.</value>
+    </data>
+    <data name="WordsLearned_Description_1" xml:space="preserve">
+        <value>100 words learned</value>
+    </data>
+    <data name="WordsLearned_Description_2" xml:space="preserve">
+        <value>500 words learned</value>
+    </data>
+    <data name="WordsLearned_Description_3" xml:space="preserve">
+        <value>1,000 words learned</value>
+    </data>
+    <data name="WordsLearned_Description_4" xml:space="preserve">
+        <value>3,000 words learned</value>
+    </data>
+    <data name="WordsLearned_Description_5" xml:space="preserve">
+        <value>5,000 words learned</value>
+    </data>
+    <data name="QuizzesFinished_Description_1" xml:space="preserve">
+        <value>100 quizzes finished</value>
+    </data>
+    <data name="QuizzesFinished_Description_2" xml:space="preserve">
+        <value>1,000 quizzes finished</value>
+    </data>
+    <data name="QuizzesFinished_Description_3" xml:space="preserve">
+        <value>10,000 quizzes finished</value>
+    </data>
+    <data name="DaysInARow_Description_1" xml:space="preserve">
+        <value>7 days in a row</value>
+    </data>
+    <data name="DaysInARow_Description_2" xml:space="preserve">
+        <value>30 days in a row</value>
+    </data>
+    <data name="DaysInARow_Description_3" xml:space="preserve">
+        <value>100 days in a row</value>
+    </data>
+    <data name="WithoutMistakes_Description_1" xml:space="preserve">
+        <value>A quiz without mistakes</value>
+    </data>
+    <data name="WithoutMistakes_Description_2" xml:space="preserve">
+        <value>5 quizzes in a row without mistakes</value>
+    </data>
+    <data name="WithoutMistakes_Description_3" xml:space="preserve">
+        <value>20 quizzes in a row without mistakes</value>
+    </data>
+    <data name="LevelsCompleted_Description_1" xml:space="preserve">
+        <value>Every A1 word learned</value>
+    </data>
+    <data name="LevelsCompleted_Description_2" xml:space="preserve">
+        <value>Every A1–A2 word learned</value>
+    </data>
+    <data name="LevelsCompleted_Description_3" xml:space="preserve">
+        <value>Every A1–B1 word learned</value>
+    </data>
+    <data name="LevelsCompleted_Description_4" xml:space="preserve">
+        <value>Every A1–B2 word learned</value>
+    </data>
+    <data name="LevelsCompleted_Description_5" xml:space="preserve">
+        <value>Every A1–C1 word learned</value>
+    </data>
+    <data name="FirstQuiz_Description_1" xml:space="preserve">
+        <value>First quiz finished</value>
+    </data>
+    <data name="TenQuizzesInADay_Description_1" xml:space="preserve">
+        <value>10 quizzes in one day</value>
+    </data>
+    <data name="FirstC1Word_Description_1" xml:space="preserve">
+        <value>First C1 word learned</value>
+    </data>
+    <data name="WelcomeBack_Description_1" xml:space="preserve">
+        <value>Back after a week away</value>
+    </data>
+    <data name="AllWordsLearned_Description_1" xml:space="preserve">
+        <value>Every word of a language pair learned</value>
+    </data>
+    <data name="NewOne" xml:space="preserve">
+        <value>🎉 New achievement</value>
+    </data>
+    <data name="NewMany" xml:space="preserve">
+        <value>🎉 New achievements</value>
+    </data>
+    <data name="OnlyYou" xml:space="preserve">
+        <value>✨ Only you have it</value>
+    </data>
+    <data name="WordsLearned_Progress" xml:space="preserve">
+        <value>{0} of {1} words</value>
+    </data>
+    <data name="QuizzesFinished_Progress" xml:space="preserve">
+        <value>{0} of {1} quizzes</value>
+    </data>
+    <data name="DaysInARow_Progress" xml:space="preserve">
+        <value>{0} of {1} days in a row</value>
+    </data>
+    <data name="WithoutMistakes_Progress" xml:space="preserve">
+        <value>{0} of {1} quizzes in a row without mistakes</value>
+    </data>
+    <data name="WithoutMistakes_Progress_1" xml:space="preserve">
+        <value>{0} of 1 quiz without mistakes</value>
+    </data>
+    <data name="LanguagePairs_Progress" xml:space="preserve">
+        <value>words learned in {0} of {1} language pairs</value>
+    </data>
+    <data name="LevelsCompleted_Progress" xml:space="preserve">
+        <value>learn every {1} word</value>
+    </data>
+    <data name="LanguagePairs_Description_1" xml:space="preserve">
+        <value>Words learned in 2 language pairs</value>
+    </data>
+    <data name="LanguagePairs_Description_2" xml:space="preserve">
+        <value>Words learned in 5 language pairs</value>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>Next: {0} · {1}</value>
     </data>
 </root>

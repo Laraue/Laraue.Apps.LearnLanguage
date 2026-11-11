@@ -50,6 +50,41 @@ public static class AchievementCatalog
     }
 
     /// <summary>
+    /// The level as a heading: "📚 🥇 Scholar", or "👣 First steps" for a single-level achievement.
+    /// </summary>
+    public static string Heading(Achievement achievement, int level) =>
+        $"{All[achievement].Emoji} {Level(achievement, level)}";
+
+    /// <summary>
+    /// What the level was earned for: "1,000 words learned".
+    /// </summary>
+    public static string Description(Achievement achievement, int level) =>
+        Text($"{achievement}_Description_{level}");
+
+    /// <summary>
+    /// The level and what it means: "🥇 Scholar (1,000 words learned)", "First steps (first quiz finished)".
+    /// </summary>
+    public static string LevelWithMeaning(Achievement achievement, int level) =>
+        $"{Level(achievement, level)} ({Meaning(achievement, level)})";
+
+    /// <summary>
+    /// The description inside a sentence: "1,000 words learned", "a quiz without mistakes".
+    /// </summary>
+    public static string Meaning(Achievement achievement, int level)
+    {
+        var description = Description(achievement, level);
+        return char.ToLower(description[0], System.Globalization.CultureInfo.CurrentUICulture) + description[1..];
+    }
+
+    /// <summary>
+    /// How progress to a level reads, with the progress as {0} and what the level takes as {1}:
+    /// "{0} of {1} words". A level can have its own, e.g. for a singular.
+    /// </summary>
+    public static string ProgressFormat(Achievement achievement, int level) =>
+        AchievementTexts.ResourceManager.GetString($"{achievement}_Progress_{level}", AchievementTexts.Culture)
+        ?? Text($"{achievement}_Progress");
+
+    /// <summary>
     /// The level's name with the achievement's emoji, as a title on the leaderboard: "🔥 Volcano".
     /// </summary>
     public static string ShortTitle(Achievement achievement, int level) =>
@@ -70,14 +105,11 @@ public static class AchievementCatalog
         All[achievement].Thresholds.Length == 1 ? Text($"{achievement}_1") : Text(achievement.ToString());
 
     /// <summary>
-    /// What a level takes: "1,000", "B1", or a description for a single-level achievement.
+    /// What a level of an achievement with levels takes: "1,000", or "B1" for levels completed.
     /// </summary>
-    public static string Requirement(Achievement achievement, int level) => achievement switch
-    {
-        Achievement.LevelsCompleted => CefrLevels[level - 1],
-        _ when All[achievement].Thresholds.Length == 1 => Text($"{achievement}_Requirement"),
-        _ => All[achievement].Thresholds[level - 1].ToString("N0", System.Globalization.CultureInfo.CurrentUICulture),
-    };
+    public static string Requirement(Achievement achievement, int level) => achievement == Achievement.LevelsCompleted
+        ? CefrLevels[level - 1]
+        : All[achievement].Thresholds[level - 1].ToString("N0", System.Globalization.CultureInfo.CurrentUICulture);
 
     /// <summary>
     /// How many players have a level: "4% of players have it", or that nobody (else) has it yet.

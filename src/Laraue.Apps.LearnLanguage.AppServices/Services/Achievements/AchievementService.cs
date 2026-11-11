@@ -77,7 +77,8 @@ public sealed class AchievementService(
             [Achievement.QuizzesFinished] = () => AnsweredQuizzes(userId).CountAsync(ct),
             [Achievement.DaysInARow] = () => statsRepository.GetStreakAsync(userId, DateOnly.FromDateTime(now), ct),
             [Achievement.WithoutMistakes] = () => CountPerfectQuizzesInARowAsync(userId, ct),
-            [Achievement.LanguagePairs] = () => AnsweredQuizzes(userId).Select(q => q.LanguageId).Distinct().CountAsync(ct),
+            // A pair counts once a word is learned in it, not for a quiz only started there.
+            [Achievement.LanguagePairs] = () => LearnedTranslations(userId).Select(t => t.LanguageId).Distinct().CountAsync(ct),
             [Achievement.LevelsCompleted] = () => CountLevelsCompletedAsync(userId, ct),
             [Achievement.FirstQuiz] = async () => await AnsweredQuizzes(userId).AnyAsync(ct) ? 1 : 0,
             [Achievement.TenQuizzesInADay] = () => AnsweredQuizzes(userId).CountAsync(q => q.FinishedAt >= now.Date, ct),

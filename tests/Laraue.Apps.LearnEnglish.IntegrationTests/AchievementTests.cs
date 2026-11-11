@@ -41,11 +41,13 @@ public class AchievementTests : IntegrationTest
         var message = telegramTestHost.Requests().Single<SendMessageRequest>();
         Assert.Equal(
             """
-            <b>🎉 New achievement: 🎯 Without mistakes · 🥉 Sharp eye</b>
-            🥇 Nobody else has it yet
+            <b>🎉 New achievements</b>
 
-            <b>🎉 New achievement: 👣 First steps</b>
-            🥇 Nobody else has it yet
+            <b>🎯 🥉 Sharp eye</b>
+            A quiz without mistakes · ✨ Only you have it
+
+            <b>👣 First steps</b>
+            First quiz finished · ✨ Only you have it
             """.ReplaceLineEndings("\n"),
             message.Text.TrimEnd());
         var buttons = Buttons(message.ReplyMarkup);
@@ -58,7 +60,7 @@ public class AchievementTests : IntegrationTest
         Assert.StartsWith("https://t.me/share/url?", shareUrl);
         Assert.Equal("https://t.me/TestBot?start=source-achievement", query["url"]);
         Assert.Equal(
-            "My new achievement with @TestBot: 🎯 Without mistakes · 🥉 Sharp eye. 🥇 Nobody else has it yet",
+            "My new achievement with @TestBot: 🎯 Without mistakes · 🥉 Sharp eye. ✨ Only you have it",
             query["text"]);
     }
 
@@ -127,8 +129,10 @@ public class AchievementTests : IntegrationTest
         Assert.Equal([(Achievement.FirstQuiz, (byte)1)], Granted(telegramTestHost, me));
         Assert.Equal(
             """
-            <b>🎉 New achievement: 👣 First steps</b>
-            67% of players have it
+            <b>🎉 New achievement</b>
+
+            <b>👣 First steps</b>
+            First quiz finished · 67% of players have it
             """.ReplaceLineEndings("\n"),
             telegramTestHost.Requests().Single<SendMessageRequest>().Text.TrimEnd());
     }
@@ -160,7 +164,8 @@ public class AchievementTests : IntegrationTest
         Assert.DoesNotContain((Achievement.WordsLearned, (byte)4), granted);
 
         var text = telegramTestHost.Requests().Single<SendMessageRequest>().Text;
-        Assert.Contains("📚 Words learned · 🥇 Scholar", text);
+        Assert.Contains("<b>📚 🥇 Scholar</b>", text);
+        Assert.Contains("1,000 words learned", text);
         Assert.DoesNotContain("Bookworm", text);
         Assert.DoesNotContain("Word collector", text);
     }
@@ -222,8 +227,34 @@ public class AchievementTests : IntegrationTest
         await CheckAchievementsAsync(telegramTestHost);
 
         Assert.Contains(
-            "🎉 Новое достижение: 👣 Первые шаги",
+            "<b>👣 Первые шаги</b>\nПервый тест пройден",
             telegramTestHost.Requests().Single<SendMessageRequest>().Text);
+    }
+
+    [Fact]
+    public async Task LanguagePairs_ShouldCountPairsWithALearnedWord()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id);
+        var de = DefaultContextData.GetWordLanguages().GetId("de");
+        var word = telegramTestHost.GetFromDb(db => db.Translations
+            .Where(t => t.LanguageId == de)
+            .OrderBy(t => t.WordId)
+            .First()).WordId;
+        // No mistakes: a wrong answer would un-learn a word asked again for review.
+        // A quiz in German only: not a pair yet.
+        AddFinishedQuiz(telegramTestHost, me, DateTime.UtcNow.AddHours(-1), de);
+        AddLearned(telegramTestHost, me, word, Ru);
+
+        await PlayQuizAsync(telegramTestHost, mistakes: 0);
+        await CheckAchievementsAsync(telegramTestHost);
+        Assert.DoesNotContain((Achievement.LanguagePairs, (byte)1), Granted(telegramTestHost, me));
+
+        // A word learned in German: two pairs.
+        AddLearned(telegramTestHost, me, word, de);
+        await PlayQuizAsync(telegramTestHost, mistakes: 0);
+        await CheckAchievementsAsync(telegramTestHost);
+        Assert.Contains((Achievement.LanguagePairs, (byte)1), Granted(telegramTestHost, me));
     }
 
     [Fact]
@@ -332,13 +363,19 @@ public class AchievementTests : IntegrationTest
         return user;
     }
 
-    private static void AddFinishedQuiz(AppTelegramTestHost host, User user, DateTime at)
+    private static void AddLearned(AppTelegramTestHost host, User user, long wordId, long languageId) =>
+        host.InsertIntoDb(new LearnedTranslation
+        {
+            UserId = user.Id, WordId = wordId, LanguageId = languageId, WinStreakCount = 3, LearnedAt = DateTime.UtcNow,
+        });
+
+    private static void AddFinishedQuiz(AppTelegramTestHost host, User user, DateTime at, long? languageId = null)
     {
         var wordId = host.GetFromDb(db => db.Words.OrderBy(w => w.Id).First()).Id;
         host.InsertIntoDb(new UserQuiz
         {
             UserId = user.Id,
-            LanguageId = Ru,
+            LanguageId = languageId ?? Ru,
             Status = UserQuizStatus.Finished,
             CreatedAt = at,
             FinishedAt = at,

@@ -1,3 +1,5 @@
+using Microsoft.Extensions.DependencyInjection;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
 using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Apps.LearnLanguage.DataAccess;
@@ -21,7 +23,7 @@ public class AchievementsScreenTests : IntegrationTest
     private static readonly long Ru = DefaultContextData.GetWordLanguages().GetId("ru");
 
     [Fact]
-    public async Task List_ShouldShowLevelsProgressAndRarity()
+    public async Task List_ShouldShowMedalsAndProgress()
     {
         using var telegramTestHost = GetTelegramTestHost();
         var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
@@ -31,26 +33,59 @@ public class AchievementsScreenTests : IntegrationTest
         Grant(telegramTestHost, me, Achievement.WordsLearned, 1);
         Grant(telegramTestHost, me, Achievement.LanguagePairs, 1);
         Grant(telegramTestHost, me, Achievement.LanguagePairs, 2);
+        // The finished quiz has no mistakes, and the first words include C1 ones.
+        Grant(telegramTestHost, me, Achievement.WithoutMistakes, 1);
+        Grant(telegramTestHost, me, Achievement.FirstC1Word, 1);
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
 
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         var lines = request.Text!.Split('\n');
-        Assert.Equal("<b>🏅 Achievements · 4 of 26</b>", lines[0]);
-        // A level held, the next one with progress to it; nobody else has the next one yet.
-        Assert.Contains("📚 <b>Words learned</b> · 🥉 Bookworm", lines);
-        Assert.Contains("Next: 🥈 Word collector · 120 / 500 · Nobody has it yet", lines);
-        // Every level held.
-        Assert.Contains("🌍 <b>Language pairs</b> · 🥈 Polyglot · 🥇 Nobody else has it yet", lines);
-        // Nothing held yet: only the next level; levels completed show the CEFR level instead of a count.
-        Assert.Contains("🎓 <b>Levels completed</b>", lines);
-        Assert.Contains("Next: 🥉 Peppa Pig without subtitles · A1 · Nobody has it yet", lines);
-        // Single achievements as a checklist.
-        Assert.Contains("✅ 👣 <b>First steps</b> · 🥇 Nobody else has it yet", lines);
-        Assert.Contains("🔒 ⚡ <b>Marathon</b> · 10 quizzes in a day · Nobody has it yet", lines);
+        Assert.Equal("<b>🏅 Achievements · 6 of 26</b>", lines[0]);
+        // The level held with what it means, then the next one with the progress to it.
+        AssertFollow(lines, "<b>Words learned</b>: 🥉 Bookworm (100 words learned)",
+            "Next: 🥈 Word collector · 120 of 500 words");
+        AssertFollow(lines, "<b>Without mistakes</b>: 🥉 Sharp eye (a quiz without mistakes)",
+            "Next: 🥈 Sniper · 1 of 5 quizzes in a row without mistakes");
+        // Nothing held yet: locked, then the next one.
+        AssertFollow(lines, "<b>Quizzes finished</b>: 🔒", "Next: 🥉 Persistence · 1 of 100 quizzes");
+        AssertFollow(lines, "<b>Levels completed</b>: 🔒", "Next: 🥉 A1 Beginner · learn every A1 word");
+        // Every level held: no next one.
+        AssertFollow(lines, "<b>Language pairs</b>: 🥈 Polyglot (words learned in 5 language pairs)", "");
+        // Single achievements: the status, the name and what it's for, separated by blank lines.
+        Assert.Contains("✅ <b>Pioneer</b> (first C1 word learned)", lines);
+        AssertFollow(lines, "✅ <b>First steps</b> (first quiz finished)", "", "🔒 <b>Marathon</b> (10 quizzes in one day)");
+        // Everything reached is granted: no waiting.
+        Assert.DoesNotContain(lines, l => l.StartsWith("⏳"));
 
         Assert.Equal(("🎖 Choose a title", "achs/t"), Buttons(request)[0][0]);
         Assert.Equal(("📊 My Progress", "stat"), Buttons(request)[1][0]);
+    }
+
+    [Fact]
+    public async Task List_ShouldRequestACheck_WhenSomethingReachedIsNotGrantedYet()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        // Progress from before achievements existed, nothing granted.
+        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
+        AddFinishedQuiz(telegramTestHost, me);
+        AddLearnedWords(telegramTestHost, me, 120);
+
+        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
+
+        Assert.Contains(
+            "⏳ New achievements are on their way: open this section again after the message about them arrives.",
+            telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
+        Assert.NotNull(telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).AchievementsCheckRequestedAt);
+
+        // The achievements job grants them; the screen no longer waits.
+        using (var scope = telegramTestHost.CreateScope())
+            await scope.ServiceProvider.GetRequiredService<IAchievementChecker>().CheckRequestedAsync();
+        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
+
+        var text = telegramTestHost.Requests().Last<EditMessageTextRequest>().Text!;
+        Assert.Contains("<b>Words learned</b>: 🥉 Bookworm", text);
+        Assert.DoesNotContain("⏳", text);
     }
 
     [Fact]
@@ -65,10 +100,10 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.AchievementTitles)));
         var titles = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         Assert.Equal(
-            ["🔥 Spark", "🔥 Flame", "✅ Without a title", "← Back"],
+            ["🥉 Spark (7 days in a row)", "🥈 Flame (30 days in a row)", "✅ Without a title", "← Back"],
             Buttons(titles).Select(r => r.Single().Item1).ToArray());
 
-        var flame = Buttons(titles).SelectMany(r => r).Single(b => b.Item1 == "🔥 Flame").Item2!;
+        var flame = Buttons(titles).SelectMany(r => r).Single(b => b.Item1 == "🥈 Flame (30 days in a row)").Item2!;
         await telegramTestHost.SendUpdateAsync(Callback(flame));
 
         var user = telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id));
@@ -99,7 +134,7 @@ public class AchievementsScreenTests : IntegrationTest
     }
 
     [Fact]
-    public async Task MyProgress_ShouldCountAchievements_AndLinkTheList()
+    public async Task MyProgress_ShouldCountAchievements()
     {
         using var telegramTestHost = GetTelegramTestHost();
         var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
@@ -110,7 +145,13 @@ public class AchievementsScreenTests : IntegrationTest
 
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         Assert.Contains("🏅 Achievements: 1 of 26", request.Text!.Split('\n'));
-        Assert.Equal(("🏅 Achievements", "achs"), Buttons(request)[1][0]);
+    }
+
+    private static void AssertFollow(string[] lines, string line, params string[] next)
+    {
+        var index = Array.IndexOf(lines, line);
+        Assert.True(index >= 0, $"No line \"{line}\"");
+        Assert.Equal(next, lines.Skip(index + 1).Take(next.Length));
     }
 
     private static User AddUser(

@@ -78,19 +78,19 @@
         <value>Пройденные уровни</value>
     </data>
     <data name="LevelsCompleted_1" xml:space="preserve">
-        <value>«Свинка Пеппа» без субтитров</value>
+        <value>A1 Начальный</value>
     </data>
     <data name="LevelsCompleted_2" xml:space="preserve">
-        <value>Поболтать о погоде с англичанином</value>
+        <value>A2 Элементарный</value>
     </data>
     <data name="LevelsCompleted_3" xml:space="preserve">
-        <value>«Гарри Поттер» в оригинале</value>
+        <value>B1 Средний</value>
     </data>
     <data name="LevelsCompleted_4" xml:space="preserve">
-        <value>«Друзья» без субтитров</value>
+        <value>B2 Выше среднего</value>
     </data>
     <data name="LevelsCompleted_5" xml:space="preserve">
-        <value>«Оливер Твист» в оригинале</value>
+        <value>C1 Продвинутый</value>
     </data>
     <data name="FirstQuiz_1" xml:space="preserve">
         <value>Первые шаги</value>
@@ -107,44 +107,20 @@
     <data name="AllWordsLearned_1" xml:space="preserve">
         <value>Мастер слов</value>
     </data>
-    <data name="New" xml:space="preserve">
-        <value>🎉 Новое достижение: {0}</value>
-    </data>
     <data name="Rarity" xml:space="preserve">
         <value>Есть у {0}% игроков</value>
     </data>
     <data name="RarityUnderOnePercent" xml:space="preserve">
         <value>Есть менее чем у 1% игроков</value>
     </data>
-    <data name="OnlyYou" xml:space="preserve">
-        <value>🥇 Больше ни у кого его нет</value>
-    </data>
     <data name="ShareText" xml:space="preserve">
         <value>Моё новое достижение в @{1}: {0}. {2}</value>
-    </data>
-    <data name="FirstQuiz_Requirement" xml:space="preserve">
-        <value>Пройти тест</value>
-    </data>
-    <data name="TenQuizzesInADay_Requirement" xml:space="preserve">
-        <value>10 тестов за день</value>
-    </data>
-    <data name="FirstC1Word_Requirement" xml:space="preserve">
-        <value>Выучить слово уровня C1</value>
-    </data>
-    <data name="WelcomeBack_Requirement" xml:space="preserve">
-        <value>Вернуться после недели перерыва</value>
-    </data>
-    <data name="AllWordsLearned_Requirement" xml:space="preserve">
-        <value>Выучить все слова языковой пары</value>
     </data>
     <data name="NobodyYet" xml:space="preserve">
         <value>Пока ни у кого нет</value>
     </data>
     <data name="ScreenTitle" xml:space="preserve">
         <value>🏅 Достижения · {0} из {1}</value>
-    </data>
-    <data name="Next" xml:space="preserve">
-        <value>Дальше: {0}</value>
     </data>
     <data name="NoTitles" xml:space="preserve">
         <value>Получайте достижения, чтобы открывать титулы: название каждого уровня можно показать рядом с вашим именем в рейтинге.</value>
@@ -169,5 +145,122 @@
     </data>
     <data name="Trophies" xml:space="preserve">
         <value>🏆 Трофеи: {0}</value>
+    </data>
+    <data name="PendingMessage" xml:space="preserve">
+        <value>⏳ Новые достижения уже в пути: откройте этот раздел снова, когда придёт сообщение о них.</value>
+    </data>
+    <data name="PendingRefresh" xml:space="preserve">
+        <value>⏳ Новые достижения уже в пути: откройте этот раздел снова через несколько секунд.</value>
+    </data>
+    <data name="WordsLearned_Description_1" xml:space="preserve">
+        <value>100 выученных слов</value>
+    </data>
+    <data name="WordsLearned_Description_2" xml:space="preserve">
+        <value>500 выученных слов</value>
+    </data>
+    <data name="WordsLearned_Description_3" xml:space="preserve">
+        <value>1 000 выученных слов</value>
+    </data>
+    <data name="WordsLearned_Description_4" xml:space="preserve">
+        <value>3 000 выученных слов</value>
+    </data>
+    <data name="WordsLearned_Description_5" xml:space="preserve">
+        <value>5 000 выученных слов</value>
+    </data>
+    <data name="QuizzesFinished_Description_1" xml:space="preserve">
+        <value>100 пройденных тестов</value>
+    </data>
+    <data name="QuizzesFinished_Description_2" xml:space="preserve">
+        <value>1 000 пройденных тестов</value>
+    </data>
+    <data name="QuizzesFinished_Description_3" xml:space="preserve">
+        <value>10 000 пройденных тестов</value>
+    </data>
+    <data name="DaysInARow_Description_1" xml:space="preserve">
+        <value>7 дней подряд</value>
+    </data>
+    <data name="DaysInARow_Description_2" xml:space="preserve">
+        <value>30 дней подряд</value>
+    </data>
+    <data name="DaysInARow_Description_3" xml:space="preserve">
+        <value>100 дней подряд</value>
+    </data>
+    <data name="WithoutMistakes_Description_1" xml:space="preserve">
+        <value>Тест без ошибок</value>
+    </data>
+    <data name="WithoutMistakes_Description_2" xml:space="preserve">
+        <value>5 тестов подряд без ошибок</value>
+    </data>
+    <data name="WithoutMistakes_Description_3" xml:space="preserve">
+        <value>20 тестов подряд без ошибок</value>
+    </data>
+    <data name="LevelsCompleted_Description_1" xml:space="preserve">
+        <value>Выучены все слова уровня A1</value>
+    </data>
+    <data name="LevelsCompleted_Description_2" xml:space="preserve">
+        <value>Выучены все слова уровней A1–A2</value>
+    </data>
+    <data name="LevelsCompleted_Description_3" xml:space="preserve">
+        <value>Выучены все слова уровней A1–B1</value>
+    </data>
+    <data name="LevelsCompleted_Description_4" xml:space="preserve">
+        <value>Выучены все слова уровней A1–B2</value>
+    </data>
+    <data name="LevelsCompleted_Description_5" xml:space="preserve">
+        <value>Выучены все слова уровней A1–C1</value>
+    </data>
+    <data name="FirstQuiz_Description_1" xml:space="preserve">
+        <value>Первый тест пройден</value>
+    </data>
+    <data name="TenQuizzesInADay_Description_1" xml:space="preserve">
+        <value>10 тестов за один день</value>
+    </data>
+    <data name="FirstC1Word_Description_1" xml:space="preserve">
+        <value>Выучено первое слово уровня C1</value>
+    </data>
+    <data name="WelcomeBack_Description_1" xml:space="preserve">
+        <value>Возвращение после недели перерыва</value>
+    </data>
+    <data name="AllWordsLearned_Description_1" xml:space="preserve">
+        <value>Выучены все слова языковой пары</value>
+    </data>
+    <data name="NewOne" xml:space="preserve">
+        <value>🎉 Новое достижение</value>
+    </data>
+    <data name="NewMany" xml:space="preserve">
+        <value>🎉 Новые достижения</value>
+    </data>
+    <data name="OnlyYou" xml:space="preserve">
+        <value>✨ Есть только у вас</value>
+    </data>
+    <data name="WordsLearned_Progress" xml:space="preserve">
+        <value>{0} из {1} слов</value>
+    </data>
+    <data name="QuizzesFinished_Progress" xml:space="preserve">
+        <value>{0} из {1} тестов</value>
+    </data>
+    <data name="DaysInARow_Progress" xml:space="preserve">
+        <value>{0} из {1} дней подряд</value>
+    </data>
+    <data name="WithoutMistakes_Progress" xml:space="preserve">
+        <value>{0} из {1} тестов подряд без ошибок</value>
+    </data>
+    <data name="WithoutMistakes_Progress_1" xml:space="preserve">
+        <value>{0} из 1 теста без ошибок</value>
+    </data>
+    <data name="LanguagePairs_Progress" xml:space="preserve">
+        <value>слова выучены в {0} из {1} языковых пар</value>
+    </data>
+    <data name="LevelsCompleted_Progress" xml:space="preserve">
+        <value>выучите все слова уровня {1}</value>
+    </data>
+    <data name="LanguagePairs_Description_1" xml:space="preserve">
+        <value>Слова выучены в 2 языковых парах</value>
+    </data>
+    <data name="LanguagePairs_Description_2" xml:space="preserve">
+        <value>Слова выучены в 5 языковых парах</value>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>Дальше: {0} · {1}</value>
     </data>
 </root>
