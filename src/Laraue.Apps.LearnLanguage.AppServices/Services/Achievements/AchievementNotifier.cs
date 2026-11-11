@@ -79,14 +79,6 @@ public sealed class AchievementNotifier(
         return $"https://t.me/share/url?url={Uri.EscapeDataString(botLink)}&text={Uri.EscapeDataString(text)}";
     }
 
-    private static string Rarity(EarnedAchievement achievement)
-    {
-        if (achievement.Holders <= 1)
-            return AchievementTexts.OnlyYou;
-
-        var percent = achievement.Holders * 100.0 / Math.Max(achievement.Players, achievement.Holders);
-        return percent < 1
-            ? AchievementTexts.RarityUnderOnePercent
-            : string.Format(AchievementTexts.Rarity, Math.Round(percent).ToString(CultureInfo.CurrentUICulture));
-    }
+    private static string Rarity(EarnedAchievement achievement) =>
+        AchievementCatalog.Rarity(achievement.Holders, achievement.Players, held: true);
 }

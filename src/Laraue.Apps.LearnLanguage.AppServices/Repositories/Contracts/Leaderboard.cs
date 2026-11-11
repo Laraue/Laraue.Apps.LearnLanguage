@@ -24,6 +24,7 @@ public record Leaderboard(
 /// <param name="UserId">The user the row is about.</param>
 /// <param name="Profile">The user's Telegram names.</param>
 /// <param name="NameMode">What of <paramref name="Profile"/> others see.</param>
+/// <param name="Title">The achievement level the user shows next to their name, if any.</param>
 /// <param name="Correct">Right answers in the period.</param>
 /// <param name="Wrong">Wrong answers in the period; skipped questions aren't answers.</param>
 public record LeaderboardRow(
@@ -31,6 +32,7 @@ public record LeaderboardRow(
     Guid UserId,
     TelegramProfile Profile,
     LeaderboardNameMode NameMode,
+    (Achievement Achievement, byte Level)? Title,
     int Correct,
     int Wrong)
 {

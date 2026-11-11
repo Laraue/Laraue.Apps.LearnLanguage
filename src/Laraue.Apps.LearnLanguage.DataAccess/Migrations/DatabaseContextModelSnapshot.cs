@@ -13071,6 +13071,14 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("character varying(32)")
                         .HasColumnName("telegram_user_name");
 
+                    b.Property<byte?>("TitleAchievement")
+                        .HasColumnType("smallint")
+                        .HasColumnName("title_achievement");
+
+                    b.Property<byte?>("TitleLevel")
+                        .HasColumnType("smallint")
+                        .HasColumnName("title_level");
+
                     b.Property<int>("WordsTemplateMode")
                         .HasColumnType("integer")
                         .HasColumnName("words_template_mode");

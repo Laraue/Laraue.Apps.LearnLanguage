@@ -159,6 +159,8 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
                 u.Id,
                 Profile = new TelegramProfile(u.TelegramUserName, u.TelegramFirstName, u.TelegramLastName),
                 u.LeaderboardName,
+                u.TitleAchievement,
+                u.TitleLevel,
             })
             .ToDictionaryAsync(u => u.Id, ct);
 
@@ -170,6 +172,7 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
                 score.UserId,
                 user?.Profile ?? new TelegramProfile(null, null, null),
                 user?.LeaderboardName ?? LeaderboardNameMode.Hidden,
+                user is { TitleAchievement: { } achievement, TitleLevel: { } level } ? (achievement, level) : null,
                 score.Correct,
                 score.Wrong);
         }

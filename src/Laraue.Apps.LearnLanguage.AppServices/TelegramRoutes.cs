@@ -13,6 +13,8 @@ public static class TelegramRoutes
     
     public const string Stat = "stat";
     public const string Leaderboard = "lb";
+    public const string Achievements = "achs";
+    public const string AchievementTitles = "achs/t";
     public const string Menu = "m";
     public const string DropMessage = "d";
     public const string AchievementMessagesOff = "ach/off";

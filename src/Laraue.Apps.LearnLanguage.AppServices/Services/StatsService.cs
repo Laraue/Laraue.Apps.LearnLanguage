@@ -1,4 +1,5 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices.Services.Leagues;
+﻿using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Leagues;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using System.Globalization;
 using Laraue.Apps.LearnLanguage.AppServices.Extensions;
@@ -22,7 +23,8 @@ public class StatsService(
     IStatsRepository statsRepository,
     IAdminRepository adminRepository,
     IDateTimeProvider dateTimeProvider,
-    IBotUsernameProvider botUsernameProvider) : IStatsService
+    IBotUsernameProvider botUsernameProvider,
+    IAchievementService achievementService) : IStatsService
 {
     private const int BarLength = 10;
     private const int LeaderboardSize = 10;
@@ -55,6 +57,10 @@ public class StatsService(
 
         if (progress.StreakDays > 0)
             tmb.AppendRow(string.Format(Stats.Streak, progress.StreakDays));
+        tmb.AppendRow(string.Format(
+            Stats.Achievements,
+            await achievementService.CountHeldAsync(replyData.UserId, ct),
+            AchievementCatalog.LevelsCount));
         if (progress.WeekQuizzes > 0 || progress.WeekAnswers > 0)
             tmb.AppendRow(string.Format(
                 Stats.Week,
@@ -110,12 +116,13 @@ public class StatsService(
             .ToInlineKeyboardButton(QuizMode.ButtonName));
         tmb.AddInlineKeyboardButtons(quizButtons);
 
-        if (await botUsernameProvider.GetUsernameAsync(ct) is { } botUsername)
+        var secondRow = new List<InlineKeyboardButton>
         {
-            tmb.AddInlineKeyboardButtons([
-                InlineKeyboardButton.WithUrl(Buttons.ShareProgress, GetShareUrl(progress, botUsername))
-            ]);
-        }
+            InlineKeyboardButton.WithCallbackData(Buttons.Achievements, TelegramRoutes.Achievements),
+        };
+        if (await botUsernameProvider.GetUsernameAsync(ct) is { } botUsername)
+            secondRow.Add(InlineKeyboardButton.WithUrl(Buttons.ShareProgress, GetShareUrl(progress, botUsername)));
+        tmb.AddInlineKeyboardButtons(secondRow);
 
         // Other pairs the user has practised, to switch the screen to them.
         foreach (var other in progress.PracticedPairs.Where(p => p.LanguageId != progress.LanguageId))
@@ -227,6 +234,8 @@ public class StatsService(
         var name = LeaderboardNames.Format(row.NameMode, row.Profile);
         if (row.UserId == viewerId)
             name += $" <b>{Stats.Leaderboard_You}</b>";
+        if (row.Title is { } title)
+            name += $" · {AchievementCatalog.ShortTitle(title.Achievement, title.Level)}";
         return string.Format(Stats.Leaderboard_Row, place, name, Number(row.Points), Percent(row.Correct, row.Answers));
     }
 
