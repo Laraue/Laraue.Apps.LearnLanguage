@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20261111161038_AddTrophies")]
-    partial class AddTrophies
+    [Migration("20261111182917_AddTrophiesRemoveLeagues")]
+    partial class AddTrophiesRemoveLeagues
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -13038,10 +13038,6 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("leaderboard_name");
 
-                    b.Property<byte>("League")
-                        .HasColumnType("smallint")
-                        .HasColumnName("league");
-
                     b.Property<TimeOnly?>("ReminderTime")
                         .HasColumnType("time without time zone")
                         .HasColumnName("reminder_time");
@@ -13271,10 +13267,6 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                     b.Property<DateTime>("AwardedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("awarded_at");
-
-                    b.Property<byte>("League")
-                        .HasColumnType("smallint")
-                        .HasColumnName("league");
 
                     b.Property<byte>("Place")
                         .HasColumnType("smallint")

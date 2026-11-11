@@ -77,12 +77,6 @@
     <data name="LeaderboardName_Hidden" xml:space="preserve">
         <value>🙈 Скрыто</value>
     </data>
-    <data name="Leaderboard_LeagueBeginner" xml:space="preserve">
-        <value>🌱 Новички</value>
-    </data>
-    <data name="Leaderboard_LeagueIntermediate" xml:space="preserve">
-        <value>🌳 Опытные</value>
-    </data>
     <data name="Achievement_Ok" xml:space="preserve">
         <value>👌 Хорошо</value>
     </data>

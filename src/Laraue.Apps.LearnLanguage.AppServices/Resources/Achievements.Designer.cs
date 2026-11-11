@@ -483,24 +483,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rising star.
-        /// </summary>
-        public static string RisingStar_1 {
-            get {
-                return ResourceManager.GetString("RisingStar_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Move up to the 🌳 Intermediate league.
-        /// </summary>
-        public static string RisingStar_Requirement {
-            get {
-                return ResourceManager.GetString("RisingStar_Requirement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 🥇 1st place.
         /// </summary>
         public static string Trophy_Place_1 {

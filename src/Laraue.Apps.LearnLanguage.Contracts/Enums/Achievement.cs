@@ -36,7 +36,4 @@ public enum Achievement : byte
 
     /// <summary>Every word of a language pair learned.</summary>
     AllWordsLearned = 11,
-
-    /// <summary>Moved up to the Intermediate league.</summary>
-    RisingStar = 12,
 }

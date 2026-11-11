@@ -70,11 +70,6 @@ public sealed class User
     public LeaderboardNameMode LeaderboardName { get; set; }
 
     /// <summary>
-    /// The user's leaderboard league, set once a week by the league job. It only moves up.
-    /// </summary>
-    public League League { get; set; }
-
-    /// <summary>
     /// The user asked not to get messages about new achievements. They still earn them.
     /// </summary>
     public bool AchievementMessagesOff { get; set; }

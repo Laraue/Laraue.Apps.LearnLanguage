@@ -1,5 +1,3 @@
-using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
-using Laraue.Apps.LearnLanguage.AppServices.Services.Leagues;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Core.DateTime.Services.Abstractions;
 using Laraue.Core.Extensions.Hosting;
@@ -12,7 +10,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Services.Seasons;
 /// </summary>
 public sealed class SeasonJobData
 {
-    /// <summary>The start of the last week whose trophies were awarded and after which leagues were updated.</summary>
+    /// <summary>The start of the last week whose trophies were awarded.</summary>
     public DateTime? WeekDone { get; set; }
 
     /// <summary>The start of the last month whose trophies were awarded.</summary>
@@ -21,14 +19,11 @@ public sealed class SeasonJobData
 
 /// <summary>
 /// Runs daily at 00:00 UTC and closes the seasons that have ended: on the 1st, the month's trophies; on Monday,
-/// the week's trophies, then leagues move up (and a check for the 🌳 Rising star achievement). What's done is
-/// kept in the job state, so a missed run catches up and a repeated one does nothing. The first run only
-/// records where things stand, so a deploy doesn't award past seasons.
+/// the week's. What's done is kept in the job state, so a missed run catches up and a repeated one does
+/// nothing. The first run only records where things stand, so a deploy doesn't award past seasons.
 /// </summary>
 public sealed class SeasonJob(
     ITrophyService trophyService,
-    ILeagueUpdater leagueUpdater,
-    IAchievementChecker achievementChecker,
     IDateTimeProvider dateTimeProvider,
     ILogger<SeasonJob> logger)
     : BaseJob<SeasonJobData>
@@ -79,16 +74,8 @@ public sealed class SeasonJob(
 
         if (data.WeekDone != lastWeek)
         {
-            // Trophies first: the week was played in the leagues as they were.
             var awarded = await trophyService.AwardAsync(Season.Week, lastWeek, ct);
-            var movedUp = await leagueUpdater.UpdateAsync(ct);
-            foreach (var userId in movedUp)
-                await achievementChecker.RequestCheckAsync(userId, ct);
-            logger.LogInformation(
-                "Week {Week:yyyy-MM-dd}: {Count} trophies, {MovedUp} users moved up",
-                lastWeek,
-                awarded,
-                movedUp.Count);
+            logger.LogInformation("Week {Week:yyyy-MM-dd}: {Count} trophies", lastWeek, awarded);
             data.WeekDone = lastWeek;
             await UpdateStateAsync(jobState, ct);
         }

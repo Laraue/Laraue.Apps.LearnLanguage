@@ -36,7 +36,7 @@ public class AchievementsScreenTests : IntegrationTest
 
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         var lines = request.Text!.Split('\n');
-        Assert.Equal("<b>🏅 Achievements · 4 of 27</b>", lines[0]);
+        Assert.Equal("<b>🏅 Achievements · 4 of 26</b>", lines[0]);
         // A level held, the next one with progress to it; nobody else has the next one yet.
         Assert.Contains("📚 <b>Words learned</b> · 🥉 Bookworm", lines);
         Assert.Contains("Next: 🥈 Word collector · 120 / 500 · Nobody has it yet", lines);
@@ -109,7 +109,7 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Stat)));
 
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
-        Assert.Contains("🏅 Achievements: 1 of 27", request.Text!.Split('\n'));
+        Assert.Contains("🏅 Achievements: 1 of 26", request.Text!.Split('\n'));
         Assert.Equal(("🏅 Achievements", "achs"), Buttons(request)[1][0]);
     }
 

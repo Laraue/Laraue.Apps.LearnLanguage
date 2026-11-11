@@ -159,12 +159,6 @@
     <data name="ChooseTitle" xml:space="preserve">
         <value>Choose a title to show next to your name in the leaderboard:</value>
     </data>
-    <data name="RisingStar_1" xml:space="preserve">
-        <value>Rising star</value>
-    </data>
-    <data name="RisingStar_Requirement" xml:space="preserve">
-        <value>Move up to the 🌳 Intermediate league</value>
-    </data>
     <data name="Trophy_Place_1" xml:space="preserve">
         <value>🥇 1st place</value>
     </data>

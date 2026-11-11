@@ -24,7 +24,6 @@ public static class AchievementCatalog
             new(Achievement.FirstC1Word, "🔤", [1]),
             new(Achievement.WelcomeBack, "👋", [1]),
             new(Achievement.AllWordsLearned, "🌟", [1]),
-            new(Achievement.RisingStar, "🌳", [1]),
         }
         .ToDictionary(x => x.Achievement);
 

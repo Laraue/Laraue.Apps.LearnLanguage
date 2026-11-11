@@ -34,25 +34,21 @@ public sealed class TrophyService(
             .ToHashSet();
 
         var now = dateTimeProvider.UtcNow;
-        var trophies = new List<UserTrophy>();
-        foreach (var league in Enum.GetValues<League>())
-        {
-            var top = await statsRepository.GetSeasonTopAsync(league, seasonStart, seasonEnd, Places, ct);
-            if (top.PlayersCount < MinPlayers)
-                continue;
+        var top = await statsRepository.GetSeasonTopAsync(seasonStart, seasonEnd, Places, ct);
+        if (top.PlayersCount < MinPlayers)
+            return 0;
 
-            trophies.AddRange(top.Placed
-                .Where(p => !alreadyAwarded.Contains(p.UserId))
-                .Select(p => new UserTrophy
-                {
-                    UserId = p.UserId,
-                    Season = season,
-                    SeasonStart = seasonStart,
-                    League = league,
-                    Place = (byte)p.Place,
-                    AwardedAt = now,
-                }));
-        }
+        var trophies = top.Placed
+            .Where(p => !alreadyAwarded.Contains(p.UserId))
+            .Select(p => new UserTrophy
+            {
+                UserId = p.UserId,
+                Season = season,
+                SeasonStart = seasonStart,
+                Place = (byte)p.Place,
+                AwardedAt = now,
+            })
+            .ToList();
 
         context.UserTrophies.AddRange(trophies);
         await context.SaveChangesAsync(ct);

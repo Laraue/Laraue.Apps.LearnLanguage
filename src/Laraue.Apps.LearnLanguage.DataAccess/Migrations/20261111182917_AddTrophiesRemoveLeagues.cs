@@ -6,13 +6,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTrophies : Migration
+    public partial class AddTrophiesRemoveLeagues : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             // The weekly league job is replaced by the daily season job.
             migrationBuilder.Sql("DELETE FROM job_states WHERE job_name = 'UpdateLeagues'");
+
+            migrationBuilder.DropColumn(
+                name: "league",
+                table: "users");
 
             migrationBuilder.CreateTable(
                 name: "user_trophies",
@@ -21,7 +25,6 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     season = table.Column<byte>(type: "smallint", nullable: false),
                     season_start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    league = table.Column<byte>(type: "smallint", nullable: false),
                     place = table.Column<byte>(type: "smallint", nullable: false),
                     awarded_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -42,6 +45,13 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
         {
             migrationBuilder.DropTable(
                 name: "user_trophies");
+
+            migrationBuilder.AddColumn<byte>(
+                name: "league",
+                table: "users",
+                type: "smallint",
+                nullable: false,
+                defaultValue: (byte)0);
         }
     }
 }

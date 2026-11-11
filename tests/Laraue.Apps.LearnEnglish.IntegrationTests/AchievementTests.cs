@@ -227,21 +227,6 @@ public class AchievementTests : IntegrationTest
     }
 
     [Fact]
-    public async Task IntermediateUser_ShouldGetRisingStar()
-    {
-        using var telegramTestHost = GetTelegramTestHost();
-        var me = AddUser(telegramTestHost, DefaultUser.Id);
-        await telegramTestHost.ExecuteInDbAsync(db => db.Users
-            .Where(u => u.Id == me.Id)
-            .ExecuteUpdateAsync(u => u.SetProperty(x => x.League, League.Intermediate)));
-
-        await PlayQuizAsync(telegramTestHost, mistakes: 1);
-        await CheckAchievementsAsync(telegramTestHost);
-
-        Assert.Contains((Achievement.RisingStar, (byte)1), Granted(telegramTestHost, me));
-    }
-
-    [Fact]
     public async Task MutedUser_ShouldEarnAchievements_WithoutAMessage()
     {
         using var telegramTestHost = GetTelegramTestHost();

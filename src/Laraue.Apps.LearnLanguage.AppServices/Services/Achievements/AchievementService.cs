@@ -95,9 +95,6 @@ public sealed class AchievementService(
                 return lastTwo.Count == 2 && lastTwo[0] - lastTwo[1] >= WelcomeBackAfter ? 1 : 0;
             },
             [Achievement.AllWordsLearned] = async () => await HasLearnedAllWordsOfAPairAsync(userId, ct) ? 1 : 0,
-            // The league job moves users up and asks for a check.
-            [Achievement.RisingStar] = async () => await context.Users
-                .AnyAsync(u => u.Id == userId && u.League == League.Intermediate, ct) ? 1 : 0,
         };
 
     /// <inheritdoc />

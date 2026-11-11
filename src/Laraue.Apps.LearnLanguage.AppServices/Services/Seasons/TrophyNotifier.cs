@@ -59,15 +59,12 @@ public sealed class TrophyNotifier(
     }
 
     /// <summary>
-    /// "🏆 🥇 1st place · 🌳 Intermediate league · week 46".
+    /// "🏆 🥇 1st place · week 46".
     /// </summary>
     public static string TrophyTitle(UserTrophy trophy)
     {
         var place = AchievementTexts.ResourceManager.GetString($"Trophy_Place_{trophy.Place}", AchievementTexts.Culture);
-        var league = trophy.League == League.Intermediate
-            ? Stats.Leaderboard_LeagueIntermediate
-            : Stats.Leaderboard_LeagueBeginnerName;
-        return $"🏆 {place} · {league} · {SeasonName(trophy.Season, trophy.SeasonStart)}";
+        return $"🏆 {place} · {SeasonName(trophy.Season, trophy.SeasonStart)}";
     }
 
     private static string SeasonName(Season season, DateTime start)
