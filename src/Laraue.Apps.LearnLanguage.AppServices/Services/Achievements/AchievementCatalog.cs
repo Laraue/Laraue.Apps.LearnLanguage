@@ -62,6 +62,12 @@ public static class AchievementCatalog
         Text($"{achievement}_Description_{level}");
 
     /// <summary>
+    /// The level and what it means: "🥇 Scholar (1,000 words learned)", "First steps (first quiz finished)".
+    /// </summary>
+    public static string LevelWithMeaning(Achievement achievement, int level) =>
+        $"{Level(achievement, level)} ({Meaning(achievement, level)})";
+
+    /// <summary>
     /// The description inside a sentence: "1,000 words learned", "a quiz without mistakes".
     /// </summary>
     public static string Meaning(Achievement achievement, int level)

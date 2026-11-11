@@ -43,18 +43,15 @@ public class AchievementsScreenTests : IntegrationTest
         var lines = request.Text!.Split('\n');
         Assert.Equal("<b>🏅 Achievements · 6 of 26</b>", lines[0]);
         // The level held with what it means, then the next one with the progress to it.
-        Assert.Contains(
-            "<b>Words learned</b>: 🥉 Bookworm (100 words learned). Next: 🥈 Word collector · 120 of 500 words",
-            lines);
-        Assert.Contains(
-            "<b>Without mistakes</b>: 🥉 Sharp eye (a quiz without mistakes). " +
-            "Next: 🥈 Sniper · 1 of 5 quizzes in a row without mistakes",
-            lines);
+        AssertFollow(lines, "<b>Words learned</b>: 🥉 Bookworm (100 words learned)",
+            "Next: 🥈 Word collector · 120 of 500 words");
+        AssertFollow(lines, "<b>Without mistakes</b>: 🥉 Sharp eye (a quiz without mistakes)",
+            "Next: 🥈 Sniper · 1 of 5 quizzes in a row without mistakes");
         // Nothing held yet: locked, then the next one.
-        Assert.Contains("<b>Quizzes finished</b>: 🔒 Next: 🥉 Persistence · 1 of 100 quizzes", lines);
-        Assert.Contains("<b>Levels completed</b>: 🔒 Next: 🥉 A1 Beginner · learn every A1 word", lines);
+        AssertFollow(lines, "<b>Quizzes finished</b>: 🔒", "Next: 🥉 Persistence · 1 of 100 quizzes");
+        AssertFollow(lines, "<b>Levels completed</b>: 🔒", "Next: 🥉 A1 Beginner · learn every A1 word");
         // Every level held: no next one.
-        Assert.Contains("<b>Language pairs</b>: 🥈 Polyglot (words learned in 5 language pairs)", lines);
+        AssertFollow(lines, "<b>Language pairs</b>: 🥈 Polyglot (words learned in 5 language pairs)", "");
         // Single achievements: the status, the name and what it's for, separated by blank lines.
         Assert.Contains("✅ <b>Pioneer</b> (first C1 word learned)", lines);
         AssertFollow(lines, "✅ <b>First steps</b> (first quiz finished)", "", "🔒 <b>Marathon</b> (10 quizzes in one day)");
@@ -116,10 +113,10 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.AchievementTitles)));
         var titles = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         Assert.Equal(
-            ["🔥 Spark", "🔥 Flame", "✅ Without a title", "← Back"],
+            ["🥉 Spark (7 days in a row)", "🥈 Flame (30 days in a row)", "✅ Without a title", "← Back"],
             Buttons(titles).Select(r => r.Single().Item1).ToArray());
 
-        var flame = Buttons(titles).SelectMany(r => r).Single(b => b.Item1 == "🔥 Flame").Item2!;
+        var flame = Buttons(titles).SelectMany(r => r).Single(b => b.Item1 == "🥈 Flame (30 days in a row)").Item2!;
         await telegramTestHost.SendUpdateAsync(Callback(flame));
 
         var user = telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id));
