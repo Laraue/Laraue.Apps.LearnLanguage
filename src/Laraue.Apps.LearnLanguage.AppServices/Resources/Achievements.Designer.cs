@@ -465,15 +465,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to next {0}.
-        /// </summary>
-        public static string NextLevel {
-            get {
-                return ResourceManager.GetString("NextLevel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ⏳ New achievements are on their way: a message about them comes in a few seconds..
         /// </summary>
         public static string PendingMessage {
@@ -749,6 +740,69 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         public static string OnlyYou {
             get {
                 return ResourceManager.GetString("OnlyYou", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} words.
+        /// </summary>
+        public static string WordsLearned_Progress {
+            get {
+                return ResourceManager.GetString("WordsLearned_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} quizzes.
+        /// </summary>
+        public static string QuizzesFinished_Progress {
+            get {
+                return ResourceManager.GetString("QuizzesFinished_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} days in a row.
+        /// </summary>
+        public static string DaysInARow_Progress {
+            get {
+                return ResourceManager.GetString("DaysInARow_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} quizzes in a row without mistakes.
+        /// </summary>
+        public static string WithoutMistakes_Progress {
+            get {
+                return ResourceManager.GetString("WithoutMistakes_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of 1 quiz without mistakes.
+        /// </summary>
+        public static string WithoutMistakes_Progress_1 {
+            get {
+                return ResourceManager.GetString("WithoutMistakes_Progress_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} language pairs.
+        /// </summary>
+        public static string LanguagePairs_Progress {
+            get {
+                return ResourceManager.GetString("LanguagePairs_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn every {1} word.
+        /// </summary>
+        public static string LevelsCompleted_Progress {
+            get {
+                return ResourceManager.GetString("LevelsCompleted_Progress", resourceCulture);
             }
         }
     }

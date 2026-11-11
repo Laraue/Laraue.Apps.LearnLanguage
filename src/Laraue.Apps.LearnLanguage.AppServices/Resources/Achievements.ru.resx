@@ -146,9 +146,6 @@
     <data name="Trophies" xml:space="preserve">
         <value>🏆 Трофеи: {0}</value>
     </data>
-    <data name="NextLevel" xml:space="preserve">
-        <value>дальше {0}</value>
-    </data>
     <data name="PendingMessage" xml:space="preserve">
         <value>⏳ Новые достижения уже в пути: сообщение о них придёт через несколько секунд.</value>
     </data>
@@ -241,5 +238,26 @@
     </data>
     <data name="OnlyYou" xml:space="preserve">
         <value>✨ Есть только у вас</value>
+    </data>
+    <data name="WordsLearned_Progress" xml:space="preserve">
+        <value>{0} из {1} слов</value>
+    </data>
+    <data name="QuizzesFinished_Progress" xml:space="preserve">
+        <value>{0} из {1} тестов</value>
+    </data>
+    <data name="DaysInARow_Progress" xml:space="preserve">
+        <value>{0} из {1} дней подряд</value>
+    </data>
+    <data name="WithoutMistakes_Progress" xml:space="preserve">
+        <value>{0} из {1} тестов подряд без ошибок</value>
+    </data>
+    <data name="WithoutMistakes_Progress_1" xml:space="preserve">
+        <value>{0} из 1 теста без ошибок</value>
+    </data>
+    <data name="LanguagePairs_Progress" xml:space="preserve">
+        <value>{0} из {1} языковых пар</value>
+    </data>
+    <data name="LevelsCompleted_Progress" xml:space="preserve">
+        <value>Выучите все слова уровня {1}</value>
     </data>
 </root>

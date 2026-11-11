@@ -62,9 +62,12 @@ public static class AchievementCatalog
         Text($"{achievement}_Description_{level}");
 
     /// <summary>
-    /// The medal of a level: 🥉 for 1, 🥈 for 2, and so on.
+    /// How progress to a level reads, with the progress as {0} and what the level takes as {1}:
+    /// "{0} of {1} words". A level can have its own, e.g. for a singular.
     /// </summary>
-    public static string Medal(int level) => Medals[level - 1];
+    public static string ProgressFormat(Achievement achievement, int level) =>
+        AchievementTexts.ResourceManager.GetString($"{achievement}_Progress_{level}", AchievementTexts.Culture)
+        ?? Text($"{achievement}_Progress");
 
     /// <summary>
     /// The level's name with the achievement's emoji, as a title on the leaderboard: "🔥 Volcano".

@@ -58,10 +58,13 @@ public sealed class AchievementsScreen(
             tmb.AppendRow().AppendRow(messagesOff ? AchievementTexts.PendingRefresh : AchievementTexts.PendingMessage);
         }
 
-        // Achievements with levels first, one line each: medals held and progress to the next level.
-        tmb.AppendRow();
+        // Achievements with levels first: the level held, then the progress to the next one.
         foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length > 1))
-            tmb.AppendRow(LevelsLine(item));
+        {
+            tmb.AppendRow();
+            foreach (var line in LevelsLines(item))
+                tmb.AppendRow(line);
+        }
 
         // Then the single ones as a checklist.
         tmb.AppendRow();
@@ -149,24 +152,24 @@ public sealed class AchievementsScreen(
     }
 
     /// <summary>
-    /// "📚 Words learned: 🥉🥈🥇 · 2,289 / 3,000", or the next level for levels completed.
+    /// "📚 Words learned · 🥇 Scholar", then "2,289 of 3,000 words → 💎 Walking dictionary" until every level is
+    /// held.
     /// </summary>
-    private static string LevelsLine(AchievementProgress item)
+    private static IEnumerable<string> LevelsLines(AchievementProgress item)
     {
         var definition = AchievementCatalog.All[item.Achievement];
-        var levels = definition.Thresholds.Length;
-        var medals = string.Concat(Enumerable.Range(1, item.Level).Select(l => AchievementCatalog.Medal(l)));
+        var name = $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}";
+        yield return item.Level > 0 ? $"{name} · {AchievementCatalog.Level(item.Achievement, item.Level)}" : name;
 
-        string? progress = item.Achievement == Achievement.LevelsCompleted
-            ? item.Level < levels
-                ? string.Format(AchievementTexts.NextLevel, AchievementCatalog.Requirement(item.Achievement, item.Level + 1))
-                : null
-            : item.Level < levels
-                ? $"{Number(item.Value)} / {AchievementCatalog.Requirement(item.Achievement, item.Level + 1)}"
-                : Number(item.Value);
+        if (item.Level == definition.Thresholds.Length)
+            yield break;
 
-        var details = string.Join(" · ", new[] { medals, progress }.Where(x => !string.IsNullOrEmpty(x)));
-        return $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}: {details}";
+        var next = item.Level + 1;
+        var progress = string.Format(
+            AchievementCatalog.ProgressFormat(item.Achievement, next),
+            Number(item.Value),
+            AchievementCatalog.Requirement(item.Achievement, next));
+        yield return $"{progress} → {AchievementCatalog.Level(item.Achievement, next)}";
     }
 
     private static bool IsReachedButNotGranted(AchievementProgress item) =>

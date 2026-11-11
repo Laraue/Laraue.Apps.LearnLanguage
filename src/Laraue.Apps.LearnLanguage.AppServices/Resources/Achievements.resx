@@ -153,9 +153,6 @@
     <data name="Trophies" xml:space="preserve">
         <value>🏆 Trophies: {0}</value>
     </data>
-    <data name="NextLevel" xml:space="preserve">
-        <value>next {0}</value>
-    </data>
     <data name="PendingMessage" xml:space="preserve">
         <value>⏳ New achievements are on their way: a message about them comes in a few seconds.</value>
     </data>
@@ -248,5 +245,26 @@
     </data>
     <data name="OnlyYou" xml:space="preserve">
         <value>✨ Only you have it</value>
+    </data>
+    <data name="WordsLearned_Progress" xml:space="preserve">
+        <value>{0} of {1} words</value>
+    </data>
+    <data name="QuizzesFinished_Progress" xml:space="preserve">
+        <value>{0} of {1} quizzes</value>
+    </data>
+    <data name="DaysInARow_Progress" xml:space="preserve">
+        <value>{0} of {1} days in a row</value>
+    </data>
+    <data name="WithoutMistakes_Progress" xml:space="preserve">
+        <value>{0} of {1} quizzes in a row without mistakes</value>
+    </data>
+    <data name="WithoutMistakes_Progress_1" xml:space="preserve">
+        <value>{0} of 1 quiz without mistakes</value>
+    </data>
+    <data name="LanguagePairs_Progress" xml:space="preserve">
+        <value>{0} of {1} language pairs</value>
+    </data>
+    <data name="LevelsCompleted_Progress" xml:space="preserve">
+        <value>Learn every {1} word</value>
     </data>
 </root>
