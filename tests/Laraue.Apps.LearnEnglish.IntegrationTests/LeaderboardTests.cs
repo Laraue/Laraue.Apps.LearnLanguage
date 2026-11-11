@@ -116,28 +116,28 @@ public class LeaderboardTests : IntegrationTest
         var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
         AddLearnedWords(telegramTestHost, me, ru, words, Now);
 
-        // The board shows the stored league: no move before the job runs.
+        // Enough words, but leagues change only when the weekly job runs.
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
-        Assert.Contains("🌱 Beginner league", telegramTestHost.Requests().Last<EditMessageTextRequest>().Text);
+        Assert.Contains(
+            "🌱 Beginner league · 🎉 enough words: you move to 🌳 Intermediate on Monday",
+            telegramTestHost.Requests().Last<EditMessageTextRequest>().Text!.Split('\n'));
 
         Assert.Equal(1, await UpdateLeaguesAsync(telegramTestHost));
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
         Assert.Contains("🌳 Intermediate league", telegramTestHost.Requests().Last<EditMessageTextRequest>().Text);
 
-        // A wrong answer un-learns a word: the count goes down, the league stays.
+        // A wrong answer un-learns a word: the league stays.
         await telegramTestHost.ExecuteInDbAsync(db => db.LearnedTranslations
             .Where(t => t.UserId == me.Id && t.WordId == words[0])
             .ExecuteUpdateAsync(t => t.SetProperty(x => x.LearnedAt, (DateTime?)null)));
-        await UpdateLeaguesAsync(telegramTestHost);
-
-        var user = telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id));
-        Assert.Equal((999, League.Intermediate), (user.LearnedWords, user.League));
-        // Nothing changed since: the next run writes nothing.
         Assert.Equal(0, await UpdateLeaguesAsync(telegramTestHost));
+        Assert.Equal(
+            League.Intermediate,
+            telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).League);
     }
 
     [Fact]
-    public async Task Leaderboard_ShouldCountAWordLearnedInTwoPairsOnce()
+    public async Task Leaderboard_ShouldCountTheWordsLeftLive_AndAWordLearnedInTwoPairsOnce()
     {
         using var telegramTestHost = GetTelegramTestHost();
         var (ru, de) = Languages();
@@ -145,13 +145,25 @@ public class LeaderboardTests : IntegrationTest
         var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
         AddLearnedWords(telegramTestHost, me, ru, words[..600], Now);
         AddLearnedWords(telegramTestHost, me, de, words, Now);
-        await UpdateLeaguesAsync(telegramTestHost);
 
+        // No job run: the count is live.
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
 
         Assert.Contains(
             "🌱 Beginner league · words left to 🌳 Intermediate: 1",
             telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
+    }
+
+    [Theory]
+    [InlineData("2026-11-09T00:00:00", 7 * 24)] // Monday 00:00: the next week
+    [InlineData("2026-11-09T10:00:00", 6 * 24 + 14)] // Monday 10:00
+    [InlineData("2026-11-15T23:00:00", 1)] // Sunday 23:00
+    [InlineData("2026-11-11T12:30:00", 4 * 24 + 11.5)] // Wednesday 12:30
+    public void LeagueJob_ShouldRunAgainAtTheNextMonday(string now, double hours)
+    {
+        var at = DateTime.SpecifyKind(DateTime.Parse(now), DateTimeKind.Utc);
+
+        Assert.Equal(TimeSpan.FromHours(hours), LeagueJob.TimeToNextWeek(at));
     }
 
     [Fact]
@@ -359,7 +371,7 @@ public class LeaderboardTests : IntegrationTest
     private static async Task<int> UpdateLeaguesAsync(AppTelegramTestHost host)
     {
         using var scope = host.CreateScope();
-        return await scope.ServiceProvider.GetRequiredService<LeagueUpdater>().UpdateAsync();
+        return await scope.ServiceProvider.GetRequiredService<ILeagueUpdater>().UpdateAsync();
     }
 
     private static (long Ru, long De) Languages()

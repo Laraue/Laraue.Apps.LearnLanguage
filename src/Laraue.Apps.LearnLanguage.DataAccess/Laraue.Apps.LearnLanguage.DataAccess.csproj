@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="Laraue.Telegram.NET.Authentication" Version="$(LaraueTelegramNetVersion)" />
+    <PackageReference Include="Laraue.Core.Extensions.Hosting.EfCore" Version="$(LaraueCoreExtensionsHostingEfCoreVersion)" />
     <PackageReference Include="linq2db" Version="$(Linq2DbVersion)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(EfCoreVersion)">
       <PrivateAssets>all</PrivateAssets>

@@ -13031,10 +13031,6 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("league");
 
-                    b.Property<int>("LearnedWords")
-                        .HasColumnType("integer")
-                        .HasColumnName("learned_words");
-
                     b.Property<TimeOnly?>("ReminderTime")
                         .HasColumnType("time without time zone")
                         .HasColumnName("reminder_time");
@@ -13391,6 +13387,30 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasDatabaseName("ix_word_topics_topic_id");
 
                     b.ToTable("word_topics", (string)null);
+                });
+
+            modelBuilder.Entity("Laraue.Core.Extensions.Hosting.EfCore.JobStateEntity", b =>
+                {
+                    b.Property<string>("JobName")
+                        .HasColumnType("text")
+                        .HasColumnName("job_name");
+
+                    b.Property<string>("JobData")
+                        .HasColumnType("text")
+                        .HasColumnName("job_data");
+
+                    b.Property<DateTime?>("LastExecutionAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_execution_at");
+
+                    b.Property<DateTime?>("NextExecutionAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("next_execution_at");
+
+                    b.HasKey("JobName")
+                        .HasName("pk_job_states");
+
+                    b.ToTable("job_states", (string)null);
                 });
 
             modelBuilder.Entity("Laraue.Telegram.NET.UpdatesQueue.EFCore.DataAccess.FailedUpdate", b =>

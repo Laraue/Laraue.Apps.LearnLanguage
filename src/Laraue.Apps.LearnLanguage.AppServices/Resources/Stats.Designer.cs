@@ -301,5 +301,14 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("Leaderboard_LeagueIntermediate", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🌱 Beginner league · 🎉 enough words: you move to 🌳 Intermediate on Monday.
+        /// </summary>
+        public static string Leaderboard_LeagueBeginnerMovingUp {
+            get {
+                return ResourceManager.GetString("Leaderboard_LeagueBeginnerMovingUp", resourceCulture);
+            }
+        }
     }
 }

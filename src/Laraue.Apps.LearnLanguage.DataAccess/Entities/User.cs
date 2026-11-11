@@ -70,12 +70,7 @@ public sealed class User
     public LeaderboardNameMode LeaderboardName { get; set; }
 
     /// <summary>
-    /// Distinct English words the user has learned in any pair, recounted by the league job.
-    /// </summary>
-    public int LearnedWords { get; set; }
-
-    /// <summary>
-    /// The user's leaderboard league, set by the league job from <see cref="LearnedWords"/>. It only moves up.
+    /// The user's leaderboard league, set once a week by the league job. It only moves up.
     /// </summary>
     public League League { get; set; }
 

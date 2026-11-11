@@ -150,11 +150,7 @@ public class StatsService(
         tmb.AppendRow($"<b>{string.Format(
                 Stats.Leaderboard_Title,
                 request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week)}</b>")
-            .AppendRow(board.League == League.Intermediate
-                ? Stats.Leaderboard_LeagueIntermediate
-                : string.Format(
-                    Stats.Leaderboard_LeagueBeginner,
-                    Number(LeagueRules.IntermediateMinWords - board.LearnedWords)))
+            .AppendRow(LeagueLine(board))
             .AppendRow(Stats.Leaderboard_Scoring)
             .AppendRow();
 
@@ -191,6 +187,18 @@ public class StatsService(
         tmb.AddMainMenuButton();
 
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+    }
+
+    private static string LeagueLine(Leaderboard board)
+    {
+        if (board.League == League.Intermediate)
+            return Stats.Leaderboard_LeagueIntermediate;
+
+        // The words are counted live, but leagues change on Mondays.
+        var wordsLeft = LeagueRules.IntermediateMinWords - board.LearnedWords;
+        return wordsLeft > 0
+            ? string.Format(Stats.Leaderboard_LeagueBeginner, Number(wordsLeft))
+            : Stats.Leaderboard_LeagueBeginnerMovingUp;
     }
 
     private static string LeaderboardRow(LeaderboardRow row, Guid viewerId)

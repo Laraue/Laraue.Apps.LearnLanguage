@@ -1,4 +1,6 @@
-﻿using Laraue.Apps.LearnLanguage.DataAccess;
+﻿using Laraue.Core.Extensions.Hosting.EfCore;
+using Laraue.Core.Extensions.Hosting;
+using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Core.DataAccess.Linq2DB.Extensions;
 using Laraue.Apps.LearnLanguage.AppServices.Metrics;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
@@ -24,7 +26,7 @@ builder.Services.AddHealthChecks();
 builder.Services.AddHostedService<LearnLanguageStateMetrics>();
 builder.Services.AddHostedService<DictionarySyncService>();
 builder.Services.AddHostedService<ReminderService>();
-builder.Services.AddHostedService<LeagueService>();
+builder.Services.AddBackgroundJob<LeagueJob, EmptyJobData>(LeagueJob.Name);
 builder.Logging.ClearProviders().AddJsonConsole();
 
 builder.Services

@@ -108,12 +108,18 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         int count,
         CancellationToken ct = default)
     {
-        // Leagues are stored by the league job.
-        var viewer = await context.Users
+        // Leagues are stored by the weekly league job; the viewer's learned words are counted live, so the
+        // words left to the next league go down as they learn.
+        var league = await context.Users
             .Where(u => u.Id == userId)
-            .Select(u => new { u.League, u.LearnedWords })
+            .Select(u => u.League)
             .FirstAsync(ct);
-        var leagueQuestions = context.UserQuizQuestions.Where(x => x.Quiz.User.League == viewer.League);
+        var learnedWords = await context.LearnedTranslations
+            .Where(t => t.UserId == userId && t.LearnedAt != null)
+            .Select(t => t.WordId)
+            .Distinct()
+            .CountAsync(ct);
+        var leagueQuestions = context.UserQuizQuestions.Where(x => x.Quiz.User.League == league);
 
         // Points per user of the league who answered in the period. Each query below aggregates it in the
         // database, so only the shown rows come back, however many users play.
@@ -166,8 +172,8 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         }
 
         return new Leaderboard(
-            viewer.League,
-            viewer.LearnedWords,
+            league,
+            learnedWords,
             top.Select(ToRow).ToArray(),
             me is null ? null : ToRow(me),
             playersCount);

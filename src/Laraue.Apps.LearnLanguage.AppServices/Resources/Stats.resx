@@ -99,4 +99,7 @@
     <data name="Leaderboard_LeagueIntermediate" xml:space="preserve">
         <value>🌳 Intermediate league</value>
     </data>
+    <data name="Leaderboard_LeagueBeginnerMovingUp" xml:space="preserve">
+        <value>🌱 Beginner league · 🎉 enough words: you move to 🌳 Intermediate on Monday</value>
+    </data>
 </root>
