@@ -10,6 +10,7 @@ using Telegram.Bot.Requests;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using Xunit;
+using TelegramUser = Telegram.Bot.Types.User;
 using User = Laraue.Apps.LearnLanguage.DataAccess.Entities.User;
 
 namespace Laraue.Apps.LearnEnglish.IntegrationTests;
@@ -64,7 +65,7 @@ public class LeaderboardTests : IntegrationTest
 
             🙈 Your name is hidden from others. You can show it in ⚙️ Settings.
             """.ReplaceLineEndings("\n"),
-            request.Text.TrimEnd());
+            request.Text!.TrimEnd());
 
         var buttons = Buttons(request);
         Assert.Equal("✅ This week", buttons[0][0].Item1);
@@ -114,7 +115,7 @@ public class LeaderboardTests : IntegrationTest
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
 
-        var lines = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text.Split('\n');
+        var lines = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n');
         Assert.Contains("🥇 ******* · 36 pts · 100% correct", lines);
         Assert.Contains("10. ******* · 9 pts · 100% correct", lines);
         Assert.DoesNotContain(lines, l => l.StartsWith("11."));
@@ -140,7 +141,7 @@ public class LeaderboardTests : IntegrationTest
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
 
-        var lines = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text.Split('\n');
+        var lines = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n');
         Assert.Equal(9, lines.Count(l => l.StartsWith("🥇 ******* · 15 pts")));
         Assert.Contains("10. ******* · 3 pts · 100% correct", lines);
         var dots = Array.IndexOf(lines, "…");
@@ -168,7 +169,7 @@ public class LeaderboardTests : IntegrationTest
     public async Task Settings_ShouldLetChooseTheName_PreviewingTheCurrentProfile()
     {
         using var telegramTestHost = GetTelegramTestHost();
-        // Stored names are old: the choices show the current ones from Telegram.
+        // Stored names are old: the library stores the current ones on the user's first update.
         var me = AddUser(telegramTestHost, DefaultUser.Id, "Old");
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Settings)));
@@ -199,7 +200,7 @@ public class LeaderboardTests : IntegrationTest
     {
         using var telegramTestHost = GetTelegramTestHost();
         AddUser(telegramTestHost, DefaultUser.Id, "Me", nameMode: LeaderboardNameMode.FirstName);
-        var withoutLastNameAndUsername = new global::Telegram.Bot.Types.User { Id = DefaultUser.Id, FirstName = "Me" };
+        var withoutLastNameAndUsername = new TelegramUser { Id = DefaultUser.Id, FirstName = "Me" };
 
         await telegramTestHost.SendUpdateAsync(
             Callback(new CallbackRoutePath(TelegramRoutes.LeaderboardNameSettings), withoutLastNameAndUsername));
@@ -306,7 +307,7 @@ public class LeaderboardTests : IntegrationTest
             .ToArray();
 
     // The viewer's Telegram account as the updates carry it.
-    private static global::Telegram.Bot.Types.User Viewer => new()
+    private static TelegramUser Viewer => new()
     {
         Id = DefaultUser.Id,
         Username = "me_smith",
@@ -314,7 +315,7 @@ public class LeaderboardTests : IntegrationTest
         LastName = "Smith",
     };
 
-    private static Update Callback(string data, global::Telegram.Bot.Types.User? from = null) => new()
+    private static Update Callback(string data, TelegramUser? from = null) => new()
     {
         CallbackQuery = new CallbackQuery
         {

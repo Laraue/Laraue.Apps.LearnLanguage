@@ -131,14 +131,8 @@ public class UserSettingsService(
         await HandleSettingsViewAsync(replyData, ct);
     }
 
-    public async Task HandleLeaderboardNameSettingsViewAsync(
-        ReplyData replyData,
-        TelegramProfile? profile,
-        CancellationToken ct = default)
+    public async Task HandleLeaderboardNameSettingsViewAsync(ReplyData replyData, CancellationToken ct = default)
     {
-        // The choices preview the user's current names.
-        if (profile is not null)
-            await repository.UpdateProfileAsync(replyData.UserId, profile, ct);
         var settings = await repository.GetSettingsAsync(replyData.UserId, ct);
 
         var tmb = new TelegramMessageBuilder()

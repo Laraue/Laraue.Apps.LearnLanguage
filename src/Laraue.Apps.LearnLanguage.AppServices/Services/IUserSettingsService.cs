@@ -1,5 +1,4 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
-using Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
+﻿using Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Services;
 
@@ -23,12 +22,9 @@ public interface IUserSettingsService
         CancellationToken ct = default);
 
     /// <summary>
-    /// Show the choices of how others see the user on the leaderboard, previewing their current names.
+    /// Show the choices of how others see the user on the leaderboard, previewing their stored names.
     /// </summary>
-    Task HandleLeaderboardNameSettingsViewAsync(
-        ReplyData replyData,
-        TelegramProfile? profile,
-        CancellationToken ct = default);
+    Task HandleLeaderboardNameSettingsViewAsync(ReplyData replyData, CancellationToken ct = default);
 
     /// <summary>
     /// Set what of the user's names others see on the leaderboard and show the settings.
