@@ -89,10 +89,12 @@ public class LeaderboardTests : IntegrationTest
         var dan = AddUser(telegramTestHost, 5, "Dan", nameMode: LeaderboardNameMode.FirstName);
         foreach (var user in new[] { me, anna, olga })
             AddLearnedWords(telegramTestHost, user, ru, words, beforeWeek);
-        // One word short of the league.
+        // Learned the 1,000th word just now: the league is live, so already Intermediate.
+        AddLearnedWords(telegramTestHost, dan, ru, words[..999], beforeWeek);
+        AddLearnedWords(telegramTestHost, dan, ru, words[999..], Now);
+        // Had 1,000 words, but answered one wrong since, so it's not learned anymore: Beginner.
         AddLearnedWords(telegramTestHost, bob, ru, words[..999], beforeWeek);
-        // Enough words, but learned this week: the league moves up at the next reset.
-        AddLearnedWords(telegramTestHost, dan, ru, words, Now);
+        AddLearnedWords(telegramTestHost, bob, ru, words[999..], learnedAt: null);
         foreach (var user in new[] { me, anna, olga, bob, dan })
             AddAnswers(telegramTestHost, user, Now, correct: 1, wrong: 0);
 
@@ -103,8 +105,8 @@ public class LeaderboardTests : IntegrationTest
         Assert.Contains("Anna · 3 pts", text);
         Assert.Contains("Olga · 3 pts", text);
         Assert.Contains("Me <b>(you)</b> · 3 pts", text);
+        Assert.Contains("Dan · 3 pts", text);
         Assert.DoesNotContain("Bob", text);
-        Assert.DoesNotContain("Dan", text);
     }
 
     [Fact]
@@ -350,14 +352,14 @@ public class LeaderboardTests : IntegrationTest
         User user,
         long languageId,
         IEnumerable<long> wordIds,
-        DateTime learnedAt)
+        DateTime? learnedAt)
     {
         host.InsertRangeIntoDb(wordIds.Select(id => new LearnedTranslation
         {
             UserId = user.Id,
             WordId = id,
             LanguageId = languageId,
-            WinStreakCount = 3,
+            WinStreakCount = learnedAt is null ? 0 : 3,
             LearnedAt = learnedAt,
         }));
     }

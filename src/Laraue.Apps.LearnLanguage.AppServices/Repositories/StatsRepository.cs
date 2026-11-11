@@ -108,22 +108,23 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         int count,
         CancellationToken ct = default)
     {
-        // The league is fixed for the period: by the words learned before it started.
+        // The league is live: by the words learned now. learned_at moves on every answer (a right answer to a
+        // learned word sets it to now, a wrong one clears it), so it can't tell what was learned at a date.
         var learnedWords = await context.LearnedTranslations
-            .Where(t => t.UserId == userId && t.LearnedAt < since)
+            .Where(t => t.UserId == userId && t.LearnedAt != null)
             .Select(t => t.WordId)
             .Distinct()
             .CountAsync(ct);
         var league = Leagues.For(learnedWords);
 
-        // Users who answered in the period and are in the Intermediate league. Only the period's players are
-        // counted, so the (user_id, learned_at) index serves it.
+        // Users who answered in the period and are in the Intermediate league now. Only the period's players
+        // are counted, so the (user_id, learned_at) index serves it.
         var players = context.UserQuizQuestions
             .Where(x => x.AnsweredAt >= since)
             .Select(x => x.Quiz.UserId)
             .Distinct();
         var intermediate = context.LearnedTranslations
-            .Where(t => players.Contains(t.UserId) && t.LearnedAt < since)
+            .Where(t => players.Contains(t.UserId) && t.LearnedAt != null)
             .GroupBy(t => t.UserId)
             .Where(g => g.Select(t => t.WordId).Distinct().Count() >= Leagues.IntermediateMinWords)
             .Select(g => g.Key);
