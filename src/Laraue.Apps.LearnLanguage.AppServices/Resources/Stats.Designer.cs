@@ -283,5 +283,23 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("Leaderboard_NameHidden", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🌱 Beginner league · words left to 🌳 Intermediate: {0}.
+        /// </summary>
+        public static string Leaderboard_LeagueBeginner {
+            get {
+                return ResourceManager.GetString("Leaderboard_LeagueBeginner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🌳 Intermediate league.
+        /// </summary>
+        public static string Leaderboard_LeagueIntermediate {
+            get {
+                return ResourceManager.GetString("Leaderboard_LeagueIntermediate", resourceCulture);
+            }
+        }
     }
 }

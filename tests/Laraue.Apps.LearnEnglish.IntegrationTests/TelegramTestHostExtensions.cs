@@ -26,5 +26,16 @@ public static class TelegramTestHostExtensions
             
             dbContext.SaveChanges();
         }
+
+        public void InsertRangeIntoDb<T>(IEnumerable<T> entities) where T : class
+        {
+            using var scope = telegramTestHost.CreateScope();
+
+            var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+            dbContext.AddRange(entities);
+
+            dbContext.SaveChanges();
+        }
     }
 }

@@ -56,6 +56,7 @@ public class LeaderboardTests : IntegrationTest
         Assert.Equal(
             """
             <b>🏆 Leaderboard · this week</b>
+            🌱 Beginner league · words left to 🌳 Intermediate: 1,000
             +3 for a right answer, −1 for a wrong one
 
             🥇 Alice · 15 pts · 100% correct
@@ -71,6 +72,56 @@ public class LeaderboardTests : IntegrationTest
         Assert.Equal("✅ This week", buttons[0][0].Item1);
         Assert.Equal("This month", buttons[0][1].Item1);
         Assert.Equal(("📊 My Progress", "stat"), buttons[1][0]);
+    }
+
+    [Fact]
+    public async Task Leaderboard_ShouldShowOnlyTheViewersLeague()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var (ru, _) = Languages();
+        var words = WordsOfBothPairs(telegramTestHost, 1000);
+        var beforeWeek = WeekStart.AddDays(-1);
+
+        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me", nameMode: LeaderboardNameMode.FirstName);
+        var anna = AddUser(telegramTestHost, 2, "Anna", nameMode: LeaderboardNameMode.FirstName);
+        var olga = AddUser(telegramTestHost, 3, "Olga", nameMode: LeaderboardNameMode.FirstName);
+        var bob = AddUser(telegramTestHost, 4, "Bob", nameMode: LeaderboardNameMode.FirstName);
+        var dan = AddUser(telegramTestHost, 5, "Dan", nameMode: LeaderboardNameMode.FirstName);
+        foreach (var user in new[] { me, anna, olga })
+            AddLearnedWords(telegramTestHost, user, ru, words, beforeWeek);
+        // One word short of the league.
+        AddLearnedWords(telegramTestHost, bob, ru, words[..999], beforeWeek);
+        // Enough words, but learned this week: the league moves up at the next reset.
+        AddLearnedWords(telegramTestHost, dan, ru, words, Now);
+        foreach (var user in new[] { me, anna, olga, bob, dan })
+            AddAnswers(telegramTestHost, user, Now, correct: 1, wrong: 0);
+
+        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
+
+        var text = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!;
+        Assert.Contains("🌳 Intermediate league", text);
+        Assert.Contains("Anna · 3 pts", text);
+        Assert.Contains("Olga · 3 pts", text);
+        Assert.Contains("Me <b>(you)</b> · 3 pts", text);
+        Assert.DoesNotContain("Bob", text);
+        Assert.DoesNotContain("Dan", text);
+    }
+
+    [Fact]
+    public async Task Leaderboard_ShouldCountAWordLearnedInTwoPairsOnce()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var (ru, de) = Languages();
+        var words = WordsOfBothPairs(telegramTestHost, 999);
+        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
+        AddLearnedWords(telegramTestHost, me, ru, words[..600], WeekStart.AddDays(-1));
+        AddLearnedWords(telegramTestHost, me, de, words, WeekStart.AddDays(-1));
+
+        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
+
+        Assert.Contains(
+            "🌱 Beginner league · words left to 🌳 Intermediate: 1",
+            telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
     }
 
     [Fact]
@@ -273,6 +324,42 @@ public class LeaderboardTests : IntegrationTest
         };
         host.InsertIntoDb(user);
         return user;
+    }
+
+    private static (long Ru, long De) Languages()
+    {
+        var languages = DefaultContextData.GetWordLanguages();
+        return (languages.GetId("ru"), languages.GetId("de"));
+    }
+
+    // Words translated to both Russian and German, so they can be learned in both pairs.
+    private static long[] WordsOfBothPairs(AppTelegramTestHost host, int count)
+    {
+        var (ru, de) = Languages();
+        return host.GetFromDb(db => db.Translations
+            .Where(t => t.LanguageId == ru)
+            .Select(t => t.WordId)
+            .Intersect(db.Translations.Where(t => t.LanguageId == de).Select(t => t.WordId))
+            .OrderBy(id => id)
+            .Take(count)
+            .ToArray());
+    }
+
+    private static void AddLearnedWords(
+        AppTelegramTestHost host,
+        User user,
+        long languageId,
+        IEnumerable<long> wordIds,
+        DateTime learnedAt)
+    {
+        host.InsertRangeIntoDb(wordIds.Select(id => new LearnedTranslation
+        {
+            UserId = user.Id,
+            WordId = id,
+            LanguageId = languageId,
+            WinStreakCount = 3,
+            LearnedAt = learnedAt,
+        }));
     }
 
     private static void AddAnswers(

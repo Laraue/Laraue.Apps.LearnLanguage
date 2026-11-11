@@ -108,9 +108,32 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         int count,
         CancellationToken ct = default)
     {
-        // Points per user who answered in the period. Each query below aggregates it in the database, so only
-        // the shown rows come back, however many users play.
-        var scores = GetScores(context.UserQuizQuestions, since);
+        // The league is fixed for the period: by the words learned before it started.
+        var learnedWords = await context.LearnedTranslations
+            .Where(t => t.UserId == userId && t.LearnedAt < since)
+            .Select(t => t.WordId)
+            .Distinct()
+            .CountAsync(ct);
+        var league = Leagues.For(learnedWords);
+
+        // Users who answered in the period and are in the Intermediate league. Only the period's players are
+        // counted, so the (user_id, learned_at) index serves it.
+        var players = context.UserQuizQuestions
+            .Where(x => x.AnsweredAt >= since)
+            .Select(x => x.Quiz.UserId)
+            .Distinct();
+        var intermediate = context.LearnedTranslations
+            .Where(t => players.Contains(t.UserId) && t.LearnedAt < since)
+            .GroupBy(t => t.UserId)
+            .Where(g => g.Select(t => t.WordId).Distinct().Count() >= Leagues.IntermediateMinWords)
+            .Select(g => g.Key);
+        var leagueQuestions = league == League.Intermediate
+            ? context.UserQuizQuestions.Where(x => intermediate.Contains(x.Quiz.UserId))
+            : context.UserQuizQuestions.Where(x => !intermediate.Contains(x.Quiz.UserId));
+
+        // Points per user of the league who answered in the period. Each query below aggregates it in the
+        // database, so only the shown rows come back, however many users play.
+        var scores = GetScores(leagueQuestions, since);
 
         var top = await scores
             .OrderByDescending(x => x.Points)
@@ -159,6 +182,8 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         }
 
         return new Leaderboard(
+            league,
+            learnedWords,
             top.Select(ToRow).ToArray(),
             me is null ? null : ToRow(me),
             playersCount);

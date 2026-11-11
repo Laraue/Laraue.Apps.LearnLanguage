@@ -148,6 +148,11 @@ public class StatsService(
         tmb.AppendRow($"<b>{string.Format(
                 Stats.Leaderboard_Title,
                 request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week)}</b>")
+            .AppendRow(board.League == League.Intermediate
+                ? Stats.Leaderboard_LeagueIntermediate
+                : string.Format(
+                    Stats.Leaderboard_LeagueBeginner,
+                    Number(Leagues.IntermediateMinWords - board.LearnedWords)))
             .AppendRow(Stats.Leaderboard_Scoring)
             .AppendRow();
 
