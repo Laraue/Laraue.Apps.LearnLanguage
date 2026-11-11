@@ -87,7 +87,7 @@
         <value>🙈 Ваше имя скрыто от других. Показать его можно в ⚙️ Настройках.</value>
     </data>
     <data name="Leaderboard_LeagueBeginner" xml:space="preserve">
-        <value>🌱 Лига новичков · до лиги 🌳 продолжающих осталось слов: {0}</value>
+        <value>🌱 Лига новичков · до следующей лиги 🌳 осталось слов: {0}</value>
     </data>
     <data name="Leaderboard_LeagueIntermediate" xml:space="preserve">
         <value>🌳 Лига продолжающих</value>
