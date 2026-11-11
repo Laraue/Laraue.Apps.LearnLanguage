@@ -37,7 +37,7 @@ public interface IAchievementService
 /// <param name="Players">How many users have finished a quiz.</param>
 public record AchievementsOverview(
     IReadOnlyList<AchievementProgress> Items,
-    IReadOnlyDictionary<(Achievement Achievement, byte Level), int> Holders,
+    IReadOnlyDictionary<AchievementLevel, int> Holders,
     int Players);
 
 /// <param name="Achievement">The achievement.</param>

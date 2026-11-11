@@ -141,7 +141,7 @@ public sealed class AchievementsScreen(
 
     private static string Rarity(AchievementsOverview overview, AchievementProgress item, int level) =>
         AchievementCatalog.Rarity(
-            overview.Holders.GetValueOrDefault((item.Achievement, (byte)level)),
+            overview.Holders.GetValueOrDefault(new AchievementLevel(item.Achievement, (byte)level)),
             overview.Players,
             held: item.Level >= level);
 

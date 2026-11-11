@@ -27,7 +27,7 @@ public sealed class AchievementService(
                 .Where(a => a.UserId == userId)
                 .Select(a => new { a.Achievement, a.Level })
                 .ToListAsync(ct))
-            .Select(a => (a.Achievement, a.Level))
+            .Select(a => new AchievementLevel(a.Achievement, a.Level))
             .ToHashSet();
 
         var now = dateTimeProvider.UtcNow;
@@ -38,12 +38,12 @@ public sealed class AchievementService(
         {
             // Nothing to count when every level is already held.
             var levels = Enumerable.Range(1, definition.Thresholds.Length).Select(l => (byte)l);
-            if (levels.All(level => held.Contains((achievement, level))))
+            if (levels.All(level => held.Contains(new AchievementLevel(achievement, level))))
                 continue;
 
             var value = await values[achievement]();
             granted.AddRange(definition.LevelsReached(value)
-                .Where(level => !held.Contains((achievement, level)))
+                .Where(level => !held.Contains(new AchievementLevel(achievement, level)))
                 .Select(level => new UserAchievement
                 {
                     UserId = userId,
@@ -62,7 +62,7 @@ public sealed class AchievementService(
         // Several levels at once (catching up): tell about the highest one.
         var highest = granted
             .GroupBy(a => a.Achievement)
-            .Select(g => (Achievement: g.Key, Level: g.Max(a => a.Level)))
+            .Select(g => new AchievementLevel(g.Key, g.Max(a => a.Level)))
             .ToArray();
         return await GetRarityAsync(highest, ct);
     }
@@ -121,7 +121,7 @@ public sealed class AchievementService(
                 .GroupBy(a => new { a.Achievement, a.Level })
                 .Select(g => new { g.Key.Achievement, g.Key.Level, Count = g.Count() })
                 .ToListAsync(ct))
-            .ToDictionary(x => (x.Achievement, x.Level), x => x.Count);
+            .ToDictionary(x => new AchievementLevel(x.Achievement, x.Level), x => x.Count);
 
         return new AchievementsOverview(items, holders, await CountPlayersAsync(ct));
     }
@@ -221,7 +221,7 @@ public sealed class AchievementService(
     }
 
     private async Task<IReadOnlyList<EarnedAchievement>> GetRarityAsync(
-        IReadOnlyCollection<(Achievement Achievement, byte Level)> achievements,
+        IReadOnlyCollection<AchievementLevel> achievements,
         CancellationToken ct)
     {
         var kinds = achievements.Select(a => a.Achievement).ToArray();

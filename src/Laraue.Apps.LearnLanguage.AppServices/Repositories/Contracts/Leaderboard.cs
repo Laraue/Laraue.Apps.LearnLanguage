@@ -1,3 +1,4 @@
+using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
@@ -32,7 +33,7 @@ public record LeaderboardRow(
     Guid UserId,
     TelegramProfile Profile,
     LeaderboardNameMode NameMode,
-    (Achievement Achievement, byte Level)? Title,
+    AchievementLevel? Title,
     int Correct,
     int Wrong)
 {
