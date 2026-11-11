@@ -1,9 +1,7 @@
 using Laraue.Apps.LearnLanguage.AppServices;
-using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
 using Laraue.Telegram.NET.Abstractions.Request;
-using Laraue.Telegram.NET.Core.Extensions;
 using Laraue.Telegram.NET.Core.Routing;
 using Laraue.Telegram.NET.Core.Routing.Attributes;
 
@@ -30,10 +28,6 @@ public class StatController : TelegramController
         [FromQuery] LeaderboardRequest leaderboardRequest,
         CancellationToken ct)
     {
-        return _statsService.SendLeaderboardAsync(
-            ReplyData.FromRequest(request),
-            leaderboardRequest,
-            TelegramProfile.From(request.Update.GetUser()),
-            ct);
+        return _statsService.SendLeaderboardAsync(ReplyData.FromRequest(request), leaderboardRequest, ct);
     }
 }

@@ -20,8 +20,7 @@ public class StatsService(
     IStatsRepository statsRepository,
     IAdminRepository adminRepository,
     IDateTimeProvider dateTimeProvider,
-    IBotUsernameProvider botUsernameProvider,
-    IUserRepository userRepository) : IStatsService
+    IBotUsernameProvider botUsernameProvider) : IStatsService
 {
     private const int BarLength = 10;
     private const int LeaderboardSize = 10;
@@ -133,13 +132,8 @@ public class StatsService(
     public async Task SendLeaderboardAsync(
         ReplyData replyData,
         LeaderboardRequest request,
-        TelegramProfile? profile,
         CancellationToken ct = default)
     {
-        // The viewer's own row shows their current name.
-        if (profile is not null)
-            await userRepository.UpdateProfileAsync(replyData.UserId, profile, ct);
-
         var today = DateOnly.FromDateTime(dateTimeProvider.UtcNow);
         var since = request.Month
             ? new DateOnly(today.Year, today.Month, 1)
