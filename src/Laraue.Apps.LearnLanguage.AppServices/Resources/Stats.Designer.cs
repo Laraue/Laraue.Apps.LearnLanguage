@@ -211,5 +211,77 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("ShareTextFirstWord", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🏆 Leaderboard · {0}.
+        /// </summary>
+        public static string Leaderboard_Title {
+            get {
+                return ResourceManager.GetString("Leaderboard_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to this week.
+        /// </summary>
+        public static string Leaderboard_Week {
+            get {
+                return ResourceManager.GetString("Leaderboard_Week", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to this month.
+        /// </summary>
+        public static string Leaderboard_Month {
+            get {
+                return ResourceManager.GetString("Leaderboard_Month", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to +3 for a right answer, −1 for a wrong one.
+        /// </summary>
+        public static string Leaderboard_Scoring {
+            get {
+                return ResourceManager.GetString("Leaderboard_Scoring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} · {2} pts · {3}% correct.
+        /// </summary>
+        public static string Leaderboard_Row {
+            get {
+                return ResourceManager.GetString("Leaderboard_Row", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (you).
+        /// </summary>
+        public static string Leaderboard_You {
+            get {
+                return ResourceManager.GetString("Leaderboard_You", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hardly anyone has played yet. Answer a few questions and take the lead!.
+        /// </summary>
+        public static string Leaderboard_FewPlayers {
+            get {
+                return ResourceManager.GetString("Leaderboard_FewPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🙈 Your name is hidden from others. You can show it in ⚙️ Settings..
+        /// </summary>
+        public static string Leaderboard_NameHidden {
+            get {
+                return ResourceManager.GetString("Leaderboard_NameHidden", resourceCulture);
+            }
+        }
     }
 }

@@ -62,4 +62,19 @@
     <data name="ShareProgress" xml:space="preserve">
         <value>📤 Поделиться прогрессом</value>
     </data>
+    <data name="Leaderboard" xml:space="preserve">
+        <value>🏆 Рейтинг</value>
+    </data>
+    <data name="Leaderboard_Week" xml:space="preserve">
+        <value>За неделю</value>
+    </data>
+    <data name="Leaderboard_Month" xml:space="preserve">
+        <value>За месяц</value>
+    </data>
+    <data name="ShowNameOnLeaderboard" xml:space="preserve">
+        <value>🏆 Показывать моё имя в рейтинге</value>
+    </data>
+    <data name="HideNameOnLeaderboard" xml:space="preserve">
+        <value>🙈 Скрыть моё имя в рейтинге</value>
+    </data>
 </root>

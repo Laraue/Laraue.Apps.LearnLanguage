@@ -69,4 +69,28 @@
     <data name="ShareTextFirstWord" xml:space="preserve">
         <value>I've learned my first English word with @{0}</value>
     </data>
+    <data name="Leaderboard_Title" xml:space="preserve">
+        <value>🏆 Leaderboard · {0}</value>
+    </data>
+    <data name="Leaderboard_Week" xml:space="preserve">
+        <value>this week</value>
+    </data>
+    <data name="Leaderboard_Month" xml:space="preserve">
+        <value>this month</value>
+    </data>
+    <data name="Leaderboard_Scoring" xml:space="preserve">
+        <value>+3 for a right answer, −1 for a wrong one</value>
+    </data>
+    <data name="Leaderboard_Row" xml:space="preserve">
+        <value>{0} {1} · {2} pts · {3}% correct</value>
+    </data>
+    <data name="Leaderboard_You" xml:space="preserve">
+        <value>(you)</value>
+    </data>
+    <data name="Leaderboard_FewPlayers" xml:space="preserve">
+        <value>Hardly anyone has played yet. Answer a few questions and take the lead!</value>
+    </data>
+    <data name="Leaderboard_NameHidden" xml:space="preserve">
+        <value>🙈 Your name is hidden from others. You can show it in ⚙️ Settings.</value>
+    </data>
 </root>

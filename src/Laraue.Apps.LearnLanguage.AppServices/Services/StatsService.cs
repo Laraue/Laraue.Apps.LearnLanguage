@@ -23,6 +23,10 @@ public class StatsService(
     IBotUsernameProvider botUsernameProvider) : IStatsService
 {
     private const int BarLength = 10;
+    private const int LeaderboardSize = 10;
+
+    // Fewer players than this and a ranking means little, so the board invites to play instead.
+    private const int MinLeaderboardPlayers = 3;
 
     public async Task SendStatsAsync(ReplyData replyData, StatsRequest request, CancellationToken ct = default)
     {
@@ -104,12 +108,11 @@ public class StatsService(
             .ToInlineKeyboardButton(QuizMode.ButtonName));
         tmb.AddInlineKeyboardButtons(quizButtons);
 
+        var socialButtons = new List<InlineKeyboardButton>();
         if (await botUsernameProvider.GetUsernameAsync(ct) is { } botUsername)
-        {
-            tmb.AddInlineKeyboardButtons([
-                InlineKeyboardButton.WithUrl(Buttons.ShareProgress, GetShareUrl(progress, botUsername))
-            ]);
-        }
+            socialButtons.Add(InlineKeyboardButton.WithUrl(Buttons.ShareProgress, GetShareUrl(progress, botUsername)));
+        socialButtons.Add(InlineKeyboardButton.WithCallbackData(Buttons.Leaderboard, TelegramRoutes.Leaderboard));
+        tmb.AddInlineKeyboardButtons(socialButtons);
 
         // Other pairs the user has practised, to switch the screen to them.
         foreach (var other in progress.PracticedPairs.Where(p => p.LanguageId != progress.LanguageId))
@@ -124,6 +127,80 @@ public class StatsService(
         tmb.AddMainMenuButton();
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
     }
+
+    public async Task SendLeaderboardAsync(
+        ReplyData replyData,
+        LeaderboardRequest request,
+        CancellationToken ct = default)
+    {
+        var today = DateOnly.FromDateTime(dateTimeProvider.UtcNow);
+        var since = request.Month
+            ? new DateOnly(today.Year, today.Month, 1)
+            : today.AddDays(-((7 + (int)today.DayOfWeek - (int)DayOfWeek.Monday) % 7));
+        var board = await statsRepository.GetLeaderboardAsync(
+            replyData.UserId,
+            since.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
+            LeaderboardSize,
+            ct);
+
+        var tmb = new TelegramMessageBuilder();
+        tmb.AppendRow($"<b>{string.Format(
+                Stats.Leaderboard_Title,
+                request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week)}</b>")
+            .AppendRow(Stats.Leaderboard_Scoring)
+            .AppendRow();
+
+        if (board.PlayersCount < MinLeaderboardPlayers)
+        {
+            tmb.AppendRow(Stats.Leaderboard_FewPlayers);
+            if (board.Me is { } me)
+                tmb.AppendRow().AppendRow(LeaderboardRow(me, replyData.UserId));
+        }
+        else
+        {
+            foreach (var row in board.Top)
+                tmb.AppendRow(LeaderboardRow(row, replyData.UserId));
+            if (board.Me is { } me && me.Rank > LeaderboardSize)
+                tmb.AppendRow("…").AppendRow(LeaderboardRow(me, replyData.UserId));
+        }
+
+        if (board.Me is not null && !board.ShowMyName)
+            tmb.AppendRow().AppendRow(Stats.Leaderboard_NameHidden);
+
+        var periodPath = new CallbackRoutePath(TelegramRoutes.Leaderboard);
+        tmb.AddInlineKeyboardButtons([
+            periodPath
+                .WithQueryParameter(ParameterNames.Month, false)
+                .ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Week, !request.Month)),
+            periodPath
+                .WithQueryParameter(ParameterNames.Month, true)
+                .ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Month, request.Month)),
+        ]);
+        tmb.AddInlineKeyboardButtons([
+            InlineKeyboardButton.WithCallbackData(Buttons.Stat, TelegramRoutes.Stat)
+        ]);
+        tmb.AddMainMenuButton();
+
+        await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+    }
+
+    private static string LeaderboardRow(LeaderboardRow row, Guid viewerId)
+    {
+        var place = row.Rank switch
+        {
+            1 => "🥇",
+            2 => "🥈",
+            3 => "🥉",
+            _ => $"{row.Rank}.",
+        };
+        // The viewer sees their own name as others do, to know how they look on the board.
+        var name = LeaderboardNames.Format(row.FirstName, row.ShowName);
+        if (row.UserId == viewerId)
+            name += $" <b>{Stats.Leaderboard_You}</b>";
+        return string.Format(Stats.Leaderboard_Row, place, name, Number(row.Points), Percent(row.Correct, row.Answers));
+    }
+
+    private static string Selected(string title, bool selected) => selected ? $"✅ {title}" : title;
 
     /// <summary>
     /// A Telegram share link: Telegram opens its share dialog with this message and a link to the bot. The link's

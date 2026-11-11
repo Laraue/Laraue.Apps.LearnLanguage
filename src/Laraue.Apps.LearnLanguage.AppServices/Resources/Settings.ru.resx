@@ -41,4 +41,13 @@
     <data name="RemindersOff" xml:space="preserve">
         <value>выключено</value>
     </data>
+    <data name="LeaderboardName" xml:space="preserve">
+        <value>🏆 Имя в рейтинге: {0}</value>
+    </data>
+    <data name="LeaderboardNameShown" xml:space="preserve">
+        <value>показано</value>
+    </data>
+    <data name="LeaderboardNameHidden" xml:space="preserve">
+        <value>скрыто</value>
+    </data>
 </root>

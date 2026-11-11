@@ -17,7 +17,8 @@ public class UserRepository(DatabaseContext context) : IUserRepository
                 x.LanguageToLearnId,
                 x.LanguageToLearn.Name,
                 x.LanguageToLearn.Description,
-                x.ReminderTime))
+                x.ReminderTime,
+                x.ShowNameOnLeaderboard))
             .FirstAsyncEF(ct);
     }
 
@@ -29,6 +30,13 @@ public class UserRepository(DatabaseContext context) : IUserRepository
             .ExecuteUpdateAsync(x => x
                 .SetProperty(u => u.ReminderTime, reminderTime)
                 .SetProperty(u => u.BotBlockedAt, u => reminderTime != null ? null : u.BotBlockedAt), ct);
+    }
+
+    public Task SetShowNameOnLeaderboardAsync(Guid userId, bool show, CancellationToken ct = default)
+    {
+        return context.Users
+            .Where(x => x.Id == userId)
+            .ExecuteUpdateAsync(x => x.SetProperty(u => u.ShowNameOnLeaderboard, show), ct);
     }
 
     public Task SetLanguageCodeAsync(Guid userId, string code, CancellationToken ct = default)

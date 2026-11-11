@@ -95,6 +95,10 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext
         
         modelBuilder.Entity<UserQuizQuestion>()
             .HasIndex(x => x.WordId);
+
+        // The leaderboard counts answers of a period across all users.
+        modelBuilder.Entity<UserQuizQuestion>()
+            .HasIndex(x => x.AnsweredAt);
         
         modelBuilder.Entity<UtmLabel>()
             .HasKey(x => new { x.UserId, x.Name });

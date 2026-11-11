@@ -62,4 +62,28 @@
     <data name="ShareTextFirstWord" xml:space="preserve">
         <value>Выучено первое английское слово · учу с @{0}</value>
     </data>
+    <data name="Leaderboard_Title" xml:space="preserve">
+        <value>🏆 Рейтинг · {0}</value>
+    </data>
+    <data name="Leaderboard_Week" xml:space="preserve">
+        <value>эта неделя</value>
+    </data>
+    <data name="Leaderboard_Month" xml:space="preserve">
+        <value>этот месяц</value>
+    </data>
+    <data name="Leaderboard_Scoring" xml:space="preserve">
+        <value>+3 за верный ответ, −1 за ошибку</value>
+    </data>
+    <data name="Leaderboard_Row" xml:space="preserve">
+        <value>{0} {1} · {2} очк. · верно {3}%</value>
+    </data>
+    <data name="Leaderboard_You" xml:space="preserve">
+        <value>(вы)</value>
+    </data>
+    <data name="Leaderboard_FewPlayers" xml:space="preserve">
+        <value>Пока почти никто не играл. Ответьте на несколько вопросов и займите первое место!</value>
+    </data>
+    <data name="Leaderboard_NameHidden" xml:space="preserve">
+        <value>🙈 Ваше имя скрыто от других. Показать его можно в ⚙️ Настройках.</value>
+    </data>
 </root>

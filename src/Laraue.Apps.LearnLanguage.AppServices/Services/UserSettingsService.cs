@@ -41,6 +41,9 @@ public class UserSettingsService(
                 settings.ReminderTime is { } reminderTime
                     ? $"<b>{string.Format(Settings.RemindersOn, reminderTime.ToString("HH:mm"))}</b>"
                     : $"<b>{Settings.RemindersOff}</b>"))
+            .AppendRow(string.Format(
+                Settings.LeaderboardName,
+                $"<b>{(settings.ShowNameOnLeaderboard ? Settings.LeaderboardNameShown : Settings.LeaderboardNameHidden)}</b>"))
             .AppendRow();
 
         tmb.AddInlineKeyboardButtons([
@@ -55,6 +58,14 @@ public class UserSettingsService(
                 .ToInlineKeyboardButton(settings.ReminderTime is null
                     ? Buttons.TurnOnReminders
                     : Buttons.TurnOffReminders)
+        ]);
+
+        tmb.AddInlineKeyboardButtons([
+            new CallbackRoutePath(TelegramRoutes.LeaderboardNameSettings, RouteMethod.Post)
+                .WithQueryParameter(ParameterNames.Enable, !settings.ShowNameOnLeaderboard)
+                .ToInlineKeyboardButton(settings.ShowNameOnLeaderboard
+                    ? Buttons.HideNameOnLeaderboard
+                    : Buttons.ShowNameOnLeaderboard)
         ]);
 
         tmb.AddBackMenuButton(TelegramRoutes.Menu);
@@ -117,6 +128,15 @@ public class UserSettingsService(
             : (TimeOnly?)null;
 
         await repository.SetReminderTimeAsync(replyData.UserId, reminderTime, ct);
+        await HandleSettingsViewAsync(replyData, ct);
+    }
+
+    public async Task UpdateLeaderboardNameSettingsAsync(
+        ReplyData replyData,
+        UpdateLeaderboardNameSettingsRequest request,
+        CancellationToken ct = default)
+    {
+        await repository.SetShowNameOnLeaderboardAsync(replyData.UserId, request.Show, ct);
         await HandleSettingsViewAsync(replyData, ct);
     }
 

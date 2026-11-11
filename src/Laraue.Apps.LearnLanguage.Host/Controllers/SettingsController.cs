@@ -41,6 +41,15 @@ public class SettingsController(IUserSettingsService service) : TelegramControll
         return service.UpdateRemindersSettingsAsync(ReplyData.FromRequest(context), request, ct);
     }
 
+    [TelegramCallbackRoute(TelegramRoutes.LeaderboardNameSettings, RouteMethod.Post)]
+    public Task UpdateLeaderboardNameSettingsAsync(
+        RequestContext context,
+        [FromQuery] UpdateLeaderboardNameSettingsRequest request,
+        CancellationToken ct)
+    {
+        return service.UpdateLeaderboardNameSettingsAsync(ReplyData.FromRequest(context), request, ct);
+    }
+
     [TelegramCallbackRoute(TelegramRoutes.LearnLanguageSettings, RouteMethod.Post)]
     public async Task UpdateLearnLanguageSettingsAsync(
         RequestContext context,

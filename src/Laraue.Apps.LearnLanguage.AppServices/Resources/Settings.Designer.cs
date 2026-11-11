@@ -148,5 +148,32 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("RemindersOff", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🏆 Name in the leaderboard: {0}.
+        /// </summary>
+        public static string LeaderboardName {
+            get {
+                return ResourceManager.GetString("LeaderboardName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to shown.
+        /// </summary>
+        public static string LeaderboardNameShown {
+            get {
+                return ResourceManager.GetString("LeaderboardNameShown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hidden.
+        /// </summary>
+        public static string LeaderboardNameHidden {
+            get {
+                return ResourceManager.GetString("LeaderboardNameHidden", resourceCulture);
+            }
+        }
     }
 }

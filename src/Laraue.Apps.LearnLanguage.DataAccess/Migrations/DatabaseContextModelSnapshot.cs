@@ -13027,6 +13027,10 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("time without time zone")
                         .HasColumnName("reminder_time");
 
+                    b.Property<bool>("ShowNameOnLeaderboard")
+                        .HasColumnType("boolean")
+                        .HasColumnName("show_name_on_leaderboard");
+
                     b.Property<byte>("ShowWordsMode")
                         .HasColumnType("smallint")
                         .HasColumnName("show_words_mode");
@@ -13164,6 +13168,9 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_user_quiz_questions");
+
+                    b.HasIndex("AnsweredAt")
+                        .HasDatabaseName("ix_user_quiz_questions_answered_at");
 
                     b.HasIndex("QuizId")
                         .HasDatabaseName("ix_user_quiz_questions_quiz_id");

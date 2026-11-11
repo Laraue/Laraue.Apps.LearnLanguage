@@ -101,6 +101,64 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
             await GetMostMissedWordsAsync(userId, lang, MostMissedOnScreen, ct));
     }
 
+    public async Task<Leaderboard> GetLeaderboardAsync(
+        Guid userId,
+        DateTime since,
+        int count,
+        CancellationToken ct = default)
+    {
+        // One row per user who answered in the period, a few hundred at most, so ranking happens in memory.
+        var scores = await context.UserQuizQuestions
+            .Where(x => x.AnsweredAt >= since)
+            .Where(x => x.Status == UserQuizQuestionStatus.Correct || x.Status == UserQuizQuestionStatus.Incorrect)
+            .GroupBy(x => x.Quiz.UserId)
+            .Select(g => new
+            {
+                UserId = g.Key,
+                Correct = g.Count(x => x.Status == UserQuizQuestionStatus.Correct),
+                Wrong = g.Count(x => x.Status == UserQuizQuestionStatus.Incorrect),
+            })
+            .ToArrayAsync(ct);
+
+        var ranked = scores
+            .OrderByDescending(x => x.Correct * LeaderboardRow.PointsPerCorrect - x.Wrong * LeaderboardRow.PointsPerWrong)
+            .ThenByDescending(x => x.Correct)
+            .ThenBy(x => x.UserId)
+            .Select((x, i) => new { Rank = i + 1, x.UserId, x.Correct, x.Wrong })
+            .ToArray();
+
+        var shown = ranked.Take(count).ToList();
+        var me = ranked.FirstOrDefault(x => x.UserId == userId);
+        if (me is not null && me.Rank > count)
+            shown.Add(me);
+
+        var userIds = shown.Select(x => x.UserId).Append(userId).ToArray();
+        var users = await context.Users
+            .Where(u => userIds.Contains(u.Id))
+            .Select(u => new { u.Id, u.TelegramFirstName, u.ShowNameOnLeaderboard })
+            .ToDictionaryAsync(u => u.Id, ct);
+
+        var rows = shown
+            .Select(x =>
+            {
+                var user = users.GetValueOrDefault(x.UserId);
+                return new LeaderboardRow(
+                    x.Rank,
+                    x.UserId,
+                    user?.TelegramFirstName,
+                    user?.ShowNameOnLeaderboard ?? false,
+                    x.Correct,
+                    x.Wrong);
+            })
+            .ToArray();
+
+        return new Leaderboard(
+            rows.Where(r => r.Rank <= count).ToArray(),
+            rows.FirstOrDefault(r => r.UserId == userId),
+            ranked.Length,
+            users.GetValueOrDefault(userId)?.ShowNameOnLeaderboard ?? false);
+    }
+
     public async Task<MissedWord[]> GetMostMissedWordsAsync(
         Guid userId,
         long languageId,
