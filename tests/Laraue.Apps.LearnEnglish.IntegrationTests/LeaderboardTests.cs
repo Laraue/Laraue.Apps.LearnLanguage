@@ -74,7 +74,8 @@ public class LeaderboardTests : IntegrationTest
         var buttons = Buttons(request);
         Assert.Equal("✅ This week", buttons[0][0].Item1);
         Assert.Equal("This month", buttons[0][1].Item1);
-        Assert.Equal(("📊 My Progress", "stat"), buttons[1][0]);
+        Assert.Equal(["✅ 🌱 Beginner", "🌳 Intermediate"], buttons[1].Select(b => b.Item1));
+        Assert.Equal(("📊 My Progress", "stat"), buttons[2][0]);
     }
 
     [Fact]
@@ -105,6 +106,22 @@ public class LeaderboardTests : IntegrationTest
         Assert.Contains("Olga · 3 pts", text);
         Assert.Contains("Me <b>(you)</b> · 3 pts", text);
         Assert.DoesNotContain("Bob", text);
+
+        // The other league's board, for the month: its players, without the viewer's row.
+        var buttons = Buttons(telegramTestHost.Requests().Single<EditMessageTextRequest>());
+        await telegramTestHost.SendUpdateAsync(Callback(buttons[0][1].Item2!));
+        var monthButtons = Buttons(telegramTestHost.Requests().Last<EditMessageTextRequest>());
+        await telegramTestHost.SendUpdateAsync(Callback(monthButtons[1][0].Item2!));
+
+        var beginners = telegramTestHost.Requests().Last<EditMessageTextRequest>();
+        Assert.StartsWith(
+            "<b>🏆 Leaderboard · this month · 🌱 Beginner league</b>\n+3 for a right answer",
+            beginners.Text);
+        Assert.Contains("🥇 Bob · 3 pts", beginners.Text);
+        Assert.DoesNotContain("(you)", beginners.Text);
+        Assert.DoesNotContain("Hardly anyone", beginners.Text);
+        Assert.Equal(["This week", "✅ This month"], Buttons(beginners)[0].Select(b => b.Item1));
+        Assert.Equal(["✅ 🌱 Beginner", "🌳 Intermediate"], Buttons(beginners)[1].Select(b => b.Item1));
     }
 
     [Fact]

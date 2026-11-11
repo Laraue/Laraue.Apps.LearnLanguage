@@ -105,4 +105,7 @@
     <data name="Leaderboard_LeagueBeginnerName" xml:space="preserve">
         <value>🌱 Beginner league</value>
     </data>
+    <data name="Leaderboard_NoPlayers" xml:space="preserve">
+        <value>Nobody in this league has played yet.</value>
+    </data>
 </root>

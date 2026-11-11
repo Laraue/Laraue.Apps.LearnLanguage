@@ -1,3 +1,4 @@
+using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Repositories;
@@ -16,8 +17,14 @@ public interface IStatsRepository
     Task<MissedWord[]> GetMostMissedWordsAsync(Guid userId, long languageId, int count, CancellationToken ct = default);
 
     /// <summary>
-    /// Users of the viewer's league ranked by points for answers given since <paramref name="since"/>, all
-    /// language pairs together: the first <paramref name="count"/> of them and the viewer's own row.
+    /// Users of a league ranked by points for answers given since <paramref name="since"/>, all language pairs
+    /// together: the first <paramref name="count"/> of them and, when it's the viewer's league, their own row.
     /// </summary>
-    Task<Leaderboard> GetLeaderboardAsync(Guid userId, DateTime since, int count, CancellationToken ct = default);
+    /// <param name="league">The league to show; the viewer's own one when null.</param>
+    Task<Leaderboard> GetLeaderboardAsync(
+        Guid userId,
+        League? league,
+        DateTime since,
+        int count,
+        CancellationToken ct = default);
 }

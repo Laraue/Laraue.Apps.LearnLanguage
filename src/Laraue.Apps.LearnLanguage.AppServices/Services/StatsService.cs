@@ -142,6 +142,7 @@ public class StatsService(
             : today.AddDays(-((7 + (int)today.DayOfWeek - (int)DayOfWeek.Monday) % 7));
         var board = await statsRepository.GetLeaderboardAsync(
             replyData.UserId,
+            Enum.IsDefined((League)request.League) ? (League)request.League : null,
             since.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
             LeaderboardSize,
             ct);
@@ -153,12 +154,18 @@ public class StatsService(
             board.League == League.Intermediate
                 ? Stats.Leaderboard_LeagueIntermediate
                 : Stats.Leaderboard_LeagueBeginnerName)}</b>");
-        if (board.League == League.Beginner)
+        var isMyLeague = board.League == board.MyLeague;
+        if (isMyLeague && board.League == League.Beginner)
             tmb.AppendRow(BeginnerProgressLine(board));
         tmb.AppendRow(Stats.Leaderboard_Scoring)
             .AppendRow();
 
-        if (board.PlayersCount < MinLeaderboardPlayers)
+        if (!isMyLeague && board.PlayersCount == 0)
+        {
+            // Another league's board: nothing to invite to.
+            tmb.AppendRow(Stats.Leaderboard_NoPlayers);
+        }
+        else if (isMyLeague && board.PlayersCount < MinLeaderboardPlayers)
         {
             tmb.AppendRow(Stats.Leaderboard_FewPlayers);
             if (board.Me is { } me)
@@ -176,14 +183,19 @@ public class StatsService(
         if (board.Me is { } my && LeaderboardNames.GetName(my.NameMode, my.Profile) is null)
             tmb.AppendRow().AppendRow(Stats.Leaderboard_NameHidden);
 
-        var periodPath = new CallbackRoutePath(TelegramRoutes.Leaderboard);
+        // Each button keeps the other choice: a period of the shown league, a league for the shown period.
+        CallbackRoutePath Path(bool month, League league) => new CallbackRoutePath(TelegramRoutes.Leaderboard)
+            .WithQueryParameter(ParameterNames.Month, month)
+            .WithQueryParameter(ParameterNames.League, (int)league);
         tmb.AddInlineKeyboardButtons([
-            periodPath
-                .WithQueryParameter(ParameterNames.Month, false)
-                .ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Week, !request.Month)),
-            periodPath
-                .WithQueryParameter(ParameterNames.Month, true)
-                .ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Month, request.Month)),
+            Path(false, board.League).ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Week, !request.Month)),
+            Path(true, board.League).ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Month, request.Month)),
+        ]);
+        tmb.AddInlineKeyboardButtons([
+            Path(request.Month, League.Beginner).ToInlineKeyboardButton(
+                Selected(Buttons.Leaderboard_LeagueBeginner, board.League == League.Beginner)),
+            Path(request.Month, League.Intermediate).ToInlineKeyboardButton(
+                Selected(Buttons.Leaderboard_LeagueIntermediate, board.League == League.Intermediate)),
         ]);
         tmb.AddInlineKeyboardButtons([
             InlineKeyboardButton.WithCallbackData(Buttons.Stat, TelegramRoutes.Stat)

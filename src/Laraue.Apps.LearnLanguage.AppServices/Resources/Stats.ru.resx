@@ -98,4 +98,7 @@
     <data name="Leaderboard_LeagueBeginnerName" xml:space="preserve">
         <value>🌱 Лига новичков</value>
     </data>
+    <data name="Leaderboard_NoPlayers" xml:space="preserve">
+        <value>В этой лиге пока никто не играл.</value>
+    </data>
 </root>

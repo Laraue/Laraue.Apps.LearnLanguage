@@ -319,5 +319,14 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("Leaderboard_LeagueBeginnerName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nobody in this league has played yet..
+        /// </summary>
+        public static string Leaderboard_NoPlayers {
+            get {
+                return ResourceManager.GetString("Leaderboard_NoPlayers", resourceCulture);
+            }
+        }
     }
 }
