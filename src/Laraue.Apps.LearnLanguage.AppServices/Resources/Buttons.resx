@@ -111,4 +111,7 @@
     <data name="Achievements_NoTitle" xml:space="preserve">
         <value>Without a title</value>
     </data>
+    <data name="Achievements_ShowLocked" xml:space="preserve">
+        <value>🔒 Show locked</value>
+    </data>
 </root>

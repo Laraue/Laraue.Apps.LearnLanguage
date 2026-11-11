@@ -337,5 +337,14 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("Achievements_NoTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔒 Show locked.
+        /// </summary>
+        public static string Achievements_ShowLocked {
+            get {
+                return ResourceManager.GetString("Achievements_ShowLocked", resourceCulture);
+            }
+        }
     }
 }

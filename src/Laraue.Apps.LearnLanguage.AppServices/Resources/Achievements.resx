@@ -270,4 +270,10 @@
     <data name="Next" xml:space="preserve">
         <value>Next: {0} · {1}</value>
     </data>
+    <data name="LockedCount" xml:space="preserve">
+        <value>🔒 Still locked: {0}</value>
+    </data>
+    <data name="LockedTitle" xml:space="preserve">
+        <value>🔒 Locked achievements</value>
+    </data>
 </root>

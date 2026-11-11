@@ -104,4 +104,7 @@
     <data name="Achievements_NoTitle" xml:space="preserve">
         <value>Без титула</value>
     </data>
+    <data name="Achievements_ShowLocked" xml:space="preserve">
+        <value>🔒 Показать неполученные</value>
+    </data>
 </root>

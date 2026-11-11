@@ -13,6 +13,11 @@ public interface IAchievementsScreen
     Task SendListAsync(ReplyData replyData, CancellationToken ct = default);
 
     /// <summary>
+    /// The achievements the user hasn't earned any level of yet, with what they take.
+    /// </summary>
+    Task SendLockedAsync(ReplyData replyData, CancellationToken ct = default);
+
+    /// <summary>
     /// The earned level names the user can show next to their name on the leaderboard.
     /// </summary>
     Task SendTitlesAsync(ReplyData replyData, CancellationToken ct = default);
