@@ -5,8 +5,8 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 /// <summary>
 /// Users of the viewer's league ranked by points for a period, all language pairs together.
 /// </summary>
-/// <param name="League">The viewer's league, by the words they have learned now.</param>
-/// <param name="LearnedWords">Distinct words the viewer has learned now, in any pair.</param>
+/// <param name="League">The viewer's league, as the league job stored it.</param>
+/// <param name="LearnedWords">Distinct words the viewer has learned in any pair, as the league job counted them.</param>
 /// <param name="Top">The best users of the league, best first.</param>
 /// <param name="Me">The viewer's own row, null when they haven't answered in the period.</param>
 /// <param name="PlayersCount">How many users of the league answered in the period.</param>

@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using Laraue.Apps.LearnLanguage.AppServices.Services.Leagues;
+using Laraue.Apps.LearnLanguage.Contracts.Enums;
+using System.Globalization;
 using Laraue.Apps.LearnLanguage.AppServices.Extensions;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
@@ -152,7 +154,7 @@ public class StatsService(
                 ? Stats.Leaderboard_LeagueIntermediate
                 : string.Format(
                     Stats.Leaderboard_LeagueBeginner,
-                    Number(Leagues.IntermediateMinWords - board.LearnedWords)))
+                    Number(LeagueRules.IntermediateMinWords - board.LearnedWords)))
             .AppendRow(Stats.Leaderboard_Scoring)
             .AppendRow();
 

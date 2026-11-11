@@ -13027,6 +13027,14 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("leaderboard_name");
 
+                    b.Property<byte>("League")
+                        .HasColumnType("smallint")
+                        .HasColumnName("league");
+
+                    b.Property<int>("LearnedWords")
+                        .HasColumnType("integer")
+                        .HasColumnName("learned_words");
+
                     b.Property<TimeOnly?>("ReminderTime")
                         .HasColumnType("time without time zone")
                         .HasColumnName("reminder_time");

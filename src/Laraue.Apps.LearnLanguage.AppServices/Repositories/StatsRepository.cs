@@ -108,29 +108,12 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         int count,
         CancellationToken ct = default)
     {
-        // The league is live: by the words learned now. learned_at moves on every answer (a right answer to a
-        // learned word sets it to now, a wrong one clears it), so it can't tell what was learned at a date.
-        var learnedWords = await context.LearnedTranslations
-            .Where(t => t.UserId == userId && t.LearnedAt != null)
-            .Select(t => t.WordId)
-            .Distinct()
-            .CountAsync(ct);
-        var league = Leagues.For(learnedWords);
-
-        // Users who answered in the period and are in the Intermediate league now. Only the period's players
-        // are counted, so the (user_id, learned_at) index serves it.
-        var players = context.UserQuizQuestions
-            .Where(x => x.AnsweredAt >= since)
-            .Select(x => x.Quiz.UserId)
-            .Distinct();
-        var intermediate = context.LearnedTranslations
-            .Where(t => players.Contains(t.UserId) && t.LearnedAt != null)
-            .GroupBy(t => t.UserId)
-            .Where(g => g.Select(t => t.WordId).Distinct().Count() >= Leagues.IntermediateMinWords)
-            .Select(g => g.Key);
-        var leagueQuestions = league == League.Intermediate
-            ? context.UserQuizQuestions.Where(x => intermediate.Contains(x.Quiz.UserId))
-            : context.UserQuizQuestions.Where(x => !intermediate.Contains(x.Quiz.UserId));
+        // Leagues are stored by the league job.
+        var viewer = await context.Users
+            .Where(u => u.Id == userId)
+            .Select(u => new { u.League, u.LearnedWords })
+            .FirstAsync(ct);
+        var leagueQuestions = context.UserQuizQuestions.Where(x => x.Quiz.User.League == viewer.League);
 
         // Points per user of the league who answered in the period. Each query below aggregates it in the
         // database, so only the shown rows come back, however many users play.
@@ -183,8 +166,8 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         }
 
         return new Leaderboard(
-            league,
-            learnedWords,
+            viewer.League,
+            viewer.LearnedWords,
             top.Select(ToRow).ToArray(),
             me is null ? null : ToRow(me),
             playersCount);

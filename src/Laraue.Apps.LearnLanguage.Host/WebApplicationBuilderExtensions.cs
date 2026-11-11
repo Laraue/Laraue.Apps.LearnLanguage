@@ -7,6 +7,7 @@ using Laraue.Apps.LearnLanguage.AppServices.Repositories;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
 using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Quiz;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Leagues;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Reminders;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
@@ -121,6 +122,7 @@ public static class WebApplicationBuilderExtensions
 
                 .AddScoped<IUserSettingsService, UserSettingsService>()
                 .AddScoped<ReminderSender>()
+                .AddScoped<LeagueUpdater>()
                 .AddSingleton<IBotUsernameProvider, BotUsernameProvider>()
                 .Configure<RemindersOptions>(builder.Configuration.GetSection("Reminders"))
                 .AddScoped<IUserRepository, UserRepository>()
