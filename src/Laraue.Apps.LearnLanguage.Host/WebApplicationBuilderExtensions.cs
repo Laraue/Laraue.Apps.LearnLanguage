@@ -1,4 +1,5 @@
-﻿using Laraue.Apps.Identity.Internal.Contracts;
+﻿using Laraue.Core.Extensions.Hosting.EfCore;
+using Laraue.Apps.Identity.Internal.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.AppServices.Identity;
 using Laraue.Apps.LearnLanguage.AppServices.Metrics;
@@ -7,6 +8,7 @@ using Laraue.Apps.LearnLanguage.AppServices.Repositories;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
 using Laraue.Apps.LearnLanguage.AppServices.Services.LearnModes;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Quiz;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Leagues;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Reminders;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
@@ -59,6 +61,8 @@ public static class WebApplicationBuilderExtensions
                 })
                 .AddLinq2Db();
 
+            // Background jobs of Laraue.Core.Extensions.Hosting keep their state through IJobsDbContext.
+            builder.Services.AddScoped<IJobsDbContext>(sp => sp.GetRequiredService<DatabaseContext>());
             builder.Services.AddScoped<DictionarySync>();
 
             return builder;
@@ -121,6 +125,7 @@ public static class WebApplicationBuilderExtensions
 
                 .AddScoped<IUserSettingsService, UserSettingsService>()
                 .AddScoped<ReminderSender>()
+                .AddScoped<ILeagueUpdater, LeagueUpdater>()
                 .AddSingleton<IBotUsernameProvider, BotUsernameProvider>()
                 .Configure<RemindersOptions>(builder.Configuration.GetSection("Reminders"))
                 .AddScoped<IUserRepository, UserRepository>()

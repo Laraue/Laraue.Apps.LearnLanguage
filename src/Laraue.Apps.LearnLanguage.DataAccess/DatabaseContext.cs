@@ -1,5 +1,6 @@
 ﻿using Laraue.Apps.LearnLanguage.DataAccess.Entities;
 using Laraue.Apps.LearnLanguage.DataAccess.Extensions;
+using Laraue.Core.Extensions.Hosting.EfCore;
 using Laraue.Telegram.NET.UpdatesQueue.EFCore;
 using Laraue.Telegram.NET.UpdatesQueue.EFCore.DataAccess;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Laraue.Apps.LearnLanguage.DataAccess;
 
-public class DatabaseContext : DbContext, IUpdatesQueueDbContext
+public class DatabaseContext : DbContext, IUpdatesQueueDbContext, IJobsDbContext
 {
     public DatabaseContext(DbContextOptions options) 
         : base(options)
@@ -47,6 +48,11 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext
     public DbSet<DictionaryVersion> DictionaryVersions { get; init; }
 
     public DbSet<Reminder> Reminders { get; init; }
+
+    /// <summary>
+    /// Last and next run of each background job of Laraue.Core.Extensions.Hosting, kept across restarts.
+    /// </summary>
+    public DbSet<JobStateEntity> JobStates { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -105,6 +111,10 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext
 
         modelBuilder.Entity<Reminder>()
             .HasIndex(x => new { x.UserId, x.SentAt });
+
+        // The job name is unique: one row per job.
+        modelBuilder.Entity<JobStateEntity>()
+            .HasKey(x => x.JobName);
 
         AddSeedData(modelBuilder);
     }

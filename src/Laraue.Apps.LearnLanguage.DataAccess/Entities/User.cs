@@ -70,6 +70,11 @@ public sealed class User
     public LeaderboardNameMode LeaderboardName { get; set; }
 
     /// <summary>
+    /// The user's leaderboard league, set once a week by the league job. It only moves up.
+    /// </summary>
+    public League League { get; set; }
+
+    /// <summary>
     /// How to show word translations for this user. 
     /// </summary>
     public WordsTemplateMode WordsTemplateMode { get; set; }

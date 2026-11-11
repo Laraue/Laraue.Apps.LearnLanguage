@@ -16,8 +16,8 @@ public interface IStatsRepository
     Task<MissedWord[]> GetMostMissedWordsAsync(Guid userId, long languageId, int count, CancellationToken ct = default);
 
     /// <summary>
-    /// Users ranked by points for answers given since <paramref name="since"/>, all language pairs together:
-    /// the first <paramref name="count"/> of them and the viewer's own row.
+    /// Users of the viewer's league ranked by points for answers given since <paramref name="since"/>, all
+    /// language pairs together: the first <paramref name="count"/> of them and the viewer's own row.
     /// </summary>
     Task<Leaderboard> GetLeaderboardAsync(Guid userId, DateTime since, int count, CancellationToken ct = default);
 }
