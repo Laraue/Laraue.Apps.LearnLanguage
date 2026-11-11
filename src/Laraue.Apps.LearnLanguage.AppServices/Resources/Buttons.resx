@@ -102,4 +102,7 @@
     <data name="Settings_AchievementMessagesOff" xml:space="preserve">
         <value>🔕 Turn off achievement messages</value>
     </data>
+    <data name="Achievement_Share" xml:space="preserve">
+        <value>📤 Share</value>
+    </data>
 </root>

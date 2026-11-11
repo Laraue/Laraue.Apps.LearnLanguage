@@ -382,5 +382,14 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("OnlyYou", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My new achievement with @{1}: {0}. {2}.
+        /// </summary>
+        public static string ShareText {
+            get {
+                return ResourceManager.GetString("ShareText", resourceCulture);
+            }
+        }
     }
 }

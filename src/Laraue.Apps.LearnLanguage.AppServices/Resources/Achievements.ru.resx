@@ -119,4 +119,7 @@
     <data name="OnlyYou" xml:space="preserve">
         <value>🥇 Больше ни у кого его нет</value>
     </data>
+    <data name="ShareText" xml:space="preserve">
+        <value>Моё новое достижение в @{1}: {0}. {2}</value>
+    </data>
 </root>

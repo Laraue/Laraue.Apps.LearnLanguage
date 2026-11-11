@@ -95,4 +95,7 @@
     <data name="Settings_AchievementMessagesOff" xml:space="preserve">
         <value>🔕 Выключить сообщения о достижениях</value>
     </data>
+    <data name="Achievement_Share" xml:space="preserve">
+        <value>📤 Поделиться</value>
+    </data>
 </root>

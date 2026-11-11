@@ -310,5 +310,14 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("Settings_AchievementMessagesOff", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📤 Share.
+        /// </summary>
+        public static string Achievement_Share {
+            get {
+                return ResourceManager.GetString("Achievement_Share", resourceCulture);
+            }
+        }
     }
 }

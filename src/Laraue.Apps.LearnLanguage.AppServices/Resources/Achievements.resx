@@ -126,4 +126,7 @@
     <data name="OnlyYou" xml:space="preserve">
         <value>🥇 Nobody else has it yet</value>
     </data>
+    <data name="ShareText" xml:space="preserve">
+        <value>My new achievement with @{1}: {0}. {2}</value>
+    </data>
 </root>

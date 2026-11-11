@@ -42,9 +42,18 @@ public class AchievementTests : IntegrationTest
             🥇 Nobody else has it yet
             """.ReplaceLineEndings("\n"),
             message.Text.TrimEnd());
+        var buttons = Buttons(message.ReplyMarkup);
+        Assert.Equal([("👌 OK", "d"), ("📤 Share", null)], buttons[0]);
+        Assert.Equal([("🔕 Don't notify me", "1 ach/off")], buttons[1]);
+
+        // Share opens Telegram's share dialog with the rarest achievement and a tracked link to the bot.
+        var shareUrl = ((InlineKeyboardMarkup)message.ReplyMarkup!).InlineKeyboard.First().Last().Url!;
+        var query = System.Web.HttpUtility.ParseQueryString(new Uri(shareUrl).Query);
+        Assert.StartsWith("https://t.me/share/url?", shareUrl);
+        Assert.Equal("https://t.me/TestBot?start=source-achievement", query["url"]);
         Assert.Equal(
-            [("👌 OK", "d"), ("🔕 Don't notify me", "1 ach/off")],
-            Buttons(message.ReplyMarkup).Single());
+            "My new achievement with @TestBot: 🎯 Without mistakes · 🥉 Sharp eye. 🥇 Nobody else has it yet",
+            query["text"]);
     }
 
     [Fact]
