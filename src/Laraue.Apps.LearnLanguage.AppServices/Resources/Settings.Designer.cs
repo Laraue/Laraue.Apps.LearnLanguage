@@ -175,5 +175,32 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("SelectLeaderboardName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🏅 Achievement messages: {0}.
+        /// </summary>
+        public static string AchievementMessages {
+            get {
+                return ResourceManager.GetString("AchievementMessages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to on.
+        /// </summary>
+        public static string AchievementMessagesOn {
+            get {
+                return ResourceManager.GetString("AchievementMessagesOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to off.
+        /// </summary>
+        public static string AchievementMessagesOff {
+            get {
+                return ResourceManager.GetString("AchievementMessagesOff", resourceCulture);
+            }
+        }
     }
 }

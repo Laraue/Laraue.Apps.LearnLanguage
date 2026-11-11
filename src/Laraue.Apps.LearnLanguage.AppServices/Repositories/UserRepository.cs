@@ -20,7 +20,8 @@ public class UserRepository(DatabaseContext context) : IUserRepository
                 x.LanguageToLearn.Description,
                 x.ReminderTime,
                 x.LeaderboardName,
-                new TelegramProfile(x.TelegramUserName, x.TelegramFirstName, x.TelegramLastName)))
+                new TelegramProfile(x.TelegramUserName, x.TelegramFirstName, x.TelegramLastName),
+                x.AchievementMessagesOff))
             .FirstAsyncEF(ct);
     }
 
@@ -39,6 +40,13 @@ public class UserRepository(DatabaseContext context) : IUserRepository
         return context.Users
             .Where(x => x.Id == userId)
             .ExecuteUpdateAsync(x => x.SetProperty(u => u.LeaderboardName, mode), ct);
+    }
+
+    public Task SetAchievementMessagesOffAsync(Guid userId, bool off, CancellationToken ct = default)
+    {
+        return context.Users
+            .Where(x => x.Id == userId)
+            .ExecuteUpdateAsync(x => x.SetProperty(u => u.AchievementMessagesOff, off), ct);
     }
 
     public Task UpdateProfileAsync(Guid userId, TelegramProfile profile, CancellationToken ct = default)

@@ -1,4 +1,6 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices;
+﻿using Laraue.Telegram.NET.Core.Extensions;
+using Telegram.Bot;
+using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
 using Laraue.Telegram.NET.Abstractions.Request;
@@ -7,7 +9,7 @@ using Laraue.Telegram.NET.Core.Routing.Attributes;
 
 namespace Laraue.Apps.LearnLanguage.Host.Controllers;
 
-public class SettingsController(IUserSettingsService service) : TelegramController
+public class SettingsController(IUserSettingsService service, ITelegramBotClient client) : TelegramController
 {
     [TelegramCallbackRoute(TelegramRoutes.Settings)]
     public Task HandleSettingsRequestAsync(RequestContext request, CancellationToken ct)
@@ -54,6 +56,28 @@ public class SettingsController(IUserSettingsService service) : TelegramControll
         CancellationToken ct)
     {
         return service.UpdateLeaderboardNameSettingsAsync(ReplyData.FromRequest(context), request, ct);
+    }
+
+    [TelegramCallbackRoute(TelegramRoutes.AchievementMessagesSettings, RouteMethod.Post)]
+    public Task UpdateAchievementMessagesSettingsAsync(
+        RequestContext context,
+        [FromQuery] UpdateAchievementMessagesSettingsRequest request,
+        CancellationToken ct)
+    {
+        return service.UpdateAchievementMessagesSettingsAsync(ReplyData.FromRequest(context), request, ct);
+    }
+
+    /// <summary>
+    /// "Don't notify me" under an achievement message: turns the messages off and removes this one.
+    /// </summary>
+    [TelegramCallbackRoute(TelegramRoutes.AchievementMessagesOff, RouteMethod.Post)]
+    public async Task TurnOffAchievementMessagesAsync(RequestContext context, CancellationToken ct)
+    {
+        await service.TurnOffAchievementMessagesAsync(context.UserId, ct);
+        await client.DeleteMessage(
+            context.Update.GetUserId(),
+            context.Update.CallbackQuery!.Message!.MessageId,
+            ct);
     }
 
     [TelegramCallbackRoute(TelegramRoutes.LearnLanguageSettings, RouteMethod.Post)]

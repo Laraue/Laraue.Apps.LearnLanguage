@@ -13007,6 +13007,14 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<bool>("AchievementMessagesOff")
+                        .HasColumnType("boolean")
+                        .HasColumnName("achievement_messages_off");
+
+                    b.Property<DateTime?>("AchievementsCheckRequestedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("achievements_check_requested_at");
+
                     b.Property<DateTime?>("BotBlockedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("bot_blocked_at");
@@ -13070,6 +13078,10 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("pk_users");
 
+                    b.HasIndex("AchievementsCheckRequestedAt")
+                        .HasDatabaseName("ix_users_achievements_check_requested_at")
+                        .HasFilter("achievements_check_requested_at IS NOT NULL");
+
                     b.HasIndex("GlobalUserId")
                         .IsUnique()
                         .HasDatabaseName("ix_users_global_user_id");
@@ -13078,6 +13090,33 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasDatabaseName("ix_users_language_to_learn_id");
 
                     b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UserAchievement", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<byte>("Achievement")
+                        .HasColumnType("smallint")
+                        .HasColumnName("achievement");
+
+                    b.Property<byte>("Level")
+                        .HasColumnType("smallint")
+                        .HasColumnName("level");
+
+                    b.Property<DateTime>("AchievedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("achieved_at");
+
+                    b.HasKey("UserId", "Achievement", "Level")
+                        .HasName("pk_user_achievements");
+
+                    b.HasIndex("Achievement", "Level")
+                        .HasDatabaseName("ix_user_achievements_achievement_level");
+
+                    b.ToTable("user_achievements", (string)null);
                 });
 
             modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UserQuiz", b =>
@@ -13533,6 +13572,18 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasConstraintName("fk_users_languages_language_to_learn_id");
 
                     b.Navigation("LanguageToLearn");
+                });
+
+            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UserAchievement", b =>
+                {
+                    b.HasOne("Laraue.Apps.LearnLanguage.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_achievements_users_user_id");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UserQuiz", b =>

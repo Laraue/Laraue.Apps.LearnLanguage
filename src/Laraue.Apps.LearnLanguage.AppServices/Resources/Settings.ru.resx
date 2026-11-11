@@ -50,4 +50,13 @@
     <data name="SelectLeaderboardName" xml:space="preserve">
         <value>Как другие будут видеть вас в рейтинге?</value>
     </data>
+    <data name="AchievementMessages" xml:space="preserve">
+        <value>🏅 Сообщения о достижениях: {0}</value>
+    </data>
+    <data name="AchievementMessagesOn" xml:space="preserve">
+        <value>включены</value>
+    </data>
+    <data name="AchievementMessagesOff" xml:space="preserve">
+        <value>выключены</value>
+    </data>
 </root>

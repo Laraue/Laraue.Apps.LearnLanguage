@@ -274,5 +274,50 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("Leaderboard_LeagueIntermediate", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 👌 OK.
+        /// </summary>
+        public static string Achievement_Ok {
+            get {
+                return ResourceManager.GetString("Achievement_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔕 Don't notify me.
+        /// </summary>
+        public static string Achievement_DontNotify {
+            get {
+                return ResourceManager.GetString("Achievement_DontNotify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔔 Turn on achievement messages.
+        /// </summary>
+        public static string Settings_AchievementMessagesOn {
+            get {
+                return ResourceManager.GetString("Settings_AchievementMessagesOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔕 Turn off achievement messages.
+        /// </summary>
+        public static string Settings_AchievementMessagesOff {
+            get {
+                return ResourceManager.GetString("Settings_AchievementMessagesOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📤 Share.
+        /// </summary>
+        public static string Achievement_Share {
+            get {
+                return ResourceManager.GetString("Achievement_Share", resourceCulture);
+            }
+        }
     }
 }

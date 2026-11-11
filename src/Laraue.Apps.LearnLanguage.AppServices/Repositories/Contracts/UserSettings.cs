@@ -8,4 +8,5 @@ public record UserSettings(
     string? LanguageToLearnTitle,
     TimeOnly? ReminderTime,
     LeaderboardNameMode LeaderboardName,
-    TelegramProfile Profile);
+    TelegramProfile Profile,
+    bool AchievementMessagesOff);

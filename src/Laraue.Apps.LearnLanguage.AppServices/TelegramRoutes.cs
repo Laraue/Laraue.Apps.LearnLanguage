@@ -15,12 +15,14 @@ public static class TelegramRoutes
     public const string Leaderboard = "lb";
     public const string Menu = "m";
     public const string DropMessage = "d";
+    public const string AchievementMessagesOff = "ach/off";
     
     public const string Settings = "s";
     public const string InterfaceLanguageSettings = "s/ils";
     public const string LearnLanguageSettings = "s/lls";
     public const string RemindersSettings = "s/rem";
     public const string LeaderboardNameSettings = "s/lbn";
+    public const string AchievementMessagesSettings = "s/ach";
     
     // Commands section
     public const string Start = "/start(.*)";

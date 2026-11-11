@@ -22,6 +22,19 @@ public interface IUserSettingsService
         CancellationToken ct = default);
 
     /// <summary>
+    /// Turn messages about new achievements on or off and show the settings.
+    /// </summary>
+    Task UpdateAchievementMessagesSettingsAsync(
+        ReplyData replyData,
+        UpdateAchievementMessagesSettingsRequest request,
+        CancellationToken ct = default);
+
+    /// <summary>
+    /// Stop sending messages about new achievements, from the button under such a message.
+    /// </summary>
+    Task TurnOffAchievementMessagesAsync(Guid userId, CancellationToken ct = default);
+
+    /// <summary>
     /// Show the choices of how others see the user on the leaderboard, previewing their stored names.
     /// </summary>
     Task HandleLeaderboardNameSettingsViewAsync(ReplyData replyData, CancellationToken ct = default);
