@@ -2,6 +2,7 @@ using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
 using Laraue.Core.DateTime.Services.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
@@ -206,6 +207,23 @@ public class AchievementTests : IntegrationTest
         await CheckAchievementsAsync(telegramTestHost);
 
         Assert.Equal(welcomed, Granted(telegramTestHost, me).Contains((Achievement.WelcomeBack, (byte)1)));
+    }
+
+    [Fact]
+    public async Task AchievementMessage_ShouldBeInTheUsersLanguage()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id);
+        await telegramTestHost.ExecuteInDbAsync(db => db.Users
+            .Where(u => u.Id == me.Id)
+            .ExecuteUpdateAsync(u => u.SetProperty(x => x.TelegramLanguageCode, "ru")));
+
+        await PlayQuizAsync(telegramTestHost, mistakes: 1);
+        await CheckAchievementsAsync(telegramTestHost);
+
+        Assert.Contains(
+            "🎉 Новое достижение: 👣 Первые шаги",
+            telegramTestHost.Requests().Single<SendMessageRequest>().Text);
     }
 
     [Fact]

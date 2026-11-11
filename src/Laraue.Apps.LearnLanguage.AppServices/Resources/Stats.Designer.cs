@@ -213,7 +213,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🏆 Leaderboard · {0} · {1}.
+        ///   Looks up a localized string similar to 🏆 Leaderboard · {0}.
         /// </summary>
         public static string Leaderboard_Title {
             get {
@@ -281,51 +281,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         public static string Leaderboard_NameHidden {
             get {
                 return ResourceManager.GetString("Leaderboard_NameHidden", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Words left to 🌳 Intermediate: {0}.
-        /// </summary>
-        public static string Leaderboard_LeagueBeginner {
-            get {
-                return ResourceManager.GetString("Leaderboard_LeagueBeginner", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 🌳 Intermediate league.
-        /// </summary>
-        public static string Leaderboard_LeagueIntermediate {
-            get {
-                return ResourceManager.GetString("Leaderboard_LeagueIntermediate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 🎉 Enough words: you move to 🌳 Intermediate on Monday.
-        /// </summary>
-        public static string Leaderboard_LeagueBeginnerMovingUp {
-            get {
-                return ResourceManager.GetString("Leaderboard_LeagueBeginnerMovingUp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 🌱 Beginner league.
-        /// </summary>
-        public static string Leaderboard_LeagueBeginnerName {
-            get {
-                return ResourceManager.GetString("Leaderboard_LeagueBeginnerName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Nobody in this league has played yet..
-        /// </summary>
-        public static string Leaderboard_NoPlayers {
-            get {
-                return ResourceManager.GetString("Leaderboard_NoPlayers", resourceCulture);
             }
         }
         

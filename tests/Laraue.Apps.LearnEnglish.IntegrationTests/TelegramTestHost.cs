@@ -18,6 +18,8 @@ public class AppTelegramTestHost(IServiceCollection serviceCollection)
         dbContext.Database.Migrate();
         scope.ServiceProvider.GetRequiredService<DictionarySync>().SyncAsync().GetAwaiter().GetResult();
         dbContext.Users.ExecuteDelete();
+        // Not owned by a user, so not deleted with them.
+        dbContext.Seasons.ExecuteDelete();
     }
 
     protected override void Dispose(bool disposing)
@@ -25,5 +27,7 @@ public class AppTelegramTestHost(IServiceCollection serviceCollection)
         using var scope = CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
         dbContext.Users.ExecuteDelete();
+        // Not owned by a user, so not deleted with them.
+        dbContext.Seasons.ExecuteDelete();
     }
 }

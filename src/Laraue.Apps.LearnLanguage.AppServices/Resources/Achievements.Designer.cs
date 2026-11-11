@@ -481,5 +481,59 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
                 return ResourceManager.GetString("ChooseTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🥇 1st place.
+        /// </summary>
+        public static string Trophy_Place_1 {
+            get {
+                return ResourceManager.GetString("Trophy_Place_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🥈 2nd place.
+        /// </summary>
+        public static string Trophy_Place_2 {
+            get {
+                return ResourceManager.GetString("Trophy_Place_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🥉 3rd place.
+        /// </summary>
+        public static string Trophy_Place_3 {
+            get {
+                return ResourceManager.GetString("Trophy_Place_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to week {0}.
+        /// </summary>
+        public static string Trophy_Week {
+            get {
+                return ResourceManager.GetString("Trophy_Week", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} with @{1}.
+        /// </summary>
+        public static string Trophy_ShareText {
+            get {
+                return ResourceManager.GetString("Trophy_ShareText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🏆 Trophies: {0}.
+        /// </summary>
+        public static string Trophies {
+            get {
+                return ResourceManager.GetString("Trophies", resourceCulture);
+            }
+        }
     }
 }

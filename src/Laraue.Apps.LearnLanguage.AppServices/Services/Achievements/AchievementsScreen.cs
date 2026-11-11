@@ -30,6 +30,21 @@ public sealed class AchievementsScreen(
         var tmb = new TelegramMessageBuilder()
             .AppendRow($"<b>{string.Format(AchievementTexts.ScreenTitle, held, AchievementCatalog.LevelsCount)}</b>");
 
+        // Seasonal trophies: won again and again, so not part of the count.
+        var trophies = await context.UserTrophies
+            .Where(t => t.UserId == replyData.UserId)
+            .GroupBy(t => t.Place)
+            .Select(g => new { Place = g.Key, Count = g.Count() })
+            .OrderBy(x => x.Place)
+            .ToListAsync(ct);
+        if (trophies.Count > 0)
+        {
+            string[] medals = ["🥇", "🥈", "🥉"];
+            tmb.AppendRow().AppendRow(string.Format(
+                AchievementTexts.Trophies,
+                string.Join(" · ", trophies.Select(t => $"{medals[t.Place - 1]} ×{t.Count}"))));
+        }
+
         // Achievements with levels first, then the single ones as a checklist.
         foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length > 1))
         {

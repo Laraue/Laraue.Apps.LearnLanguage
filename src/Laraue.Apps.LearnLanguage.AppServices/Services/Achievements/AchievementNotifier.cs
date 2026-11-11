@@ -27,11 +27,18 @@ public sealed class AchievementNotifier(
         IReadOnlyList<EarnedAchievement> earned,
         CancellationToken ct = default)
     {
-        if (earned.Count == 0
-            || await context.Users.AnyAsync(u => u.Id == userId && (u.AchievementMessagesOff || u.BotBlockedAt != null), ct))
-        {
+        if (earned.Count == 0)
             return;
-        }
+
+        var user = await context.Users
+            .Where(u => u.Id == userId && !u.AchievementMessagesOff && u.BotBlockedAt == null)
+            .Select(u => new { u.TelegramLanguageCode })
+            .FirstOrDefaultAsync(ct);
+        if (user is null)
+            return;
+
+        // Sent by the achievements job, outside of the user's request.
+        using var _ = InterfaceCulture.Use(user.TelegramLanguageCode);
 
         var tmb = new TelegramMessageBuilder();
         foreach (var achievement in earned)
@@ -65,8 +72,8 @@ public sealed class AchievementNotifier(
     }
 
     /// <summary>
-    /// A Telegram share link with the achievement and a link to the bot. The link's start parameter is the UTM
-    /// label source=achievement, so users who join through it show up in the funnel.
+    /// A Telegram share link with the achievement and a link to the bot, tracked as
+    /// <see cref="UtmSources.Achievement"/>.
     /// </summary>
     private static string GetShareUrl(EarnedAchievement achievement, string botUsername)
     {
@@ -75,8 +82,7 @@ public sealed class AchievementNotifier(
             AchievementCatalog.Title(achievement.Achievement, achievement.Level),
             botUsername,
             Rarity(achievement));
-        var botLink = $"https://t.me/{botUsername}?start=source-achievement";
-        return $"https://t.me/share/url?url={Uri.EscapeDataString(botLink)}&text={Uri.EscapeDataString(text)}";
+        return ShareLinks.Create(botUsername, UtmSources.Achievement, text);
     }
 
     private static string Rarity(EarnedAchievement achievement) =>

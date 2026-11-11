@@ -1,7 +1,6 @@
 using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
-using Laraue.Apps.LearnLanguage.AppServices.Services.Leagues;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
@@ -58,8 +57,7 @@ public class LeaderboardTests : IntegrationTest
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         Assert.Equal(
             """
-            <b>🏆 Leaderboard · this week · 🌱 Beginner league</b>
-            Words left to 🌳 Intermediate: 1,000
+            <b>🏆 Leaderboard · this week</b>
             +3 for a right answer, −1 for a wrong one
 
             🥇 Alice · 15 pts · 100% correct
@@ -74,115 +72,7 @@ public class LeaderboardTests : IntegrationTest
         var buttons = Buttons(request);
         Assert.Equal("✅ This week", buttons[0][0].Item1);
         Assert.Equal("This month", buttons[0][1].Item1);
-        Assert.Equal(["✅ 🌱 Beginner", "🌳 Intermediate"], buttons[1].Select(b => b.Item1));
-        Assert.Equal(("📊 My Progress", "stat"), buttons[2][0]);
-    }
-
-    [Fact]
-    public async Task Leaderboard_ShouldShowOnlyTheViewersLeague()
-    {
-        using var telegramTestHost = GetTelegramTestHost();
-        var (ru, _) = Languages();
-        var words = WordsOfBothPairs(telegramTestHost, 1000);
-
-        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me", nameMode: LeaderboardNameMode.FirstName);
-        var anna = AddUser(telegramTestHost, 2, "Anna", nameMode: LeaderboardNameMode.FirstName);
-        var olga = AddUser(telegramTestHost, 3, "Olga", nameMode: LeaderboardNameMode.FirstName);
-        var bob = AddUser(telegramTestHost, 4, "Bob", nameMode: LeaderboardNameMode.FirstName);
-        foreach (var user in new[] { me, anna, olga })
-            AddLearnedWords(telegramTestHost, user, ru, words, Now);
-        // One word short; another one was answered wrong since, so it's not learned anymore.
-        AddLearnedWords(telegramTestHost, bob, ru, words[..999], Now);
-        AddLearnedWords(telegramTestHost, bob, ru, words[999..], learnedAt: null);
-        foreach (var user in new[] { me, anna, olga, bob })
-            AddAnswers(telegramTestHost, user, Now, correct: 1, wrong: 0);
-        await UpdateLeaguesAsync(telegramTestHost);
-
-        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
-
-        var text = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!;
-        Assert.StartsWith("<b>🏆 Leaderboard · this week · 🌳 Intermediate league</b>\n+3 for a right answer", text);
-        Assert.Contains("Anna · 3 pts", text);
-        Assert.Contains("Olga · 3 pts", text);
-        Assert.Contains("Me <b>(you)</b> · 3 pts", text);
-        Assert.DoesNotContain("Bob", text);
-
-        // The other league's board, for the month: its players, without the viewer's row.
-        var buttons = Buttons(telegramTestHost.Requests().Single<EditMessageTextRequest>());
-        await telegramTestHost.SendUpdateAsync(Callback(buttons[0][1].Item2!));
-        var monthButtons = Buttons(telegramTestHost.Requests().Last<EditMessageTextRequest>());
-        await telegramTestHost.SendUpdateAsync(Callback(monthButtons[1][0].Item2!));
-
-        var beginners = telegramTestHost.Requests().Last<EditMessageTextRequest>();
-        Assert.StartsWith(
-            "<b>🏆 Leaderboard · this month · 🌱 Beginner league</b>\n+3 for a right answer",
-            beginners.Text);
-        Assert.Contains("🥇 Bob · 3 pts", beginners.Text);
-        Assert.DoesNotContain("(you)", beginners.Text);
-        Assert.DoesNotContain("Hardly anyone", beginners.Text);
-        Assert.Equal(["This week", "✅ This month"], Buttons(beginners)[0].Select(b => b.Item1));
-        Assert.Equal(["✅ 🌱 Beginner", "🌳 Intermediate"], Buttons(beginners)[1].Select(b => b.Item1));
-    }
-
-    [Fact]
-    public async Task League_ShouldMoveUpWhenTheJobRuns_AndNeverDown()
-    {
-        using var telegramTestHost = GetTelegramTestHost();
-        var (ru, _) = Languages();
-        var words = WordsOfBothPairs(telegramTestHost, 1000);
-        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
-        AddLearnedWords(telegramTestHost, me, ru, words, Now);
-
-        // Enough words, but leagues change only when the weekly job runs.
-        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
-        Assert.Contains(
-            "🎉 Enough words: you move to 🌳 Intermediate on Monday",
-            telegramTestHost.Requests().Last<EditMessageTextRequest>().Text!.Split('\n'));
-
-        Assert.Equal(1, await UpdateLeaguesAsync(telegramTestHost));
-        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
-        Assert.StartsWith(
-            "<b>🏆 Leaderboard · this week · 🌳 Intermediate league</b>",
-            telegramTestHost.Requests().Last<EditMessageTextRequest>().Text);
-
-        // A wrong answer un-learns a word: the league stays.
-        await telegramTestHost.ExecuteInDbAsync(db => db.LearnedTranslations
-            .Where(t => t.UserId == me.Id && t.WordId == words[0])
-            .ExecuteUpdateAsync(t => t.SetProperty(x => x.LearnedAt, (DateTime?)null)));
-        Assert.Equal(0, await UpdateLeaguesAsync(telegramTestHost));
-        Assert.Equal(
-            League.Intermediate,
-            telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).League);
-    }
-
-    [Fact]
-    public async Task Leaderboard_ShouldCountTheWordsLeftLive_AndAWordLearnedInTwoPairsOnce()
-    {
-        using var telegramTestHost = GetTelegramTestHost();
-        var (ru, de) = Languages();
-        var words = WordsOfBothPairs(telegramTestHost, 999);
-        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me");
-        AddLearnedWords(telegramTestHost, me, ru, words[..600], Now);
-        AddLearnedWords(telegramTestHost, me, de, words, Now);
-
-        // No job run: the count is live.
-        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
-
-        Assert.Contains(
-            "Words left to 🌳 Intermediate: 1",
-            telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
-    }
-
-    [Theory]
-    [InlineData("2026-11-09T00:00:00", 7 * 24)] // Monday 00:00: the next week
-    [InlineData("2026-11-09T10:00:00", 6 * 24 + 14)] // Monday 10:00
-    [InlineData("2026-11-15T23:00:00", 1)] // Sunday 23:00
-    [InlineData("2026-11-11T12:30:00", 4 * 24 + 11.5)] // Wednesday 12:30
-    public void LeagueJob_ShouldRunAgainAtTheNextMonday(string now, double hours)
-    {
-        var at = DateTime.SpecifyKind(DateTime.Parse(now), DateTimeKind.Utc);
-
-        Assert.Equal(TimeSpan.FromHours(hours), LeagueJob.TimeToNextWeek(at));
+        Assert.Equal(("📊 My Progress", "stat"), buttons[1][0]);
     }
 
     [Fact]
@@ -203,7 +93,7 @@ public class LeaderboardTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(monthCallback));
 
         var request = telegramTestHost.Requests().Last<EditMessageTextRequest>();
-        Assert.StartsWith("<b>🏆 Leaderboard · this month · 🌱 Beginner league</b>", request.Text);
+        Assert.StartsWith("<b>🏆 Leaderboard · this month</b>", request.Text);
         Assert.Contains("🥇 ******* · 6 pts · 100% correct", request.Text);
         Assert.Contains("🥈 ******* · 3 pts · 100% correct", request.Text);
         Assert.Contains("🥉 ******* · 2 pts · 50% correct", request.Text);
@@ -385,48 +275,6 @@ public class LeaderboardTests : IntegrationTest
         };
         host.InsertIntoDb(user);
         return user;
-    }
-
-    private static async Task<int> UpdateLeaguesAsync(AppTelegramTestHost host)
-    {
-        using var scope = host.CreateScope();
-        return await scope.ServiceProvider.GetRequiredService<ILeagueUpdater>().UpdateAsync();
-    }
-
-    private static (long Ru, long De) Languages()
-    {
-        var languages = DefaultContextData.GetWordLanguages();
-        return (languages.GetId("ru"), languages.GetId("de"));
-    }
-
-    // Words translated to both Russian and German, so they can be learned in both pairs.
-    private static long[] WordsOfBothPairs(AppTelegramTestHost host, int count)
-    {
-        var (ru, de) = Languages();
-        return host.GetFromDb(db => db.Translations
-            .Where(t => t.LanguageId == ru)
-            .Select(t => t.WordId)
-            .Intersect(db.Translations.Where(t => t.LanguageId == de).Select(t => t.WordId))
-            .OrderBy(id => id)
-            .Take(count)
-            .ToArray());
-    }
-
-    private static void AddLearnedWords(
-        AppTelegramTestHost host,
-        User user,
-        long languageId,
-        IEnumerable<long> wordIds,
-        DateTime? learnedAt)
-    {
-        host.InsertRangeIntoDb(wordIds.Select(id => new LearnedTranslation
-        {
-            UserId = user.Id,
-            WordId = id,
-            LanguageId = languageId,
-            WinStreakCount = learnedAt is null ? 0 : 3,
-            LearnedAt = learnedAt,
-        }));
     }
 
     private static void AddAnswers(

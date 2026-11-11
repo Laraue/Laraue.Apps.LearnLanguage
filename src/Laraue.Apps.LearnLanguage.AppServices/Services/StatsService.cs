@@ -1,5 +1,4 @@
 ﻿using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
-using Laraue.Apps.LearnLanguage.AppServices.Services.Leagues;
 using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using System.Globalization;
 using Laraue.Apps.LearnLanguage.AppServices.Extensions;
@@ -149,30 +148,18 @@ public class StatsService(
             : today.AddDays(-((7 + (int)today.DayOfWeek - (int)DayOfWeek.Monday) % 7));
         var board = await statsRepository.GetLeaderboardAsync(
             replyData.UserId,
-            Enum.IsDefined((League)request.League) ? (League)request.League : null,
             since.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
             LeaderboardSize,
             ct);
 
         var tmb = new TelegramMessageBuilder();
         tmb.AppendRow($"<b>{string.Format(
-            Stats.Leaderboard_Title,
-            request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week,
-            board.League == League.Intermediate
-                ? Stats.Leaderboard_LeagueIntermediate
-                : Stats.Leaderboard_LeagueBeginnerName)}</b>");
-        var isMyLeague = board.League == board.MyLeague;
-        if (isMyLeague && board.League == League.Beginner)
-            tmb.AppendRow(BeginnerProgressLine(board));
-        tmb.AppendRow(Stats.Leaderboard_Scoring)
+                Stats.Leaderboard_Title,
+                request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week)}</b>")
+            .AppendRow(Stats.Leaderboard_Scoring)
             .AppendRow();
 
-        if (!isMyLeague && board.PlayersCount == 0)
-        {
-            // Another league's board: nothing to invite to.
-            tmb.AppendRow(Stats.Leaderboard_NoPlayers);
-        }
-        else if (isMyLeague && board.PlayersCount < MinLeaderboardPlayers)
+        if (board.PlayersCount < MinLeaderboardPlayers)
         {
             tmb.AppendRow(Stats.Leaderboard_FewPlayers);
             if (board.Me is { } me)
@@ -190,19 +177,14 @@ public class StatsService(
         if (board.Me is { } my && LeaderboardNames.GetName(my.NameMode, my.Profile) is null)
             tmb.AppendRow().AppendRow(Stats.Leaderboard_NameHidden);
 
-        // Each button keeps the other choice: a period of the shown league, a league for the shown period.
-        CallbackRoutePath Path(bool month, League league) => new CallbackRoutePath(TelegramRoutes.Leaderboard)
-            .WithQueryParameter(ParameterNames.Month, month)
-            .WithQueryParameter(ParameterNames.League, (int)league);
+        var periodPath = new CallbackRoutePath(TelegramRoutes.Leaderboard);
         tmb.AddInlineKeyboardButtons([
-            Path(false, board.League).ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Week, !request.Month)),
-            Path(true, board.League).ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Month, request.Month)),
-        ]);
-        tmb.AddInlineKeyboardButtons([
-            Path(request.Month, League.Beginner).ToInlineKeyboardButton(
-                Selected(Buttons.Leaderboard_LeagueBeginner, board.League == League.Beginner)),
-            Path(request.Month, League.Intermediate).ToInlineKeyboardButton(
-                Selected(Buttons.Leaderboard_LeagueIntermediate, board.League == League.Intermediate)),
+            periodPath
+                .WithQueryParameter(ParameterNames.Month, false)
+                .ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Week, !request.Month)),
+            periodPath
+                .WithQueryParameter(ParameterNames.Month, true)
+                .ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Month, request.Month)),
         ]);
         tmb.AddInlineKeyboardButtons([
             InlineKeyboardButton.WithCallbackData(Buttons.Stat, TelegramRoutes.Stat)
@@ -210,15 +192,6 @@ public class StatsService(
         tmb.AddMainMenuButton();
 
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
-    }
-
-    private static string BeginnerProgressLine(Leaderboard board)
-    {
-        // The words are counted live, but leagues change on Mondays.
-        var wordsLeft = LeagueRules.IntermediateMinWords - board.LearnedWords;
-        return wordsLeft > 0
-            ? string.Format(Stats.Leaderboard_LeagueBeginner, Number(wordsLeft))
-            : Stats.Leaderboard_LeagueBeginnerMovingUp;
     }
 
     private static string LeaderboardRow(LeaderboardRow row, Guid viewerId)
@@ -256,8 +229,7 @@ public class StatsService(
         if (progress.StreakDays > 1)
             text += string.Format(Stats.ShareStreak, progress.StreakDays);
 
-        var botLink = $"https://t.me/{botUsername}?start=source-share";
-        return $"https://t.me/share/url?url={Uri.EscapeDataString(botLink)}&text={Uri.EscapeDataString(text)}";
+        return ShareLinks.Create(botUsername, UtmSources.Share, text);
     }
 
     private static int Percent(int part, int total) => total == 0 ? 0 : (int)Math.Round(part * 100.0 / total);

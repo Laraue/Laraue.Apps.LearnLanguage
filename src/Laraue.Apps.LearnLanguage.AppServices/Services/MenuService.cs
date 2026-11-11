@@ -142,9 +142,9 @@ public class MenuService(
             return;
         }
         
-        var queryParts =  queryRaw.Split('_');
+        var queryParts = queryRaw.Split(UtmLabels.Separator);
         var dbUtmLabels = queryParts
-            .Select(part => part.Split('-'))
+            .Select(part => part.Split(UtmLabels.NameValueSeparator))
             .Select(part => new UtmLabel
             {
                 Name = part[0].Trim(),

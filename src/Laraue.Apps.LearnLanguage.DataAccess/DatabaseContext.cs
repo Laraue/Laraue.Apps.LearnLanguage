@@ -51,6 +51,10 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext, IJobsDbContext
 
     public DbSet<UserAchievement> UserAchievements { get; init; }
 
+    public DbSet<Season> Seasons { get; init; }
+
+    public DbSet<UserTrophy> UserTrophies { get; init; }
+
     /// <summary>
     /// Last and next run of each background job of Laraue.Core.Extensions.Hosting, kept across restarts.
     /// </summary>
@@ -116,6 +120,15 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext, IJobsDbContext
 
         modelBuilder.Entity<UserAchievement>()
             .HasKey(x => new { x.UserId, x.Achievement, x.Level });
+
+        // Each week and month is recorded once.
+        modelBuilder.Entity<Season>()
+            .HasIndex(x => new { x.Type, x.StartsAt })
+            .IsUnique();
+
+        // One trophy per user and season.
+        modelBuilder.Entity<UserTrophy>()
+            .HasKey(x => new { x.UserId, x.SeasonId });
 
         // The achievements job looks up users waiting for a check: only those rows are indexed.
         modelBuilder.Entity<User>()

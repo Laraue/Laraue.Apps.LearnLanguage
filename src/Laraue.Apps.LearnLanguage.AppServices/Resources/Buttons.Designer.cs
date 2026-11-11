@@ -258,24 +258,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 🌱 Beginner.
-        /// </summary>
-        public static string Leaderboard_LeagueBeginner {
-            get {
-                return ResourceManager.GetString("Leaderboard_LeagueBeginner", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 🌳 Intermediate.
-        /// </summary>
-        public static string Leaderboard_LeagueIntermediate {
-            get {
-                return ResourceManager.GetString("Leaderboard_LeagueIntermediate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 👌 OK.
         /// </summary>
         public static string Achievement_Ok {

@@ -8,7 +8,6 @@ public static class ParameterNames
     public const string CefrLevelId = "ci";
     public const string Enable = "e";
     public const string Month = "mo";
-    public const string League = "lg";
     public const string Achievement = "ac";
     public const string Level = "lv";
     public const string LeaderboardName = "n";
