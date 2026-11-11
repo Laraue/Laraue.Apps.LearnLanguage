@@ -1,4 +1,5 @@
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
+using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -137,7 +138,12 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         var userIds = ranks.Keys.Append(userId).ToArray();
         var users = await context.Users
             .Where(u => userIds.Contains(u.Id))
-            .Select(u => new { u.Id, u.TelegramFirstName, u.ShowNameOnLeaderboard })
+            .Select(u => new
+            {
+                u.Id,
+                Profile = new TelegramProfile(u.TelegramUserName, u.TelegramFirstName, u.TelegramLastName),
+                u.LeaderboardName,
+            })
             .ToDictionaryAsync(u => u.Id, ct);
 
         LeaderboardRow ToRow(Score score)
@@ -146,8 +152,8 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
             return new LeaderboardRow(
                 ranks[score.UserId],
                 score.UserId,
-                user?.TelegramFirstName,
-                user?.ShowNameOnLeaderboard ?? false,
+                user?.Profile ?? new TelegramProfile(null, null, null),
+                user?.LeaderboardName ?? LeaderboardNameMode.Hidden,
                 score.Correct,
                 score.Wrong);
         }
@@ -155,8 +161,7 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         return new Leaderboard(
             top.Select(ToRow).ToArray(),
             me is null ? null : ToRow(me),
-            playersCount,
-            users.GetValueOrDefault(userId)?.ShowNameOnLeaderboard ?? false);
+            playersCount);
     }
 
     private static bool IsAhead(Score other, Score score) =>

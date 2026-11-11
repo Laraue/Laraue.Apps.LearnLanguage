@@ -1,4 +1,5 @@
-﻿namespace Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
+﻿using Laraue.Apps.LearnLanguage.Contracts.Enums;
+namespace Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 
 public record UserSettings(
     string? InterfaceLanguageCode,
@@ -6,4 +7,5 @@ public record UserSettings(
     string? LanguageToLearnCode,
     string? LanguageToLearnTitle,
     TimeOnly? ReminderTime,
-    bool ShowNameOnLeaderboard);
+    LeaderboardNameMode LeaderboardName,
+    TelegramProfile Profile);

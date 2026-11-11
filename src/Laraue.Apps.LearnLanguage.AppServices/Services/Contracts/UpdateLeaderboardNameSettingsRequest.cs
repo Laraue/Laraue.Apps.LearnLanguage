@@ -1,3 +1,4 @@
+using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Telegram.NET.Abstractions.Request;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
@@ -5,8 +6,8 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Services.Contracts;
 public record UpdateLeaderboardNameSettingsRequest
 {
     /// <summary>
-    /// Show the user's first name on the leaderboard, or mask it.
+    /// What of the user's names others see on the leaderboard, a <see cref="LeaderboardNameMode"/>.
     /// </summary>
-    [FromQuery(ParameterNames.Enable)]
-    public bool Show { get; init; }
+    [FromQuery(ParameterNames.LeaderboardName)]
+    public int Mode { get; init; }
 }

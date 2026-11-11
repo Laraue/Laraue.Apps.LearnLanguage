@@ -1,5 +1,7 @@
 ﻿using Laraue.Apps.Identity.Internal.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Identity;
+using Laraue.Apps.LearnLanguage.AppServices.Repositories;
+using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Telegram.NET.Authentication.Services;
 using LinqToDB.EntityFrameworkCore;
@@ -7,9 +9,23 @@ using User = Laraue.Apps.LearnLanguage.DataAccess.Entities.User;
 
 namespace Laraue.Apps.LearnLanguage.AppServices.Services;
 
-public class TelegramUserQueryService(DatabaseContext context, UserIdentityService.UserIdentityServiceClient identityClient)
+public class TelegramUserQueryService(
+    DatabaseContext context,
+    UserIdentityService.UserIdentityServiceClient identityClient,
+    IUserRepository userRepository)
     : ITelegramUserQueryService<Guid>
 {
+    /// <summary>
+    /// Called by the library once in a while for each active user, to keep their names fresh.
+    /// </summary>
+    public Task UpdateAsync(Guid userId, TelegramData telegramData, CancellationToken cancellationToken)
+    {
+        return userRepository.UpdateProfileAsync(
+            userId,
+            new TelegramProfile(telegramData.Username, telegramData.FirstName, telegramData.LastName),
+            cancellationToken);
+    }
+
     public async Task<TelegramUserId<Guid>?> FindUserIdAsync(long telegramId, CancellationToken cancellationToken)
     {
         var id = await context.Users

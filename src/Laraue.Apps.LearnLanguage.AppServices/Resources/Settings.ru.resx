@@ -44,10 +44,10 @@
     <data name="LeaderboardName" xml:space="preserve">
         <value>🏆 Имя в рейтинге: {0}</value>
     </data>
-    <data name="LeaderboardNameShown" xml:space="preserve">
-        <value>показано</value>
-    </data>
     <data name="LeaderboardNameHidden" xml:space="preserve">
         <value>скрыто</value>
+    </data>
+    <data name="SelectLeaderboardName" xml:space="preserve">
+        <value>Как другие будут видеть вас в рейтинге?</value>
     </data>
 </root>

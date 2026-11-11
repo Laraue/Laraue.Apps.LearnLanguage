@@ -13023,13 +13023,13 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("language_to_learn_id");
 
+                    b.Property<byte>("LeaderboardName")
+                        .HasColumnType("smallint")
+                        .HasColumnName("leaderboard_name");
+
                     b.Property<TimeOnly?>("ReminderTime")
                         .HasColumnType("time without time zone")
                         .HasColumnName("reminder_time");
-
-                    b.Property<bool>("ShowNameOnLeaderboard")
-                        .HasColumnType("boolean")
-                        .HasColumnName("show_name_on_leaderboard");
 
                     b.Property<byte>("ShowWordsMode")
                         .HasColumnType("smallint")

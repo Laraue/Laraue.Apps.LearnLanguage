@@ -22,7 +22,12 @@ public interface IUserSettingsService
         CancellationToken ct = default);
 
     /// <summary>
-    /// Show or mask the user's name on the leaderboard and show the settings.
+    /// Show the choices of how others see the user on the leaderboard, previewing their stored names.
+    /// </summary>
+    Task HandleLeaderboardNameSettingsViewAsync(ReplyData replyData, CancellationToken ct = default);
+
+    /// <summary>
+    /// Set what of the user's names others see on the leaderboard and show the settings.
     /// </summary>
     Task UpdateLeaderboardNameSettingsAsync(
         ReplyData replyData,

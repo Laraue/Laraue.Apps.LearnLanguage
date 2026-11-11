@@ -165,7 +165,9 @@ public class MenuService(
             ])
             .AddInlineKeyboardButtons([
                 InlineKeyboardButton.WithCallbackData(
-                    Buttons.Stat, TelegramRoutes.Stat)
+                    Buttons.Stat, TelegramRoutes.Stat),
+                InlineKeyboardButton.WithCallbackData(
+                    Buttons.Leaderboard, TelegramRoutes.Leaderboard)
             ])
             .AddInlineKeyboardButtons([
                 InlineKeyboardButton.WithCallbackData(
