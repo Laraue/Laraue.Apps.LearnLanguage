@@ -74,7 +74,7 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
 
         Assert.Contains(
-            "⏳ New achievements are on their way: a message about them comes in a few seconds.",
+            "⏳ New achievements are on their way: open this section again after the message about them arrives.",
             telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
         Assert.NotNull(telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).AchievementsCheckRequestedAt);
 

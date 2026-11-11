@@ -154,10 +154,10 @@
         <value>🏆 Trophies: {0}</value>
     </data>
     <data name="PendingMessage" xml:space="preserve">
-        <value>⏳ New achievements are on their way: a message about them comes in a few seconds.</value>
+        <value>⏳ New achievements are on their way: open this section again after the message about them arrives.</value>
     </data>
     <data name="PendingRefresh" xml:space="preserve">
-        <value>⏳ New achievements are on their way: open this screen again in a few seconds.</value>
+        <value>⏳ New achievements are on their way: open this section again in a few seconds.</value>
     </data>
     <data name="WordsLearned_Description_1" xml:space="preserve">
         <value>100 words learned</value>

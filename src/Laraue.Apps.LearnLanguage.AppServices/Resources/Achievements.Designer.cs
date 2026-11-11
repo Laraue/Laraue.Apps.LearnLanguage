@@ -465,7 +465,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ⏳ New achievements are on their way: a message about them comes in a few seconds..
+        ///   Looks up a localized string similar to ⏳ New achievements are on their way: open this section again after the message about them arrives..
         /// </summary>
         public static string PendingMessage {
             get {
@@ -474,7 +474,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ⏳ New achievements are on their way: open this screen again in a few seconds..
+        ///   Looks up a localized string similar to ⏳ New achievements are on their way: open this section again in a few seconds..
         /// </summary>
         public static string PendingRefresh {
             get {
