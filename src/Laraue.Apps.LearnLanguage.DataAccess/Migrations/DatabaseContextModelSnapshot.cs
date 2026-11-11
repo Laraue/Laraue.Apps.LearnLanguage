@@ -275,6 +275,41 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                     b.ToTable("reminders", (string)null);
                 });
 
+            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.Season", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("ClosedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("closed_at");
+
+                    b.Property<DateTime>("EndsAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ends_at");
+
+                    b.Property<DateTime>("StartsAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("starts_at");
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("smallint")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_seasons");
+
+                    b.HasIndex("Type", "StartsAt")
+                        .IsUnique()
+                        .HasDatabaseName("ix_seasons_type_starts_at");
+
+                    b.ToTable("seasons", (string)null);
+                });
+
             modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.Topic", b =>
                 {
                     b.Property<long>("Id")
@@ -13253,13 +13288,9 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
-                    b.Property<byte>("Season")
-                        .HasColumnType("smallint")
-                        .HasColumnName("season");
-
-                    b.Property<DateTime>("SeasonStart")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("season_start");
+                    b.Property<long>("SeasonId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("season_id");
 
                     b.Property<DateTime>("AwardedAt")
                         .HasColumnType("timestamp with time zone")
@@ -13269,8 +13300,11 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("place");
 
-                    b.HasKey("UserId", "Season", "SeasonStart")
+                    b.HasKey("UserId", "SeasonId")
                         .HasName("pk_user_trophies");
+
+                    b.HasIndex("SeasonId")
+                        .HasDatabaseName("ix_user_trophies_season_id");
 
                     b.ToTable("user_trophies", (string)null);
                 });
@@ -13704,12 +13738,21 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
 
             modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UserTrophy", b =>
                 {
+                    b.HasOne("Laraue.Apps.LearnLanguage.DataAccess.Entities.Season", "Season")
+                        .WithMany("Trophies")
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_trophies_seasons_season_id");
+
                     b.HasOne("Laraue.Apps.LearnLanguage.DataAccess.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_user_trophies_users_user_id");
+
+                    b.Navigation("Season");
 
                     b.Navigation("User");
                 });
@@ -13771,6 +13814,11 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                     b.Navigation("UserQuizCefrLevels");
 
                     b.Navigation("Words");
+                });
+
+            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.Season", b =>
+                {
+                    b.Navigation("Trophies");
                 });
 
             modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.Topic", b =>

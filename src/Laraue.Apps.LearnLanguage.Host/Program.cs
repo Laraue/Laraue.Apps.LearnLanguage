@@ -27,7 +27,7 @@ builder.Services.AddHealthChecks();
 builder.Services.AddHostedService<LearnLanguageStateMetrics>();
 builder.Services.AddHostedService<DictionarySyncService>();
 builder.Services.AddHostedService<ReminderService>();
-builder.Services.AddBackgroundJob<SeasonJob, SeasonJobData>(SeasonJob.Name);
+builder.Services.AddBackgroundJob<SeasonJob, EmptyJobData>(SeasonJob.Name);
 builder.Services.AddHostedService<AchievementCheckService>();
 builder.Logging.ClearProviders().AddJsonConsole();
 

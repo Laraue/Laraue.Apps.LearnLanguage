@@ -229,8 +229,7 @@ public class StatsService(
         if (progress.StreakDays > 1)
             text += string.Format(Stats.ShareStreak, progress.StreakDays);
 
-        var botLink = $"https://t.me/{botUsername}?start=source-share";
-        return $"https://t.me/share/url?url={Uri.EscapeDataString(botLink)}&text={Uri.EscapeDataString(text)}";
+        return ShareLinks.Create(botUsername, UtmSources.Share, text);
     }
 
     private static int Percent(int part, int total) => total == 0 ? 0 : (int)Math.Round(part * 100.0 / total);

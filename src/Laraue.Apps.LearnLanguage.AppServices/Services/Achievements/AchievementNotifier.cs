@@ -72,8 +72,8 @@ public sealed class AchievementNotifier(
     }
 
     /// <summary>
-    /// A Telegram share link with the achievement and a link to the bot. The link's start parameter is the UTM
-    /// label source=achievement, so users who join through it show up in the funnel.
+    /// A Telegram share link with the achievement and a link to the bot, tracked as
+    /// <see cref="UtmSources.Achievement"/>.
     /// </summary>
     private static string GetShareUrl(EarnedAchievement achievement, string botUsername)
     {
@@ -82,8 +82,7 @@ public sealed class AchievementNotifier(
             AchievementCatalog.Title(achievement.Achievement, achievement.Level),
             botUsername,
             Rarity(achievement));
-        var botLink = $"https://t.me/{botUsername}?start=source-achievement";
-        return $"https://t.me/share/url?url={Uri.EscapeDataString(botLink)}&text={Uri.EscapeDataString(text)}";
+        return ShareLinks.Create(botUsername, UtmSources.Achievement, text);
     }
 
     private static string Rarity(EarnedAchievement achievement) =>

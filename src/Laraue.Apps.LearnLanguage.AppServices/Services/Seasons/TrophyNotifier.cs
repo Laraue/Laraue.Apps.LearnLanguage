@@ -21,7 +21,7 @@ public sealed class TrophyNotifier(
     : ITrophyNotifier
 {
     /// <inheritdoc />
-    public async Task NotifyAsync(UserTrophy trophy, CancellationToken ct = default)
+    public async Task NotifyAsync(UserTrophy trophy, Season season, CancellationToken ct = default)
     {
         var user = await context.Users
             .Where(u => u.Id == trophy.UserId && !u.AchievementMessagesOff && u.BotBlockedAt == null)
@@ -33,7 +33,7 @@ public sealed class TrophyNotifier(
         // Sent by a job, outside of the user's request.
         using var _ = InterfaceCulture.Use(user.TelegramLanguageCode);
 
-        var title = TrophyTitle(trophy);
+        var title = TrophyTitle(trophy.Place, season);
         var tmb = new TelegramMessageBuilder().AppendRow($"<b>{title}</b>");
 
         var firstRow = new List<InlineKeyboardButton>
@@ -43,10 +43,9 @@ public sealed class TrophyNotifier(
         if (await botUsernameProvider.GetUsernameAsync(ct) is { } botUsername)
         {
             var text = string.Format(AchievementTexts.Trophy_ShareText, title, botUsername);
-            var botLink = $"https://t.me/{botUsername}?start=source-trophy";
             firstRow.Add(InlineKeyboardButton.WithUrl(
                 Buttons.Achievement_Share,
-                $"https://t.me/share/url?url={Uri.EscapeDataString(botLink)}&text={Uri.EscapeDataString(text)}"));
+                ShareLinks.Create(botUsername, UtmSources.Trophy, text)));
         }
 
         tmb.AddInlineKeyboardButtons(firstRow);
@@ -61,15 +60,15 @@ public sealed class TrophyNotifier(
     /// <summary>
     /// "🏆 🥇 1st place · week 46".
     /// </summary>
-    public static string TrophyTitle(UserTrophy trophy)
+    public static string TrophyTitle(byte place, Season season)
     {
-        var place = AchievementTexts.ResourceManager.GetString($"Trophy_Place_{trophy.Place}", AchievementTexts.Culture);
-        return $"🏆 {place} · {SeasonName(trophy.Season, trophy.SeasonStart)}";
+        var placeText = AchievementTexts.ResourceManager.GetString($"Trophy_Place_{place}", AchievementTexts.Culture);
+        return $"🏆 {placeText} · {SeasonName(season.Type, season.StartsAt)}";
     }
 
-    private static string SeasonName(Season season, DateTime start)
+    private static string SeasonName(SeasonType type, DateTime start)
     {
-        if (season == Season.Week)
+        if (type == SeasonType.Week)
             return string.Format(AchievementTexts.Trophy_Week, ISOWeek.GetWeekOfYear(start));
 
         var month = CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(start.Month);

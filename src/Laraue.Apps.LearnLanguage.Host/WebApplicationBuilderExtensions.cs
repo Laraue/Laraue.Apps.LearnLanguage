@@ -130,7 +130,7 @@ public static class WebApplicationBuilderExtensions
                 .AddScoped<IAchievementNotifier, AchievementNotifier>()
                 .AddScoped<IAchievementChecker, AchievementChecker>()
                 .AddScoped<IAchievementsScreen, AchievementsScreen>()
-                .AddScoped<ITrophyService, TrophyService>()
+                .AddScoped<ISeasonService, SeasonService>()
                 .AddScoped<ITrophyNotifier, TrophyNotifier>()
                 .AddSingleton<IBotUsernameProvider, BotUsernameProvider>()
                 .Configure<RemindersOptions>(builder.Configuration.GetSection("Reminders"))

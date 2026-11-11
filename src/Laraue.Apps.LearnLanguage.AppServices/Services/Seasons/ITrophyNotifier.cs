@@ -8,8 +8,8 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Services.Seasons;
 public interface ITrophyNotifier
 {
     /// <summary>
-    /// Sends a message about <paramref name="trophy"/>, unless the user turned achievement messages off or
-    /// blocked the bot.
+    /// Sends a message about <paramref name="trophy"/> won in <paramref name="season"/>, unless the user turned
+    /// achievement messages off or blocked the bot.
     /// </summary>
-    Task NotifyAsync(UserTrophy trophy, CancellationToken ct = default);
+    Task NotifyAsync(UserTrophy trophy, Season season, CancellationToken ct = default);
 }

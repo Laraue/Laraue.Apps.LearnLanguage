@@ -1,9 +1,9 @@
 namespace Laraue.Apps.LearnLanguage.Contracts.Enums;
 
 /// <summary>
-/// A leaderboard period whose top players get trophies when it ends. Stored by value: don't renumber.
+/// How long a season lasts. Stored by value: don't renumber.
 /// </summary>
-public enum Season : byte
+public enum SeasonType : byte
 {
     /// <summary>Monday 00:00 UTC to the next Monday.</summary>
     Week = 1,

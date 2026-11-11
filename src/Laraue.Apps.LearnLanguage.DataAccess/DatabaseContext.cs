@@ -51,6 +51,8 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext, IJobsDbContext
 
     public DbSet<UserAchievement> UserAchievements { get; init; }
 
+    public DbSet<Season> Seasons { get; init; }
+
     public DbSet<UserTrophy> UserTrophies { get; init; }
 
     /// <summary>
@@ -119,9 +121,14 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext, IJobsDbContext
         modelBuilder.Entity<UserAchievement>()
             .HasKey(x => new { x.UserId, x.Achievement, x.Level });
 
-        // One trophy per user and season, so awarding a season again adds nothing.
+        // Each week and month is recorded once.
+        modelBuilder.Entity<Season>()
+            .HasIndex(x => new { x.Type, x.StartsAt })
+            .IsUnique();
+
+        // One trophy per user and season.
         modelBuilder.Entity<UserTrophy>()
-            .HasKey(x => new { x.UserId, x.Season, x.SeasonStart });
+            .HasKey(x => new { x.UserId, x.SeasonId });
 
         // The achievements job looks up users waiting for a check: only those rows are indexed.
         modelBuilder.Entity<User>()
