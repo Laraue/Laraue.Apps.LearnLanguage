@@ -187,6 +187,34 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
             playersCount);
     }
 
+    public async Task<SeasonTop> GetSeasonTopAsync(
+        League league,
+        DateTime since,
+        DateTime until,
+        int places,
+        CancellationToken ct = default)
+    {
+        var scores = GetScores(
+            context.UserQuizQuestions.Where(x => x.Quiz.User.League == league && x.AnsweredAt < until),
+            since);
+
+        // Enough rows for the places even with ties.
+        var top = await scores
+            .OrderByDescending(x => x.Points)
+            .ThenByDescending(x => x.Correct)
+            .ThenBy(x => x.UserId)
+            .Take(places * 10)
+            .ToListAsync(ct);
+        var playersCount = await scores.CountAsync(ct);
+
+        var placed = top
+            .Where(x => x.Points > 0)
+            .Select(x => new SeasonPlace(x.UserId, 1 + top.Count(o => IsAhead(o, x))))
+            .Where(x => x.Place <= places)
+            .ToArray();
+        return new SeasonTop(playersCount, placed);
+    }
+
     private static bool IsAhead(Score other, Score score) =>
         other.Points > score.Points || (other.Points == score.Points && other.Correct > score.Correct);
 

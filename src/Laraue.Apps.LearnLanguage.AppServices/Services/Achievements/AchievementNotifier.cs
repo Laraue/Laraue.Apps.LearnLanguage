@@ -27,11 +27,18 @@ public sealed class AchievementNotifier(
         IReadOnlyList<EarnedAchievement> earned,
         CancellationToken ct = default)
     {
-        if (earned.Count == 0
-            || await context.Users.AnyAsync(u => u.Id == userId && (u.AchievementMessagesOff || u.BotBlockedAt != null), ct))
-        {
+        if (earned.Count == 0)
             return;
-        }
+
+        var user = await context.Users
+            .Where(u => u.Id == userId && !u.AchievementMessagesOff && u.BotBlockedAt == null)
+            .Select(u => new { u.TelegramLanguageCode })
+            .FirstOrDefaultAsync(ct);
+        if (user is null)
+            return;
+
+        // Sent by the achievements job, outside of the user's request.
+        using var _ = InterfaceCulture.Use(user.TelegramLanguageCode);
 
         var tmb = new TelegramMessageBuilder();
         foreach (var achievement in earned)

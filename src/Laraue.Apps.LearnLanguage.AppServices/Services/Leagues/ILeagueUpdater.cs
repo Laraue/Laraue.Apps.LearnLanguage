@@ -10,6 +10,6 @@ public interface ILeagueUpdater
     /// up to Intermediate. Nobody moves down: a wrong answer un-learns a word, and a user right at the threshold
     /// would otherwise go back and forth between boards.
     /// </summary>
-    /// <returns>How many users moved up.</returns>
-    Task<int> UpdateAsync(CancellationToken ct = default);
+    /// <returns>The users who moved up.</returns>
+    Task<IReadOnlyList<Guid>> UpdateAsync(CancellationToken ct = default);
 }

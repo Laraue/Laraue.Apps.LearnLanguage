@@ -33,4 +33,24 @@ public interface IStatsRepository
     /// still counts, so it doesn't look broken before the user has practised today.
     /// </summary>
     Task<int> GetStreakAsync(Guid userId, DateOnly today, CancellationToken ct = default);
+
+    /// <summary>
+    /// Players of a league who placed in the top <paramref name="places"/> for answers given from
+    /// <paramref name="since"/> to <paramref name="until"/>, ranked as on the leaderboard: equal points and
+    /// right answers share a place. Only players with points above zero place.
+    /// </summary>
+    Task<SeasonTop> GetSeasonTopAsync(
+        League league,
+        DateTime since,
+        DateTime until,
+        int places,
+        CancellationToken ct = default);
 }
+
+/// <param name="PlayersCount">How many users of the league answered in the season.</param>
+/// <param name="Placed">The players who placed, best first.</param>
+public record SeasonTop(int PlayersCount, IReadOnlyList<SeasonPlace> Placed);
+
+/// <param name="UserId">The player.</param>
+/// <param name="Place">1-based place.</param>
+public record SeasonPlace(Guid UserId, int Place);

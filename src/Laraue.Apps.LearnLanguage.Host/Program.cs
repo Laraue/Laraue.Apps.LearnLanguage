@@ -1,4 +1,5 @@
-﻿using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
+﻿using Laraue.Apps.LearnLanguage.AppServices.Services.Seasons;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
 using Laraue.Core.Extensions.Hosting.EfCore;
 using Laraue.Core.Extensions.Hosting;
 using Laraue.Apps.LearnLanguage.DataAccess;
@@ -27,7 +28,7 @@ builder.Services.AddHealthChecks();
 builder.Services.AddHostedService<LearnLanguageStateMetrics>();
 builder.Services.AddHostedService<DictionarySyncService>();
 builder.Services.AddHostedService<ReminderService>();
-builder.Services.AddBackgroundJob<LeagueJob, EmptyJobData>(LeagueJob.Name);
+builder.Services.AddBackgroundJob<SeasonJob, SeasonJobData>(SeasonJob.Name);
 builder.Services.AddHostedService<AchievementCheckService>();
 builder.Logging.ClearProviders().AddJsonConsole();
 

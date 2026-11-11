@@ -13251,6 +13251,38 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                     b.ToTable("user_quiz_topics", (string)null);
                 });
 
+            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UserTrophy", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.Property<byte>("Season")
+                        .HasColumnType("smallint")
+                        .HasColumnName("season");
+
+                    b.Property<DateTime>("SeasonStart")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("season_start");
+
+                    b.Property<DateTime>("AwardedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("awarded_at");
+
+                    b.Property<byte>("League")
+                        .HasColumnType("smallint")
+                        .HasColumnName("league");
+
+                    b.Property<byte>("Place")
+                        .HasColumnType("smallint")
+                        .HasColumnName("place");
+
+                    b.HasKey("UserId", "Season", "SeasonStart")
+                        .HasName("pk_user_trophies");
+
+                    b.ToTable("user_trophies", (string)null);
+                });
+
             modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UtmLabel", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -13674,6 +13706,18 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasConstraintName("fk_user_quiz_topics_users_user_id");
 
                     b.Navigation("Topic");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UserTrophy", b =>
+                {
+                    b.HasOne("Laraue.Apps.LearnLanguage.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_trophies_users_user_id");
 
                     b.Navigation("User");
                 });

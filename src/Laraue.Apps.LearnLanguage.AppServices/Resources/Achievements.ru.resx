@@ -152,4 +152,28 @@
     <data name="ChooseTitle" xml:space="preserve">
         <value>Выберите титул, который будет виден рядом с вашим именем в рейтинге:</value>
     </data>
+    <data name="RisingStar_1" xml:space="preserve">
+        <value>Восходящая звезда</value>
+    </data>
+    <data name="RisingStar_Requirement" xml:space="preserve">
+        <value>Перейти в 🌳 лигу опытных</value>
+    </data>
+    <data name="Trophy_Place_1" xml:space="preserve">
+        <value>🥇 1-е место</value>
+    </data>
+    <data name="Trophy_Place_2" xml:space="preserve">
+        <value>🥈 2-е место</value>
+    </data>
+    <data name="Trophy_Place_3" xml:space="preserve">
+        <value>🥉 3-е место</value>
+    </data>
+    <data name="Trophy_Week" xml:space="preserve">
+        <value>неделя {0}</value>
+    </data>
+    <data name="Trophy_ShareText" xml:space="preserve">
+        <value>{0} в @{1}</value>
+    </data>
+    <data name="Trophies" xml:space="preserve">
+        <value>🏆 Трофеи: {0}</value>
+    </data>
 </root>

@@ -173,18 +173,6 @@ public class LeaderboardTests : IntegrationTest
             telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
     }
 
-    [Theory]
-    [InlineData("2026-11-09T00:00:00", 7 * 24)] // Monday 00:00: the next week
-    [InlineData("2026-11-09T10:00:00", 6 * 24 + 14)] // Monday 10:00
-    [InlineData("2026-11-15T23:00:00", 1)] // Sunday 23:00
-    [InlineData("2026-11-11T12:30:00", 4 * 24 + 11.5)] // Wednesday 12:30
-    public void LeagueJob_ShouldRunAgainAtTheNextMonday(string now, double hours)
-    {
-        var at = DateTime.SpecifyKind(DateTime.Parse(now), DateTimeKind.Utc);
-
-        Assert.Equal(TimeSpan.FromHours(hours), LeagueJob.TimeToNextWeek(at));
-    }
-
     [Fact]
     public async Task Leaderboard_ShouldCountTheWholeMonth_WhenMonthIsSelected()
     {
@@ -390,7 +378,7 @@ public class LeaderboardTests : IntegrationTest
     private static async Task<int> UpdateLeaguesAsync(AppTelegramTestHost host)
     {
         using var scope = host.CreateScope();
-        return await scope.ServiceProvider.GetRequiredService<ILeagueUpdater>().UpdateAsync();
+        return (await scope.ServiceProvider.GetRequiredService<ILeagueUpdater>().UpdateAsync()).Count;
     }
 
     private static (long Ru, long De) Languages()

@@ -9,7 +9,7 @@ public sealed class LeagueUpdater(DatabaseContext context) : ILeagueUpdater
     private const int BatchSize = 500;
 
     /// <inheritdoc />
-    public async Task<int> UpdateAsync(CancellationToken ct = default)
+    public async Task<IReadOnlyList<Guid>> UpdateAsync(CancellationToken ct = default)
     {
         // Counted in the database; only the ids of users who move up come back.
         var userIds = await context.LearnedTranslations
@@ -26,6 +26,6 @@ public sealed class LeagueUpdater(DatabaseContext context) : ILeagueUpdater
                 .ExecuteUpdateAsync(u => u.SetProperty(x => x.League, League.Intermediate), ct);
         }
 
-        return userIds.Count;
+        return userIds;
     }
 }
