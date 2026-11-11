@@ -116,21 +116,6 @@
     <data name="ShareText" xml:space="preserve">
         <value>Моё новое достижение в @{1}: {0}. {2}</value>
     </data>
-    <data name="FirstQuiz_Requirement" xml:space="preserve">
-        <value>Пройти тест</value>
-    </data>
-    <data name="TenQuizzesInADay_Requirement" xml:space="preserve">
-        <value>10 тестов за день</value>
-    </data>
-    <data name="FirstC1Word_Requirement" xml:space="preserve">
-        <value>Выучить слово уровня C1</value>
-    </data>
-    <data name="WelcomeBack_Requirement" xml:space="preserve">
-        <value>Вернуться после недели перерыва</value>
-    </data>
-    <data name="AllWordsLearned_Requirement" xml:space="preserve">
-        <value>Выучить все слова языковой пары</value>
-    </data>
     <data name="NobodyYet" xml:space="preserve">
         <value>Пока ни у кого нет</value>
     </data>

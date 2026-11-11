@@ -375,51 +375,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finish a quiz.
-        /// </summary>
-        public static string FirstQuiz_Requirement {
-            get {
-                return ResourceManager.GetString("FirstQuiz_Requirement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 10 quizzes in a day.
-        /// </summary>
-        public static string TenQuizzesInADay_Requirement {
-            get {
-                return ResourceManager.GetString("TenQuizzesInADay_Requirement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Learn a C1 word.
-        /// </summary>
-        public static string FirstC1Word_Requirement {
-            get {
-                return ResourceManager.GetString("FirstC1Word_Requirement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Come back after a week away.
-        /// </summary>
-        public static string WelcomeBack_Requirement {
-            get {
-                return ResourceManager.GetString("WelcomeBack_Requirement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Learn every word of a language pair.
-        /// </summary>
-        public static string AllWordsLearned_Requirement {
-            get {
-                return ResourceManager.GetString("AllWordsLearned_Requirement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Nobody has it yet.
         /// </summary>
         public static string NobodyYet {

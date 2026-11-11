@@ -69,9 +69,8 @@ public sealed class AchievementsScreen(
         {
             var definition = AchievementCatalog.All[item.Achievement];
             var name = $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}";
-            tmb.AppendRow(item.Level > 0
-                ? $"✅ {name}"
-                : $"🔒 {name} · {AchievementCatalog.Requirement(item.Achievement, 1)}");
+            // What it's for, earned or not.
+            tmb.AppendRow($"{(item.Level > 0 ? "✅" : "🔒")} {name} · {AchievementCatalog.Description(item.Achievement, 1)}");
         }
 
         var title = await context.Users

@@ -87,14 +87,11 @@ public static class AchievementCatalog
         All[achievement].Thresholds.Length == 1 ? Text($"{achievement}_1") : Text(achievement.ToString());
 
     /// <summary>
-    /// What a level takes: "1,000", "B1", or a description for a single-level achievement.
+    /// What a level of an achievement with levels takes: "1,000", or "B1" for levels completed.
     /// </summary>
-    public static string Requirement(Achievement achievement, int level) => achievement switch
-    {
-        Achievement.LevelsCompleted => CefrLevels[level - 1],
-        _ when All[achievement].Thresholds.Length == 1 => Text($"{achievement}_Requirement"),
-        _ => All[achievement].Thresholds[level - 1].ToString("N0", System.Globalization.CultureInfo.CurrentUICulture),
-    };
+    public static string Requirement(Achievement achievement, int level) => achievement == Achievement.LevelsCompleted
+        ? CefrLevels[level - 1]
+        : All[achievement].Thresholds[level - 1].ToString("N0", System.Globalization.CultureInfo.CurrentUICulture);
 
     /// <summary>
     /// How many players have a level: "4% of players have it", or that nobody (else) has it yet.

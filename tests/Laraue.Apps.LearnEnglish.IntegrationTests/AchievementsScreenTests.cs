@@ -52,9 +52,9 @@ public class AchievementsScreenTests : IntegrationTest
         // Levels completed show the next CEFR level.
         Assert.Contains("🎓 Levels completed: next A1", lines);
         // Single achievements as a checklist.
-        Assert.Contains("✅ 👣 First steps", lines);
-        Assert.Contains("✅ 🔤 Pioneer", lines);
-        Assert.Contains("🔒 ⚡ Marathon · 10 quizzes in a day", lines);
+        Assert.Contains("✅ 👣 First steps · First quiz finished", lines);
+        Assert.Contains("✅ 🔤 Pioneer · First C1 word learned", lines);
+        Assert.Contains("🔒 ⚡ Marathon · 10 quizzes in one day", lines);
         // Everything reached is granted: no waiting.
         Assert.DoesNotContain(lines, l => l.StartsWith("⏳"));
 
