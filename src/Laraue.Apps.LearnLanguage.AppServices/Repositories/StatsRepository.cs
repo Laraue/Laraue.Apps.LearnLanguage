@@ -104,22 +104,24 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
 
     public async Task<Leaderboard> GetLeaderboardAsync(
         Guid userId,
+        League? league,
         DateTime since,
         int count,
         CancellationToken ct = default)
     {
         // Leagues are stored by the weekly league job; the viewer's learned words are counted live, so the
         // words left to the next league go down as they learn.
-        var league = await context.Users
+        var myLeague = await context.Users
             .Where(u => u.Id == userId)
             .Select(u => u.League)
             .FirstAsync(ct);
+        var shownLeague = league ?? myLeague;
         var learnedWords = await context.LearnedTranslations
             .Where(t => t.UserId == userId && t.LearnedAt != null)
             .Select(t => t.WordId)
             .Distinct()
             .CountAsync(ct);
-        var leagueQuestions = context.UserQuizQuestions.Where(x => x.Quiz.User.League == league);
+        var leagueQuestions = context.UserQuizQuestions.Where(x => x.Quiz.User.League == shownLeague);
 
         // Points per user of the league who answered in the period. Each query below aggregates it in the
         // database, so only the shown rows come back, however many users play.
@@ -136,7 +138,8 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         // Ties share a place: the place is 1 + the number of users strictly ahead.
         var ranks = top.ToDictionary(x => x.UserId, x => 1 + top.Count(o => IsAhead(o, x)));
         var me = top.FirstOrDefault(x => x.UserId == userId);
-        if (me is null)
+        // The viewer's own row only on their league's board.
+        if (me is null && shownLeague == myLeague)
         {
             me = await GetScores(context.UserQuizQuestions.Where(x => x.Quiz.UserId == userId), since)
                 .FirstOrDefaultAsync(ct);
@@ -172,7 +175,8 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
         }
 
         return new Leaderboard(
-            league,
+            shownLeague,
+            myLeague,
             learnedWords,
             top.Select(ToRow).ToArray(),
             me is null ? null : ToRow(me),

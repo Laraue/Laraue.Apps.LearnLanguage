@@ -70,7 +70,7 @@
         <value>I've learned my first English word with @{0}</value>
     </data>
     <data name="Leaderboard_Title" xml:space="preserve">
-        <value>🏆 Leaderboard · {0}</value>
+        <value>🏆 Leaderboard · {0} · {1}</value>
     </data>
     <data name="Leaderboard_Week" xml:space="preserve">
         <value>this week</value>
@@ -94,12 +94,18 @@
         <value>🙈 Your name is hidden from others. You can show it in ⚙️ Settings.</value>
     </data>
     <data name="Leaderboard_LeagueBeginner" xml:space="preserve">
-        <value>🌱 Beginner league · words left to 🌳 Intermediate: {0}</value>
+        <value>Words left to 🌳 Intermediate: {0}</value>
     </data>
     <data name="Leaderboard_LeagueIntermediate" xml:space="preserve">
         <value>🌳 Intermediate league</value>
     </data>
     <data name="Leaderboard_LeagueBeginnerMovingUp" xml:space="preserve">
-        <value>🌱 Beginner league · 🎉 enough words: you move to 🌳 Intermediate on Monday</value>
+        <value>🎉 Enough words: you move to 🌳 Intermediate on Monday</value>
+    </data>
+    <data name="Leaderboard_LeagueBeginnerName" xml:space="preserve">
+        <value>🌱 Beginner league</value>
+    </data>
+    <data name="Leaderboard_NoPlayers" xml:space="preserve">
+        <value>Nobody in this league has played yet.</value>
     </data>
 </root>

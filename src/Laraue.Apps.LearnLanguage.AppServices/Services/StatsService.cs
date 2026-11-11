@@ -142,19 +142,30 @@ public class StatsService(
             : today.AddDays(-((7 + (int)today.DayOfWeek - (int)DayOfWeek.Monday) % 7));
         var board = await statsRepository.GetLeaderboardAsync(
             replyData.UserId,
+            Enum.IsDefined((League)request.League) ? (League)request.League : null,
             since.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
             LeaderboardSize,
             ct);
 
         var tmb = new TelegramMessageBuilder();
         tmb.AppendRow($"<b>{string.Format(
-                Stats.Leaderboard_Title,
-                request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week)}</b>")
-            .AppendRow(LeagueLine(board))
-            .AppendRow(Stats.Leaderboard_Scoring)
+            Stats.Leaderboard_Title,
+            request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week,
+            board.League == League.Intermediate
+                ? Stats.Leaderboard_LeagueIntermediate
+                : Stats.Leaderboard_LeagueBeginnerName)}</b>");
+        var isMyLeague = board.League == board.MyLeague;
+        if (isMyLeague && board.League == League.Beginner)
+            tmb.AppendRow(BeginnerProgressLine(board));
+        tmb.AppendRow(Stats.Leaderboard_Scoring)
             .AppendRow();
 
-        if (board.PlayersCount < MinLeaderboardPlayers)
+        if (!isMyLeague && board.PlayersCount == 0)
+        {
+            // Another league's board: nothing to invite to.
+            tmb.AppendRow(Stats.Leaderboard_NoPlayers);
+        }
+        else if (isMyLeague && board.PlayersCount < MinLeaderboardPlayers)
         {
             tmb.AppendRow(Stats.Leaderboard_FewPlayers);
             if (board.Me is { } me)
@@ -172,14 +183,19 @@ public class StatsService(
         if (board.Me is { } my && LeaderboardNames.GetName(my.NameMode, my.Profile) is null)
             tmb.AppendRow().AppendRow(Stats.Leaderboard_NameHidden);
 
-        var periodPath = new CallbackRoutePath(TelegramRoutes.Leaderboard);
+        // Each button keeps the other choice: a period of the shown league, a league for the shown period.
+        CallbackRoutePath Path(bool month, League league) => new CallbackRoutePath(TelegramRoutes.Leaderboard)
+            .WithQueryParameter(ParameterNames.Month, month)
+            .WithQueryParameter(ParameterNames.League, (int)league);
         tmb.AddInlineKeyboardButtons([
-            periodPath
-                .WithQueryParameter(ParameterNames.Month, false)
-                .ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Week, !request.Month)),
-            periodPath
-                .WithQueryParameter(ParameterNames.Month, true)
-                .ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Month, request.Month)),
+            Path(false, board.League).ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Week, !request.Month)),
+            Path(true, board.League).ToInlineKeyboardButton(Selected(Buttons.Leaderboard_Month, request.Month)),
+        ]);
+        tmb.AddInlineKeyboardButtons([
+            Path(request.Month, League.Beginner).ToInlineKeyboardButton(
+                Selected(Buttons.Leaderboard_LeagueBeginner, board.League == League.Beginner)),
+            Path(request.Month, League.Intermediate).ToInlineKeyboardButton(
+                Selected(Buttons.Leaderboard_LeagueIntermediate, board.League == League.Intermediate)),
         ]);
         tmb.AddInlineKeyboardButtons([
             InlineKeyboardButton.WithCallbackData(Buttons.Stat, TelegramRoutes.Stat)
@@ -189,11 +205,8 @@ public class StatsService(
         await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
     }
 
-    private static string LeagueLine(Leaderboard board)
+    private static string BeginnerProgressLine(Leaderboard board)
     {
-        if (board.League == League.Intermediate)
-            return Stats.Leaderboard_LeagueIntermediate;
-
         // The words are counted live, but leagues change on Mondays.
         var wordsLeft = LeagueRules.IntermediateMinWords - board.LearnedWords;
         return wordsLeft > 0

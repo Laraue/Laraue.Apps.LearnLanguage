@@ -84,4 +84,10 @@
     <data name="LeaderboardName_Hidden" xml:space="preserve">
         <value>🙈 Hidden</value>
     </data>
+    <data name="Leaderboard_LeagueBeginner" xml:space="preserve">
+        <value>🌱 Beginner</value>
+    </data>
+    <data name="Leaderboard_LeagueIntermediate" xml:space="preserve">
+        <value>🌳 Intermediate</value>
+    </data>
 </root>
