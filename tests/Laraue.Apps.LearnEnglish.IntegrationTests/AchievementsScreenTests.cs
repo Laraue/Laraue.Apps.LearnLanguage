@@ -42,21 +42,22 @@ public class AchievementsScreenTests : IntegrationTest
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         var lines = request.Text!.Split('\n');
         Assert.Equal("<b>🏅 Achievements · 6 of 26</b>", lines[0]);
-        // The level held, then the next one with the progress to it.
-        AssertFollow(lines, "📚 Words learned", "Earned: 🥉 Bookworm", "Next: 🥈 Word collector · 120 of 500 words");
-        AssertFollow(lines, "🎯 Without mistakes",
-            "Earned: 🥉 Sharp eye", "Next: 🥈 Sniper · 1 of 5 quizzes in a row without mistakes");
-        // Nothing held yet: only the next one.
-        AssertFollow(lines, "🧩 Quizzes finished", "Next: 🥉 Persistence · 1 of 100 quizzes");
-        AssertFollow(lines, "🎓 Levels completed", "Next: 🥉 A1 Beginner · learn every A1 word");
+        // The level held with what it means, then the next one with the progress to it.
+        Assert.Contains(
+            "<b>Words learned</b>: 🥉 Bookworm (100 words learned). Next: 🥈 Word collector · 120 of 500 words",
+            lines);
+        Assert.Contains(
+            "<b>Without mistakes</b>: 🥉 Sharp eye (a quiz without mistakes). " +
+            "Next: 🥈 Sniper · 1 of 5 quizzes in a row without mistakes",
+            lines);
+        // Nothing held yet: locked, then the next one.
+        Assert.Contains("<b>Quizzes finished</b>: 🔒 Next: 🥉 Persistence · 1 of 100 quizzes", lines);
+        Assert.Contains("<b>Levels completed</b>: 🔒 Next: 🥉 A1 Beginner · learn every A1 word", lines);
         // Every level held: no next one.
-        AssertFollow(lines, "🌍 Language pairs", "Earned: 🥈 Polyglot", "");
-        // Single achievements as a checklist.
-        Assert.Contains("✅ 👣 First steps · First quiz finished", lines);
-        Assert.Contains("✅ 🔤 Pioneer · First C1 word learned", lines);
-        // Each on its own, separated by blank lines.
-        AssertFollow(lines, "✅ 👣 First steps · First quiz finished", "", "🔒 ⚡ Marathon · 10 quizzes in one day");
-        Assert.Contains("🔒 ⚡ Marathon · 10 quizzes in one day", lines);
+        Assert.Contains("<b>Language pairs</b>: 🥈 Polyglot (words learned in 5 language pairs)", lines);
+        // Single achievements: the status, the name and what it's for, separated by blank lines.
+        Assert.Contains("✅ <b>Pioneer</b> (first C1 word learned)", lines);
+        AssertFollow(lines, "✅ <b>First steps</b> (first quiz finished)", "", "🔒 <b>Marathon</b> (10 quizzes in one day)");
         // Everything reached is granted: no waiting.
         Assert.DoesNotContain(lines, l => l.StartsWith("⏳"));
 
@@ -86,7 +87,7 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
 
         var text = telegramTestHost.Requests().Last<EditMessageTextRequest>().Text!;
-        Assert.Contains("Earned: 🥉 Bookworm", text);
+        Assert.Contains("<b>Words learned</b>: 🥉 Bookworm", text);
         Assert.DoesNotContain("⏳", text);
     }
 

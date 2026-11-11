@@ -267,9 +267,6 @@
     <data name="LanguagePairs_Description_2" xml:space="preserve">
         <value>Words learned in 5 language pairs</value>
     </data>
-    <data name="Earned" xml:space="preserve">
-        <value>Earned: {0}</value>
-    </data>
     <data name="Next" xml:space="preserve">
         <value>Next: {0} · {1}</value>
     </data>

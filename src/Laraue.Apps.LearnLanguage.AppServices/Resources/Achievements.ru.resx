@@ -260,9 +260,6 @@
     <data name="LanguagePairs_Description_2" xml:space="preserve">
         <value>Слова выучены в 5 языковых парах</value>
     </data>
-    <data name="Earned" xml:space="preserve">
-        <value>Получено: {0}</value>
-    </data>
     <data name="Next" xml:space="preserve">
         <value>Дальше: {0} · {1}</value>
     </data>

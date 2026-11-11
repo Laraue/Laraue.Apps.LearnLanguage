@@ -807,15 +807,6 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Earned: {0}.
-        /// </summary>
-        public static string Earned {
-            get {
-                return ResourceManager.GetString("Earned", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Next: {0} · {1}.
         /// </summary>
         public static string Next {

@@ -58,22 +58,17 @@ public sealed class AchievementsScreen(
             tmb.AppendRow().AppendRow(messagesOff ? AchievementTexts.PendingRefresh : AchievementTexts.PendingMessage);
         }
 
-        // Achievements with levels first: the level held, then the progress to the next one.
+        // Achievements with levels first: the level held and what it means, then the next one.
         foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length > 1))
-        {
-            tmb.AppendRow();
-            foreach (var line in LevelsLines(item))
-                tmb.AppendRow(line);
-        }
+            tmb.AppendRow().AppendRow(LevelsLine(item));
 
         // Then the single ones as a checklist, spaced like the others.
         foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length == 1))
         {
-            tmb.AppendRow();
-            var definition = AchievementCatalog.All[item.Achievement];
-            var name = $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}";
-            // What it's for, earned or not.
-            tmb.AppendRow($"{(item.Level > 0 ? "✅" : "🔒")} {name} · {AchievementCatalog.Description(item.Achievement, 1)}");
+            // Only the status as an icon, and what it's for.
+            tmb.AppendRow().AppendRow(
+                $"{(item.Level > 0 ? "✅" : "🔒")} <b>{AchievementCatalog.Name(item.Achievement)}</b> " +
+                $"({AchievementCatalog.Meaning(item.Achievement, 1)})");
         }
 
         var title = await context.Users
@@ -152,26 +147,26 @@ public sealed class AchievementsScreen(
     }
 
     /// <summary>
-    /// "📚 Words learned", then "Earned: 🥇 Scholar" when a level is held, then
-    /// "Next: 💎 Walking dictionary · 2,289 of 3,000 words" until every level is held.
+    /// "Words learned: 🥇 Scholar (1,000 words learned). Next: 💎 Walking dictionary · 2,289 of 3,000 words";
+    /// 🔒 before a first level, no "Next" after the last one.
     /// </summary>
-    private static IEnumerable<string> LevelsLines(AchievementProgress item)
+    private static string LevelsLine(AchievementProgress item)
     {
         var definition = AchievementCatalog.All[item.Achievement];
-        yield return $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}";
-
-        if (item.Level > 0)
-            yield return string.Format(AchievementTexts.Earned, AchievementCatalog.Level(item.Achievement, item.Level));
-
+        var held = item.Level > 0
+            ? $"{AchievementCatalog.Level(item.Achievement, item.Level)} ({AchievementCatalog.Meaning(item.Achievement, item.Level)})"
+            : "🔒";
+        var line = $"<b>{AchievementCatalog.Name(item.Achievement)}</b>: {held}";
         if (item.Level == definition.Thresholds.Length)
-            yield break;
+            return line;
 
         var next = item.Level + 1;
         var progress = string.Format(
             AchievementCatalog.ProgressFormat(item.Achievement, next),
             Number(item.Value),
             AchievementCatalog.Requirement(item.Achievement, next));
-        yield return string.Format(AchievementTexts.Next, AchievementCatalog.Level(item.Achievement, next), progress);
+        var nextText = string.Format(AchievementTexts.Next, AchievementCatalog.Level(item.Achievement, next), progress);
+        return item.Level > 0 ? $"{line}. {nextText}" : $"{line} {nextText}";
     }
 
     private static bool IsReachedButNotGranted(AchievementProgress item) =>

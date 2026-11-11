@@ -62,6 +62,15 @@ public static class AchievementCatalog
         Text($"{achievement}_Description_{level}");
 
     /// <summary>
+    /// The description inside a sentence: "1,000 words learned", "a quiz without mistakes".
+    /// </summary>
+    public static string Meaning(Achievement achievement, int level)
+    {
+        var description = Description(achievement, level);
+        return char.ToLower(description[0], System.Globalization.CultureInfo.CurrentUICulture) + description[1..];
+    }
+
+    /// <summary>
     /// How progress to a level reads, with the progress as {0} and what the level takes as {1}:
     /// "{0} of {1} words". A level can have its own, e.g. for a singular.
     /// </summary>
