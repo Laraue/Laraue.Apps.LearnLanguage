@@ -66,10 +66,10 @@ public sealed class AchievementsScreen(
                 tmb.AppendRow(line);
         }
 
-        // Then the single ones as a checklist.
-        tmb.AppendRow();
+        // Then the single ones as a checklist, spaced like the others.
         foreach (var item in overview.Items.Where(i => AchievementCatalog.All[i.Achievement].Thresholds.Length == 1))
         {
+            tmb.AppendRow();
             var definition = AchievementCatalog.All[item.Achievement];
             var name = $"{definition.Emoji} {AchievementCatalog.Name(item.Achievement)}";
             // What it's for, earned or not.

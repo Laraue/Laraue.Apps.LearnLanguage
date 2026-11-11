@@ -48,12 +48,14 @@ public class AchievementsScreenTests : IntegrationTest
             "Earned: 🥉 Sharp eye", "Next: 🥈 Sniper · 1 of 5 quizzes in a row without mistakes");
         // Nothing held yet: only the next one.
         AssertFollow(lines, "🧩 Quizzes finished", "Next: 🥉 Persistence · 1 of 100 quizzes");
-        AssertFollow(lines, "🎓 Levels completed", "Next: 🥉 Peppa Pig without subtitles · learn every A1 word");
+        AssertFollow(lines, "🎓 Levels completed", "Next: 🥉 A1 Beginner · learn every A1 word");
         // Every level held: no next one.
         AssertFollow(lines, "🌍 Language pairs", "Earned: 🥈 Polyglot", "");
         // Single achievements as a checklist.
         Assert.Contains("✅ 👣 First steps · First quiz finished", lines);
         Assert.Contains("✅ 🔤 Pioneer · First C1 word learned", lines);
+        // Each on its own, separated by blank lines.
+        AssertFollow(lines, "✅ 👣 First steps · First quiz finished", "", "🔒 ⚡ Marathon · 10 quizzes in one day");
         Assert.Contains("🔒 ⚡ Marathon · 10 quizzes in one day", lines);
         // Everything reached is granted: no waiting.
         Assert.DoesNotContain(lines, l => l.StartsWith("⏳"));

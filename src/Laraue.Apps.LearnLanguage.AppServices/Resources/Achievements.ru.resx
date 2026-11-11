@@ -78,19 +78,19 @@
         <value>Пройденные уровни</value>
     </data>
     <data name="LevelsCompleted_1" xml:space="preserve">
-        <value>«Свинка Пеппа» без субтитров</value>
+        <value>A1 Начальный</value>
     </data>
     <data name="LevelsCompleted_2" xml:space="preserve">
-        <value>Поболтать о погоде с англичанином</value>
+        <value>A2 Элементарный</value>
     </data>
     <data name="LevelsCompleted_3" xml:space="preserve">
-        <value>«Гарри Поттер» в оригинале</value>
+        <value>B1 Средний</value>
     </data>
     <data name="LevelsCompleted_4" xml:space="preserve">
-        <value>«Друзья» без субтитров</value>
+        <value>B2 Выше среднего</value>
     </data>
     <data name="LevelsCompleted_5" xml:space="preserve">
-        <value>«Оливер Твист» в оригинале</value>
+        <value>C1 Продвинутый</value>
     </data>
     <data name="FirstQuiz_1" xml:space="preserve">
         <value>Первые шаги</value>

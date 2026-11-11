@@ -258,7 +258,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Peppa Pig without subtitles.
+        ///   Looks up a localized string similar to A1 Beginner.
         /// </summary>
         public static string LevelsCompleted_1 {
             get {
@@ -267,7 +267,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Small talk about the weather.
+        ///   Looks up a localized string similar to A2 Elementary.
         /// </summary>
         public static string LevelsCompleted_2 {
             get {
@@ -276,7 +276,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Harry Potter in the original.
+        ///   Looks up a localized string similar to B1 Intermediate.
         /// </summary>
         public static string LevelsCompleted_3 {
             get {
@@ -285,7 +285,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Friends without subtitles.
+        ///   Looks up a localized string similar to B2 Upper-Intermediate.
         /// </summary>
         public static string LevelsCompleted_4 {
             get {
@@ -294,7 +294,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Oliver Twist in the original.
+        ///   Looks up a localized string similar to C1 Advanced.
         /// </summary>
         public static string LevelsCompleted_5 {
             get {

@@ -85,19 +85,19 @@
         <value>Levels completed</value>
     </data>
     <data name="LevelsCompleted_1" xml:space="preserve">
-        <value>Peppa Pig without subtitles</value>
+        <value>A1 Beginner</value>
     </data>
     <data name="LevelsCompleted_2" xml:space="preserve">
-        <value>Small talk about the weather</value>
+        <value>A2 Elementary</value>
     </data>
     <data name="LevelsCompleted_3" xml:space="preserve">
-        <value>Harry Potter in the original</value>
+        <value>B1 Intermediate</value>
     </data>
     <data name="LevelsCompleted_4" xml:space="preserve">
-        <value>Friends without subtitles</value>
+        <value>B2 Upper-Intermediate</value>
     </data>
     <data name="LevelsCompleted_5" xml:space="preserve">
-        <value>Oliver Twist in the original</value>
+        <value>C1 Advanced</value>
     </data>
     <data name="FirstQuiz_1" xml:space="preserve">
         <value>First steps</value>
