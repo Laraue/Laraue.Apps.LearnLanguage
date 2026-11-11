@@ -13050,6 +13050,10 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("achievements_check_requested_at");
 
+                    b.Property<bool>("AchievementsListRequested")
+                        .HasColumnType("boolean")
+                        .HasColumnName("achievements_list_requested");
+
                     b.Property<DateTime?>("BotBlockedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("bot_blocked_at");

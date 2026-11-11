@@ -81,6 +81,11 @@ public sealed class User
     public DateTime? AchievementsCheckRequestedAt { get; set; }
 
     /// <summary>
+    /// The check was asked by opening the achievements list: after it, the job sends the updated list.
+    /// </summary>
+    public bool AchievementsListRequested { get; set; }
+
+    /// <summary>
     /// The achievement whose level name the user shows next to their name on the leaderboard, with
     /// <see cref="TitleLevel"/>. Null for no title.
     /// </summary>
