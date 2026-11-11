@@ -160,7 +160,8 @@ public class StatsService(
         {
             foreach (var row in board.Top)
                 tmb.AppendRow(LeaderboardRow(row, replyData.UserId));
-            if (board.Me is { } me && me.Rank > LeaderboardSize)
+            // Below the shown rows, or tied with the last of them but listed after.
+            if (board.Me is { } me && board.Top.All(r => r.UserId != me.UserId))
                 tmb.AppendRow("…").AppendRow(LeaderboardRow(me, replyData.UserId));
         }
 
