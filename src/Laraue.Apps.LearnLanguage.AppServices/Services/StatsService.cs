@@ -151,30 +151,43 @@ public class StatsService(
             LeaderboardSize,
             ct);
 
+        // A rich message (MIN-49): the board is a table, so places, points and percents line up in columns.
         var tmb = new TelegramMessageBuilder();
-        tmb.AppendRow($"<b>{string.Format(
+        tmb.AppendRow($"<h3>{string.Format(
                 Stats.Leaderboard_Title,
-                request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week)}</b>")
-            .AppendRow(Stats.Leaderboard_Scoring)
-            .AppendRow();
+                request.Month ? Stats.Leaderboard_Month : Stats.Leaderboard_Week)}</h3>")
+            .AppendRow($"<p>{Stats.Leaderboard_Scoring}</p>");
 
+        var rows = new List<string>();
         if (board.PlayersCount < MinLeaderboardPlayers)
         {
-            tmb.AppendRow(Stats.Leaderboard_FewPlayers);
+            tmb.AppendRow($"<p>{Stats.Leaderboard_FewPlayers}</p>");
             if (board.Me is { } me)
-                tmb.AppendRow().AppendRow(LeaderboardRow(me, replyData.UserId));
+                rows.Add(LeaderboardRow(me, replyData.UserId));
         }
         else
         {
-            foreach (var row in board.Top)
-                tmb.AppendRow(LeaderboardRow(row, replyData.UserId));
+            rows.AddRange(board.Top.Select(row => LeaderboardRow(row, replyData.UserId)));
             // Below the shown rows, or tied with the last of them but listed after.
             if (board.Me is { } me && board.Top.All(r => r.UserId != me.UserId))
-                tmb.AppendRow("…").AppendRow(LeaderboardRow(me, replyData.UserId));
+            {
+                rows.Add("<tr><td colspan=\"4\" align=\"center\">…</td></tr>");
+                rows.Add(LeaderboardRow(me, replyData.UserId));
+            }
+        }
+
+        if (rows.Count > 0)
+        {
+            tmb.AppendRow("<table bordered compact>")
+                .AppendRow($"<tr><th>#</th><th>{Stats.Leaderboard_Player}</th>" +
+                           $"<th align=\"right\">{Stats.Leaderboard_Points}</th>" +
+                           $"<th align=\"right\">{Stats.Leaderboard_Correct}</th></tr>")
+                .AppendRows(rows)
+                .AppendRow("</table>");
         }
 
         if (board.Me is { } my && LeaderboardNames.GetName(my.NameMode, my.Profile) is null)
-            tmb.AppendRow().AppendRow(Stats.Leaderboard_NameHidden);
+            tmb.AppendRow($"<footer>{Stats.Leaderboard_NameHidden}</footer>");
 
         var periodPath = new CallbackRoutePath(TelegramRoutes.Leaderboard);
         tmb.AddInlineKeyboardButtons([
@@ -190,7 +203,7 @@ public class StatsService(
         ]);
         tmb.AddMainMenuButton();
 
-        await client.EditMessageTextAsync(replyData, tmb, ParseMode.Html, cancellationToken: ct);
+        await client.EditRichMessageAsync(replyData, tmb, cancellationToken: ct);
     }
 
     private static string LeaderboardRow(LeaderboardRow row, Guid viewerId)
@@ -200,7 +213,7 @@ public class StatsService(
             1 => "🥇",
             2 => "🥈",
             3 => "🥉",
-            _ => $"{row.Rank}.",
+            _ => row.Rank.ToString(CultureInfo.InvariantCulture),
         };
         // The viewer sees their own name as others do, to know how they look on the board.
         var name = LeaderboardNames.Format(row.NameMode, row.Profile);
@@ -208,7 +221,9 @@ public class StatsService(
             name += $" <b>{Stats.Leaderboard_You}</b>";
         if (row.Title is { } title)
             name += $" · {AchievementCatalog.ShortTitle(title.Achievement, title.Level)}";
-        return string.Format(Stats.Leaderboard_Row, place, name, Number(row.Points), Percent(row.Correct, row.Answers));
+        return $"<tr><td align=\"center\">{place}</td><td>{name}</td>" +
+               $"<td align=\"right\">{Number(row.Points)}</td>" +
+               $"<td align=\"right\">{Percent(row.Correct, row.Answers)}%</td></tr>";
     }
 
     private static string Selected(string title, bool selected) => selected ? $"✅ {title}" : title;

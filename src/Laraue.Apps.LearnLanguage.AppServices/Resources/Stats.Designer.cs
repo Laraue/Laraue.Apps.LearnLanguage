@@ -249,11 +249,29 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} {1} · {2} pts · {3}% correct.
+        ///   Looks up a localized string similar to Player.
         /// </summary>
-        public static string Leaderboard_Row {
+        public static string Leaderboard_Player {
             get {
-                return ResourceManager.GetString("Leaderboard_Row", resourceCulture);
+                return ResourceManager.GetString("Leaderboard_Player", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points.
+        /// </summary>
+        public static string Leaderboard_Points {
+            get {
+                return ResourceManager.GetString("Leaderboard_Points", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correct.
+        /// </summary>
+        public static string Leaderboard_Correct {
+            get {
+                return ResourceManager.GetString("Leaderboard_Correct", resourceCulture);
             }
         }
         

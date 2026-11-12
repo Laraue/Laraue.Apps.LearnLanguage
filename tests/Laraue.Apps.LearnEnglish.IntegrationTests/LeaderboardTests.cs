@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Laraue.Apps.LearnLanguage.AppServices;
 using Laraue.Apps.LearnLanguage.AppServices.Repositories.Contracts;
 using Laraue.Apps.LearnLanguage.AppServices.Services;
@@ -57,17 +58,18 @@ public class LeaderboardTests : IntegrationTest
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         Assert.Equal(
             """
-            <b>🏆 Leaderboard · this week</b>
-            +3 for a right answer, −1 for a wrong one
-
-            🥇 Alice · 15 pts · 100% correct
-            🥈 ******* · 12 pts · 50% correct
-            🥉 ******* <b>(you)</b> · 8 pts · 75% correct
-            4. ******* · -2 pts · 17% correct
-
-            🙈 Your name is hidden from others. You can show it in ⚙️ Settings.
+            <h3>🏆 Leaderboard · this week</h3>
+            <p>+3 for a right answer, −1 for a wrong one</p>
+            <table bordered compact>
+            <tr><th>#</th><th>Player</th><th align="right">Points</th><th align="right">Correct</th></tr>
+            <tr><td align="center">🥇</td><td>Alice</td><td align="right">15</td><td align="right">100%</td></tr>
+            <tr><td align="center">🥈</td><td>*******</td><td align="right">12</td><td align="right">50%</td></tr>
+            <tr><td align="center">🥉</td><td>******* <b>(you)</b></td><td align="right">8</td><td align="right">75%</td></tr>
+            <tr><td align="center">4</td><td>*******</td><td align="right">-2</td><td align="right">17%</td></tr>
+            </table>
+            <footer>🙈 Your name is hidden from others. You can show it in ⚙️ Settings.</footer>
             """.ReplaceLineEndings("\n"),
-            request.Text!.TrimEnd());
+            Html(request).TrimEnd());
 
         var buttons = Buttons(request);
         Assert.Equal("✅ This week", buttons[0][0].Item1);
@@ -93,13 +95,13 @@ public class LeaderboardTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(monthCallback));
 
         var request = telegramTestHost.Requests().Last<EditMessageTextRequest>();
-        Assert.StartsWith("<b>🏆 Leaderboard · this month</b>", request.Text);
-        Assert.Contains("🥇 ******* · 6 pts · 100% correct", request.Text);
-        Assert.Contains("🥈 ******* · 3 pts · 100% correct", request.Text);
-        Assert.Contains("🥉 ******* · 2 pts · 50% correct", request.Text);
+        Assert.StartsWith("<h3>🏆 Leaderboard · this month</h3>", Html(request));
+        Assert.Equal(
+            ["# | Player | Points | Correct", "🥇 | ******* | 6 | 100%", "🥈 | ******* | 3 | 100%", "🥉 | ******* | 2 | 50%"],
+            Rows(request));
         // The viewer hasn't played: no own row, no hint about the name.
-        Assert.DoesNotContain("(you)", request.Text);
-        Assert.DoesNotContain("🙈", request.Text);
+        Assert.DoesNotContain("(you)", Html(request));
+        Assert.DoesNotContain("🙈", Html(request));
         Assert.Equal("✅ This month", Buttons(request)[0][1].Item1);
     }
 
@@ -117,14 +119,14 @@ public class LeaderboardTests : IntegrationTest
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
 
-        var lines = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n');
-        Assert.Contains("🥇 ******* · 36 pts · 100% correct", lines);
-        Assert.Contains("10. ******* · 9 pts · 100% correct", lines);
-        Assert.DoesNotContain(lines, l => l.StartsWith("11."));
-        var dots = Array.IndexOf(lines, "…");
-        Assert.Equal("12. Me <b>(you)</b> · 3 pts · 100% correct", lines[dots + 1]);
+        var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
+        var rows = Rows(request);
+        Assert.Contains("🥇 | ******* | 36 | 100%", rows);
+        Assert.Contains("10 | ******* | 9 | 100%", rows);
+        Assert.DoesNotContain(rows, r => r.StartsWith("11 "));
+        Assert.Equal(["…", "12 | Me <b>(you)</b> | 3 | 100%"], rows[^2..]);
         // The name is shown, so no hint about hiding it.
-        Assert.DoesNotContain(lines, l => l.StartsWith("🙈"));
+        Assert.DoesNotContain("🙈", Html(request));
     }
 
     [Fact]
@@ -143,11 +145,10 @@ public class LeaderboardTests : IntegrationTest
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
 
-        var lines = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n');
-        Assert.Equal(9, lines.Count(l => l.StartsWith("🥇 ******* · 15 pts")));
-        Assert.Contains("10. ******* · 3 pts · 100% correct", lines);
-        var dots = Array.IndexOf(lines, "…");
-        Assert.Equal("10. Me <b>(you)</b> · 3 pts · 100% correct", lines[dots + 1]);
+        var rows = Rows(telegramTestHost.Requests().Single<EditMessageTextRequest>());
+        Assert.Equal(9, rows.Count(r => r == "🥇 | ******* | 15 | 100%"));
+        Assert.Contains("10 | ******* | 3 | 100%", rows);
+        Assert.Equal(["…", "10 | Me <b>(you)</b> | 3 | 100%"], rows[^2..]);
     }
 
     [Fact]
@@ -161,10 +162,10 @@ public class LeaderboardTests : IntegrationTest
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
 
-        var text = telegramTestHost.Requests().Single<EditMessageTextRequest>().Text;
-        Assert.Contains("Hardly anyone has played yet. Answer a few questions and take the lead!", text);
-        Assert.Contains("🥈 ******* <b>(you)</b> · 6 pts · 100% correct", text);
-        Assert.DoesNotContain("🥇", text);
+        var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
+        Assert.Contains("<p>Hardly anyone has played yet. Answer a few questions and take the lead!</p>", Html(request));
+        // Only the viewer's own row, not the leader's.
+        Assert.Equal(["# | Player | Points | Correct", "🥈 | ******* <b>(you)</b> | 6 | 100%"], Rows(request));
     }
 
     [Fact]
@@ -304,6 +305,20 @@ public class LeaderboardTests : IntegrationTest
                 .ToList(),
         });
     }
+
+    // The leaderboard is a rich message (MIN-49): its HTML is in the rich content, not in the text.
+    private static string Html(EditMessageTextRequest request)
+    {
+        Assert.Null(request.Text);
+        return Assert.IsType<InputRichMessage>(request.RichMessage).Html!;
+    }
+
+    // Table rows as "place | name | points | percent"; the row separating the viewer from the top is "…".
+    private static string[] Rows(EditMessageTextRequest request) =>
+        Regex.Matches(Html(request), "<tr>(.*?)</tr>")
+            .Select(row => string.Join(" | ", Regex.Matches(row.Groups[1].Value, "<t[dh][^>]*>(.*?)</t[dh]>")
+                .Select(cell => cell.Groups[1].Value)))
+            .ToArray();
 
     private static (string, string?)[][] Buttons(EditMessageTextRequest request) =>
         ((InlineKeyboardMarkup)request.ReplyMarkup!).InlineKeyboard
