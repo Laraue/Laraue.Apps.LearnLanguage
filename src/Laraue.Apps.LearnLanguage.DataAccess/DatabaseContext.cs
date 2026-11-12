@@ -42,8 +42,6 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext, IJobsDbContext
     public DbSet<Update> Updates { get; set; }
     
     public DbSet<FailedUpdate> FailedUpdates { get; set; }
-    
-    public DbSet<UtmLabel> UtmLabels { get; set; }
 
     public DbSet<DictionaryVersion> DictionaryVersions { get; init; }
 
@@ -112,9 +110,6 @@ public class DatabaseContext : DbContext, IUpdatesQueueDbContext, IJobsDbContext
         modelBuilder.Entity<UserQuizQuestion>()
             .HasIndex(x => x.AnsweredAt);
         
-        modelBuilder.Entity<UtmLabel>()
-            .HasKey(x => new { x.UserId, x.Name });
-
         modelBuilder.Entity<Reminder>()
             .HasIndex(x => new { x.UserId, x.SentAt });
 

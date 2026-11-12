@@ -13314,29 +13314,6 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                     b.ToTable("user_trophies", (string)null);
                 });
 
-            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UtmLabel", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasColumnName("value");
-
-                    b.HasKey("UserId", "Name")
-                        .HasName("pk_utm_labels");
-
-                    b.ToTable("utm_labels", (string)null);
-                });
-
             modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.Word", b =>
                 {
                     b.Property<long>("Id")
@@ -13758,18 +13735,6 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasConstraintName("fk_user_trophies_users_user_id");
 
                     b.Navigation("Season");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Laraue.Apps.LearnLanguage.DataAccess.Entities.UtmLabel", b =>
-                {
-                    b.HasOne("Laraue.Apps.LearnLanguage.DataAccess.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_utm_labels_users_user_id");
 
                     b.Navigation("User");
                 });

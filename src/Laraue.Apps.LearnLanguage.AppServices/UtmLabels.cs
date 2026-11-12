@@ -1,9 +1,10 @@
-namespace Laraue.Apps.LearnLanguage.AppServices;
+﻿namespace Laraue.Apps.LearnLanguage.AppServices;
 
 /// <summary>
 /// UTM labels passed in the /start parameter, e.g. "source-share_campaign-autumn": labels separated by
 /// <see cref="Separator"/>, each a name and a value separated by <see cref="NameValueSeparator"/>.
-/// They're stored for new users, to see in the funnel where they came from.
+/// Only the <see cref="Source"/> label is used: a new user's source goes to Laraue.Apps.Identity and is kept as
+/// <c>User.SignUpSource</c> (MIN-47). The format stays for links that were already shared.
 /// </summary>
 public static class UtmLabels
 {
