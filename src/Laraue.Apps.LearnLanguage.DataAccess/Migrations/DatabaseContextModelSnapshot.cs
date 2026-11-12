@@ -13078,6 +13078,11 @@ namespace Laraue.Apps.LearnLanguage.DataAccess.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("show_words_mode");
 
+                    b.Property<string>("SignUpSource")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("sign_up_source");
+
                     b.Property<string>("TelegramFirstName")
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)")

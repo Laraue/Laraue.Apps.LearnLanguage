@@ -62,6 +62,7 @@ public class TelegramUserQueryService(
             TelegramFirstName = telegramData.FirstName,
             TelegramLastName = telegramData.LastName,
             CreatedAt = DateTime.UtcNow,
+            SignUpSource = globalUser.SignUpSource,
         };
 
         context.Users.Add(user);

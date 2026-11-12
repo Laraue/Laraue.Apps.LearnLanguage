@@ -21,6 +21,19 @@ public class SignUpSourceTests : IntegrationTest
         Assert.Equal("share", identity.Requests.Single().Source);
     }
 
+    [Fact]
+    public async Task FirstUpdate_ShouldSaveSourceReturnedByIdentity()
+    {
+        var identity = new RecordingIdentityClient();
+        using var host = GetTelegramTestHost(identity);
+
+        // The recording client lower-cases the source like Identity, so the saved value is Identity's.
+        await host.SendUpdateAsync(TextUpdate("/start source-Share"));
+
+        var user = Assert.Single(host.GetFromDb(db => db.Users.ToList()));
+        Assert.Equal("share", user.SignUpSource);
+    }
+
     [Theory]
     [InlineData("/start campaign-autumn")]
     [InlineData("/start abc")]
@@ -33,7 +46,8 @@ public class SignUpSourceTests : IntegrationTest
         await host.SendUpdateAsync(TextUpdate(text));
 
         Assert.False(identity.Requests.Single().HasSource);
-        Assert.Single(host.GetFromDb(db => db.Users.ToList()));
+        var user = Assert.Single(host.GetFromDb(db => db.Users.ToList()));
+        Assert.Null(user.SignUpSource);
     }
 
     [Fact]

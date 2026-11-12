@@ -52,6 +52,17 @@ public sealed class User
     /// When the user first wrote to the bot (UTC).
     /// </summary>
     public DateTime CreatedAt { get; set; }
+
+    /// <summary>
+    /// Where the user came to the bot from (MIN-47): the source label of the /start link they came by, e.g. "share"
+    /// for t.me/&lt;bot&gt;?start=source-share. It's the value Laraue.Apps.Identity stored for this service and
+    /// returned (normalized: lower case, a-z 0-9 . - _, at most <see cref="SignUpSourceMaxLength"/>). Set once when
+    /// the user is created. Users from before MIN-47 got it from their UTM labels. Null when unknown.
+    /// </summary>
+    [MaxLength(SignUpSourceMaxLength)]
+    public string? SignUpSource { get; set; }
+
+    public const int SignUpSourceMaxLength = 64;
     
     /// <summary>
     /// UTC time of day for the daily practice reminder, the time the user turned it on. Null when reminders are
