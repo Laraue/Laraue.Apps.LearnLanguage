@@ -129,19 +129,16 @@ public class MetricsTests : IAsyncLifetime
 
             // Came from "ads", answered, finished a quiz and came back the next day.
             var engaged = NewUser(1, today.AddDays(-2).AddHours(1));
-            // No UTM labels, started a quiz the same day but only skipped questions.
+            engaged.SignUpSource = "ads";
+            // No source, started a quiz the same day but only skipped questions.
             var skipper = NewUser(2, today.AddDays(-3).AddHours(1));
-            // Has a label but no source label, did nothing.
+            // An old user whose source was backfilled from a label other than source, did nothing.
             var idle = NewUser(3, today.AddDays(-20));
+            idle.SignUpSource = "campaign-x";
             // Signed up before both windows.
             var old = NewUser(4, today.AddDays(-40));
             db.Users.AddRange(engaged, skipper, idle, old);
             await db.SaveChangesAsync();
-
-            db.UtmLabels.AddRange(
-                new UtmLabel { UserId = engaged.Id, Name = "campaign", Value = "spring" },
-                new UtmLabel { UserId = engaged.Id, Name = "source", Value = "ads" },
-                new UtmLabel { UserId = idle.Id, Name = "campaign", Value = "x" });
 
             db.UserQuizzes.AddRange(
                 new UserQuiz

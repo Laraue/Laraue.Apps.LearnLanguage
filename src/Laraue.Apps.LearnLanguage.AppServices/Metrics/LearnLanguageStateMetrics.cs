@@ -1,4 +1,4 @@
-using System.Diagnostics.Metrics;
+﻿using System.Diagnostics.Metrics;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
 using Laraue.Core.DateTime.Services.Abstractions;
@@ -119,7 +119,7 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
             description: "Users who signed up in the last 7 and 30 days, by how far they got: signed_up, " +
                 "started_quiz, answered (at least one correct or incorrect answer), finished_quiz (reached the " +
                 "results screen), returned (a quiz, an answer or a learned word on a later UTC day than the sign-up). " +
-                "source is the user's UTM source, none without one.");
+                "source is where the user came from (the /start link's source label), none without one.");
 
         meter.CreateObservableGauge(
             "learnlanguage.reminder_subscribers",
@@ -330,19 +330,12 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
         DateTime since,
         CancellationToken cancellationToken)
     {
-        // The source is the "source" or "utm_source" label from the /start payload, otherwise the first label.
+        // The source is User.SignUpSource: the /start link's source label (MIN-47), none without one.
         // Activity is what active_users counts: a quiz started, a question answered or a word learned.
         var sql = $$"""
             WITH cohort AS (
                 SELECT u.id, u.created_at,
-                    COALESCE(
-                        (SELECT l.value FROM utm_labels l
-                         WHERE l.user_id = u.id AND l.name IN ('source', 'utm_source') AND l.value <> ''
-                         ORDER BY l.name LIMIT 1),
-                        (SELECT l.name || CASE WHEN l.value <> '' THEN '-' || l.value ELSE '' END FROM utm_labels l
-                         WHERE l.user_id = u.id
-                         ORDER BY l.name LIMIT 1),
-                        'none') AS source
+                    COALESCE(u.sign_up_source, 'none') AS source
                 FROM users u
                 WHERE u.created_at >= @since
             ),
