@@ -68,6 +68,17 @@ public class GlobalUserIdTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task CreateAsync_ShouldSendNoSource_WhenThereIsNoUpdate()
+    {
+        using var scope = _provider.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<ITelegramUserQueryService<Guid>>();
+
+        await service.CreateAsync(new TelegramData(102, null, null, null, null), default);
+
+        Assert.False(_identity.Requests.Single().HasSource);
+    }
+
+    [Fact]
     public async Task IdentityFailure_DoesNotCreateLocalUser()
     {
         _identity.Fail = true;
@@ -78,37 +89,5 @@ public class GlobalUserIdTests : IAsyncLifetime
 
         var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
         Assert.False(await db.Users.AnyAsync());
-    }
-
-    private class RecordingIdentityClient : FakeUserIdentityServiceClient
-    {
-        private readonly Dictionary<long, Guid> _ids = new();
-
-        public bool Fail { get; set; }
-
-        public List<CreateUserIfNotExistsRequest> Requests { get; } = [];
-
-        public Guid GlobalIdOf(long telegramId) => _ids[telegramId];
-
-        public override AsyncUnaryCall<CreateUserIfNotExistsResponse> CreateUserIfNotExistsAsync(
-            CreateUserIfNotExistsRequest request,
-            Metadata? headers = null,
-            DateTime? deadline = null,
-            CancellationToken cancellationToken = default)
-        {
-            if (Fail)
-                throw new RpcException(new Status(StatusCode.Unavailable, "Identity is down"));
-
-            Requests.Add(request);
-            if (!_ids.ContainsKey(request.TelegramId))
-                _ids[request.TelegramId] = Guid.NewGuid();
-
-            return new AsyncUnaryCall<CreateUserIfNotExistsResponse>(
-                Task.FromResult(new CreateUserIfNotExistsResponse { UserId = _ids[request.TelegramId].ToString() }),
-                Task.FromResult(new Metadata()),
-                () => Status.DefaultSuccess,
-                () => new Metadata(),
-                () => { });
-        }
     }
 }
