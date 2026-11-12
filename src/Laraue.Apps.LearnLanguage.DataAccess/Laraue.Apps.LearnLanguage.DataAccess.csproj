@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <!-- MIN-49: local library, switch back to the package after release --><ProjectReference Include="../../../../libraries/Laraue.Telegram.NET/src/Laraue.Telegram.NET.Authentication/Laraue.Telegram.NET.Authentication.csproj" />
+    <PackageReference Include="Laraue.Telegram.NET.Authentication" Version="$(LaraueTelegramNetVersion)" />
     <PackageReference Include="Laraue.Core.Extensions.Hosting.EfCore" Version="$(LaraueCoreExtensionsHostingEfCoreVersion)" />
     <PackageReference Include="linq2db" Version="$(Linq2DbVersion)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(EfCoreVersion)">
@@ -10,7 +10,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EfCoreVersion)" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(NpgsqlEfCoreVersion)" />
-    <!-- MIN-49: local library, switch back to the package after release --><ProjectReference Include="../../../../libraries/Laraue.Telegram.NET/src/Laraue.Telegram.NET.UpdatesQueue.EFCore/Laraue.Telegram.NET.UpdatesQueue.EFCore.csproj" />
+    <PackageReference Include="Laraue.Telegram.NET.UpdatesQueue.EFCore" Version="$(LaraueTelegramNetVersion)" />
   </ItemGroup>
 
   <ItemGroup>

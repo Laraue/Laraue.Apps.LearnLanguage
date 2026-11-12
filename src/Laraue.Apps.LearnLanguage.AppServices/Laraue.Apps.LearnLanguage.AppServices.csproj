@@ -6,9 +6,9 @@
     <PackageReference Include="Laraue.Core.DateTime" Version="$(LaraueCoreDateTimeVersion)" />
     <PackageReference Include="Laraue.Apps.Identity.Internal.Contracts" Version="$(LaraueIdentityInternalContractsVersion)" />
     <PackageReference Include="Grpc.Net.ClientFactory" Version="$(GrpcNetClientFactoryVersion)" />
-    <!-- MIN-49: local library, switch back to the package after release --><ProjectReference Include="../../../../libraries/Laraue.Telegram.NET/src/Laraue.Telegram.NET.Core/Laraue.Telegram.NET.Core.csproj" />
-    <!-- MIN-49: local library, switch back to the package after release --><ProjectReference Include="../../../../libraries/Laraue.Telegram.NET/src/Laraue.Telegram.NET.DataAccess/Laraue.Telegram.NET.DataAccess.csproj" />
-    <!-- MIN-49: local library, switch back to the package after release --><ProjectReference Include="../../../../libraries/Laraue.Telegram.NET/src/Laraue.Telegram.NET.Localization/Laraue.Telegram.NET.Localization.csproj" />
+    <PackageReference Include="Laraue.Telegram.NET.Core" Version="$(LaraueTelegramNetVersion)" />
+    <PackageReference Include="Laraue.Telegram.NET.DataAccess" Version="$(LaraueTelegramNetVersion)" />
+    <PackageReference Include="Laraue.Telegram.NET.Localization" Version="$(LaraueTelegramNetVersion)" />
   </ItemGroup>
 
   <ItemGroup>

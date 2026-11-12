@@ -8,7 +8,7 @@
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="EFCore.NamingConventions" Version="$(EfCoreNamingConventionsVersion)" />
-    <!-- MIN-49: local library, switch back to the package after release --><ProjectReference Include="../../../../libraries/Laraue.Telegram.NET/src/Laraue.Telegram.NET.Testing/Laraue.Telegram.NET.Testing.csproj" />
+    <PackageReference Include="Laraue.Telegram.NET.Testing" Version="$(LaraueTelegramNetVersion)" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
