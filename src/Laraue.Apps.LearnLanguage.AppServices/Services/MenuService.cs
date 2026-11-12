@@ -36,13 +36,10 @@ public class MenuService(
     }
 
     public async Task StartAsync(
-        string rawCommand,
         Guid userId,
         long telegramId,
         CancellationToken ct = default)
     {
-        await ProcessUtmLabels(rawCommand, userId, ct);
-        
         // Send welcome message
         var tmb = new TelegramMessageBuilder()
             .AppendRow(Menu.Start);
@@ -112,49 +109,6 @@ public class MenuService(
         }
 
         tmb.AddMainMenuButton();
-    }
-
-    private async Task ProcessUtmLabels(
-        string rawCommand,
-        Guid userId,
-        CancellationToken ct = default)
-    {
-        var hasUtmLabels = await databaseContext.UtmLabels
-            .Where(l => l.UserId == userId)
-            .AnyAsync(ct);
-
-        if (hasUtmLabels)
-        {
-            return;
-        }
-        
-        // Determine utm labels of the user
-        var routeRegex = RouteRegexCreator.ForRoute(TelegramRoutes.Start);
-        var match = routeRegex.Match(rawCommand);
-        if (match.Groups.Count < 2)
-        {
-            return;
-        }
-        
-        var queryRaw = match.Groups[1].Value;
-        if (string.IsNullOrEmpty(queryRaw))
-        {
-            return;
-        }
-        
-        var queryParts = queryRaw.Split(UtmLabels.Separator);
-        var dbUtmLabels = queryParts
-            .Select(part => part.Split(UtmLabels.NameValueSeparator))
-            .Select(part => new UtmLabel
-            {
-                Name = part[0].Trim(),
-                Value = part.Length > 1 ? part[1].Trim() : string.Empty,
-                UserId = userId,
-            })
-            .ToArray();
-                
-        databaseContext.UtmLabels.AddRange(dbUtmLabels);
-        await databaseContext.SaveChangesAsync(ct);
     }
 
     private static void AppendMainMenuButtons(TelegramMessageBuilder telegramMessageBuilder)

@@ -14,7 +14,10 @@ namespace Laraue.Apps.LearnEnglish.IntegrationTests;
 [Collection("IntegrationTest")]
 public class IntegrationTest
 {
-    protected static AppTelegramTestHost GetTelegramTestHost()
+    /// <param name="identityClient">The Identity client to use, e.g. a <see cref="RecordingIdentityClient"/> to
+    /// check what was sent; a <see cref="FakeUserIdentityServiceClient"/> by default.</param>
+    protected static AppTelegramTestHost GetTelegramTestHost(
+        UserIdentityService.UserIdentityServiceClient? identityClient = null)
     {
         var builder = WebApplication.CreateBuilder();
 
@@ -29,7 +32,7 @@ public class IntegrationTest
         var appServices = builder
             .Services
             .Replace(
-                ServiceDescriptor.Singleton<UserIdentityService.UserIdentityServiceClient, FakeUserIdentityServiceClient>())
+                ServiceDescriptor.Singleton(identityClient ?? new FakeUserIdentityServiceClient()))
             .Replace(ServiceDescriptor.Singleton<IBotUsernameProvider>(new FakeBotUsernameProvider()))
             .Replace(
                 new ServiceDescriptor(

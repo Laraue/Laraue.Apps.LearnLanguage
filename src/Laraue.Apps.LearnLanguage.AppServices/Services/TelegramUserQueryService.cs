@@ -12,7 +12,8 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Services;
 public class TelegramUserQueryService(
     DatabaseContext context,
     UserIdentityService.UserIdentityServiceClient identityClient,
-    IUserRepository userRepository)
+    IUserRepository userRepository,
+    RequestContext requestContext)
     : ITelegramUserQueryService<Guid>
 {
     /// <summary>
@@ -40,17 +41,20 @@ public class TelegramUserQueryService(
     {
         // Resolve the global identity before touching our own DB - if Laraue.Apps.Identity is
         // unreachable, registration fails instead of creating a user without one.
-        var globalUserId = await identityClient.GetGlobalUserIdAsync(
+        // Called on the user's first update; for a link like t.me/<bot>?start=source-share that's the /start
+        // message, and its source label is where the user came from. No update (a direct call) = no source.
+        var globalUser = await identityClient.GetGlobalUserAsync(
             telegramData.Id,
             telegramData.Username,
             telegramData.FirstName,
             telegramData.LastName,
             telegramData.LanguageCode,
+            UtmLabels.ParseSource(requestContext.Update?.Message?.Text),
             cancellationToken);
 
         var user = new User
         {
-            GlobalUserId = globalUserId,
+            GlobalUserId = globalUser.Id,
             LanguageToLearnId = await FindLanguageToLearnIdAsync(telegramData.LanguageCode, cancellationToken),
             TelegramId = telegramData.Id,
             TelegramUserName = telegramData.Username,
@@ -58,6 +62,7 @@ public class TelegramUserQueryService(
             TelegramFirstName = telegramData.FirstName,
             TelegramLastName = telegramData.LastName,
             CreatedAt = DateTime.UtcNow,
+            SignUpSource = globalUser.SignUpSource,
         };
 
         context.Users.Add(user);

@@ -14,7 +14,6 @@ public class StartController(IMenuService service) : TelegramController
     public Task StartAsync(RequestContext request, CancellationToken cancellationToken)
     {
         return service.StartAsync(
-            request.Update.Message!.Text!,
             request.UserId,
             request.Update.GetUserId(),
             cancellationToken);
