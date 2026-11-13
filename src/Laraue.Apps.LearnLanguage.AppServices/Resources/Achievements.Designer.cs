@@ -420,7 +420,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My new achievement with @{1}: {0}. {2}.
+        ///   Looks up a localized string similar to My new achievement: {0}. {1}.
         /// </summary>
         public static string ShareText {
             get {

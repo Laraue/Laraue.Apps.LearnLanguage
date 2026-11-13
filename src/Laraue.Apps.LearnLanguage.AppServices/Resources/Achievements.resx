@@ -139,7 +139,7 @@
         <value>Less than 1% of players have it</value>
     </data>
     <data name="ShareText" xml:space="preserve">
-        <value>My new achievement with @{1}: {0}. {2}</value>
+        <value>My new achievement: {0}. {1}</value>
     </data>
     <data name="NobodyYet" xml:space="preserve">
         <value>Nobody has it yet</value>

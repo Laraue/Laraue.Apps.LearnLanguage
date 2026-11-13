@@ -71,17 +71,17 @@ public sealed class AchievementNotifier(
     }
 
     /// <summary>
-    /// A Telegram share link with the achievement and a link to the bot, tracked as
-    /// <see cref="UtmSources.Achievement"/>.
+    /// A Telegram share link: the level, what it was earned for and how rare it is, then a link to the bot tracked
+    /// as <see cref="UtmSources.Achievement"/> (MIN-52).
     /// </summary>
     private static string GetShareUrl(EarnedAchievement achievement, string botUsername)
     {
         var text = string.Format(
             AchievementTexts.ShareText,
-            AchievementCatalog.Title(achievement.Achievement, achievement.Level),
-            botUsername,
+            $"{AchievementCatalog.All[achievement.Achievement].Emoji} " +
+            AchievementCatalog.LevelWithMeaning(achievement.Achievement, achievement.Level),
             Rarity(achievement));
-        return ShareLinks.Create(botUsername, UtmSources.Achievement, text);
+        return ShareLinks.CreateWithLinkAtEnd(botUsername, UtmSources.Achievement, text);
     }
 
     private static string Rarity(EarnedAchievement achievement) =>
