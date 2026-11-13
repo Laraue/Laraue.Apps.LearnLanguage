@@ -74,8 +74,14 @@
     <data name="Leaderboard_Scoring" xml:space="preserve">
         <value>+3 за верный ответ, −1 за ошибку</value>
     </data>
-    <data name="Leaderboard_Row" xml:space="preserve">
-        <value>{0} {1} · {2} очк. · верно {3}%</value>
+    <data name="Leaderboard_Player" xml:space="preserve">
+        <value>Игрок</value>
+    </data>
+    <data name="Leaderboard_Points" xml:space="preserve">
+        <value>Очки</value>
+    </data>
+    <data name="Leaderboard_Correct" xml:space="preserve">
+        <value>Верно</value>
     </data>
     <data name="Leaderboard_You" xml:space="preserve">
         <value>(вы)</value>

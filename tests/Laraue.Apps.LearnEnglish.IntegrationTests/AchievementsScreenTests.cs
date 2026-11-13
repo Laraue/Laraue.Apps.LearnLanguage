@@ -135,9 +135,10 @@ public class AchievementsScreenTests : IntegrationTest
             b => b.Item1 == "🎖 Title: 🔥 Flame");
 
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
+        // The leaderboard is a rich message with a table (MIN-49): the title follows the name in the player cell.
         Assert.Contains(
-            "Me <b>(you)</b> · 🔥 Flame · 3 pts",
-            telegramTestHost.Requests().Last<EditMessageTextRequest>().Text);
+            "<td>Me <b>(you)</b> · 🔥 Flame</td><td align=\"right\">3</td>",
+            telegramTestHost.Requests().Last<EditMessageTextRequest>().RichMessage!.Html);
     }
 
     [Fact]
