@@ -555,7 +555,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 7 days in a row.
+        ///   Looks up a localized string similar to A quiz every day, 7 days in a row.
         /// </summary>
         public static string DaysInARow_Description_1 {
             get {
@@ -564,7 +564,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 30 days in a row.
+        ///   Looks up a localized string similar to A quiz every day, 30 days in a row.
         /// </summary>
         public static string DaysInARow_Description_2 {
             get {
@@ -573,7 +573,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 100 days in a row.
+        ///   Looks up a localized string similar to A quiz every day, 100 days in a row.
         /// </summary>
         public static string DaysInARow_Description_3 {
             get {
@@ -744,7 +744,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} of {1} days in a row.
+        ///   Looks up a localized string similar to {0} of {1} days in a row with a quiz.
         /// </summary>
         public static string DaysInARow_Progress {
             get {
@@ -771,7 +771,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to words learned in {0} of {1} language pairs.
+        ///   Looks up a localized string similar to words learned with translations into {0} of {1} languages.
         /// </summary>
         public static string LanguagePairs_Progress {
             get {
@@ -789,7 +789,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Words learned in 2 language pairs.
+        ///   Looks up a localized string similar to Words learned with translations into 2 languages.
         /// </summary>
         public static string LanguagePairs_Description_1 {
             get {
@@ -798,7 +798,7 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Words learned in 5 language pairs.
+        ///   Looks up a localized string similar to Words learned with translations into 5 languages.
         /// </summary>
         public static string LanguagePairs_Description_2 {
             get {
@@ -807,11 +807,29 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next: {0} · {1}.
+        ///   Looks up a localized string similar to Achievement.
         /// </summary>
-        public static string Next {
+        public static string Column_Achievement {
             get {
-                return ResourceManager.GetString("Next", resourceCulture);
+                return ResourceManager.GetString("Column_Achievement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        public static string Column_Level {
+            get {
+                return ResourceManager.GetString("Column_Level", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        public static string Column_Next {
+            get {
+                return ResourceManager.GetString("Column_Next", resourceCulture);
             }
         }
         

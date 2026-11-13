@@ -152,9 +152,10 @@ public class SeasonTests : IntegrationTest
             },
         });
 
+        // The achievements screen is a rich message (MIN-49).
         Assert.Contains(
-            "🏆 Trophies: 🥇 ×1 · 🥈 ×2",
-            telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
+            "<p>🏆 Trophies: 🥇 ×1 · 🥈 ×2</p>",
+            telegramTestHost.Requests().Single<EditMessageTextRequest>().RichMessage!.Html);
     }
 
     [Theory]

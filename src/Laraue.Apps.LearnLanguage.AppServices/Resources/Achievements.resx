@@ -184,13 +184,13 @@
         <value>10,000 quizzes finished</value>
     </data>
     <data name="DaysInARow_Description_1" xml:space="preserve">
-        <value>7 days in a row</value>
+        <value>A quiz every day, 7 days in a row</value>
     </data>
     <data name="DaysInARow_Description_2" xml:space="preserve">
-        <value>30 days in a row</value>
+        <value>A quiz every day, 30 days in a row</value>
     </data>
     <data name="DaysInARow_Description_3" xml:space="preserve">
-        <value>100 days in a row</value>
+        <value>A quiz every day, 100 days in a row</value>
     </data>
     <data name="WithoutMistakes_Description_1" xml:space="preserve">
         <value>A quiz without mistakes</value>
@@ -247,7 +247,7 @@
         <value>{0} of {1} quizzes</value>
     </data>
     <data name="DaysInARow_Progress" xml:space="preserve">
-        <value>{0} of {1} days in a row</value>
+        <value>{0} of {1} days in a row with a quiz</value>
     </data>
     <data name="WithoutMistakes_Progress" xml:space="preserve">
         <value>{0} of {1} quizzes in a row without mistakes</value>
@@ -256,19 +256,25 @@
         <value>{0} of 1 quiz without mistakes</value>
     </data>
     <data name="LanguagePairs_Progress" xml:space="preserve">
-        <value>words learned in {0} of {1} language pairs</value>
+        <value>words learned with translations into {0} of {1} languages</value>
     </data>
     <data name="LevelsCompleted_Progress" xml:space="preserve">
         <value>learn every {1} word</value>
     </data>
     <data name="LanguagePairs_Description_1" xml:space="preserve">
-        <value>Words learned in 2 language pairs</value>
+        <value>Words learned with translations into 2 languages</value>
     </data>
     <data name="LanguagePairs_Description_2" xml:space="preserve">
-        <value>Words learned in 5 language pairs</value>
+        <value>Words learned with translations into 5 languages</value>
     </data>
-    <data name="Next" xml:space="preserve">
-        <value>Next: {0} · {1}</value>
+    <data name="Column_Achievement" xml:space="preserve">
+        <value>Achievement</value>
+    </data>
+    <data name="Column_Level" xml:space="preserve">
+        <value>Level</value>
+    </data>
+    <data name="Column_Next" xml:space="preserve">
+        <value>Next</value>
     </data>
     <data name="LockedCount" xml:space="preserve">
         <value>🔒 Still locked: {0}</value>

@@ -177,13 +177,13 @@
         <value>10 000 пройденных тестов</value>
     </data>
     <data name="DaysInARow_Description_1" xml:space="preserve">
-        <value>7 дней подряд</value>
+        <value>Тест каждый день, 7 дней подряд</value>
     </data>
     <data name="DaysInARow_Description_2" xml:space="preserve">
-        <value>30 дней подряд</value>
+        <value>Тест каждый день, 30 дней подряд</value>
     </data>
     <data name="DaysInARow_Description_3" xml:space="preserve">
-        <value>100 дней подряд</value>
+        <value>Тест каждый день, 100 дней подряд</value>
     </data>
     <data name="WithoutMistakes_Description_1" xml:space="preserve">
         <value>Тест без ошибок</value>
@@ -240,7 +240,7 @@
         <value>{0} из {1} тестов</value>
     </data>
     <data name="DaysInARow_Progress" xml:space="preserve">
-        <value>{0} из {1} дней подряд</value>
+        <value>{0} из {1} дней подряд с тестом</value>
     </data>
     <data name="WithoutMistakes_Progress" xml:space="preserve">
         <value>{0} из {1} тестов подряд без ошибок</value>
@@ -249,19 +249,25 @@
         <value>{0} из 1 теста без ошибок</value>
     </data>
     <data name="LanguagePairs_Progress" xml:space="preserve">
-        <value>слова выучены в {0} из {1} языковых пар</value>
+        <value>слова выучены с переводом на {0} из {1} языков</value>
     </data>
     <data name="LevelsCompleted_Progress" xml:space="preserve">
         <value>выучите все слова уровня {1}</value>
     </data>
     <data name="LanguagePairs_Description_1" xml:space="preserve">
-        <value>Слова выучены в 2 языковых парах</value>
+        <value>Слова выучены с переводом на 2 языка</value>
     </data>
     <data name="LanguagePairs_Description_2" xml:space="preserve">
-        <value>Слова выучены в 5 языковых парах</value>
+        <value>Слова выучены с переводом на 5 языков</value>
     </data>
-    <data name="Next" xml:space="preserve">
-        <value>Дальше: {0} · {1}</value>
+    <data name="Column_Achievement" xml:space="preserve">
+        <value>Достижение</value>
+    </data>
+    <data name="Column_Level" xml:space="preserve">
+        <value>Уровень</value>
+    </data>
+    <data name="Column_Next" xml:space="preserve">
+        <value>Дальше</value>
     </data>
     <data name="LockedCount" xml:space="preserve">
         <value>🔒 Ещё не получено: {0}</value>
