@@ -99,6 +99,11 @@ public static class AchievementCatalog
             : $"{Medals[level - 1]} {Text($"{achievement}_{level}")}";
 
     /// <summary>
+    /// The medal of a level of an achievement with levels: 🥉, 🥈, 🥇, 💎, 👑.
+    /// </summary>
+    public static string Medal(int level) => Medals[level - 1];
+
+    /// <summary>
     /// The achievement's name; for a single-level one, the name of its level.
     /// </summary>
     public static string Name(Achievement achievement) =>

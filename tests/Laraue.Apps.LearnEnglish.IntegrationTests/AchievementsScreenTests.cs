@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
 using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
 using Laraue.Apps.LearnLanguage.AppServices;
@@ -40,22 +41,25 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
 
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
-        var lines = request.Text!.Split('\n');
-        Assert.Equal("<b>🏅 Achievements · 6 of 26</b>", lines[0]);
-        // The level held with what it means, then the next one with the progress to it.
-        AssertFollow(lines, "<b>Words learned</b>: 🥉 Bookworm (100 words learned)",
-            "Next: 🥈 Word collector · 120 of 500 words");
-        AssertFollow(lines, "<b>Without mistakes</b>: 🥉 Sharp eye (a quiz without mistakes)",
-            "Next: 🥈 Sniper · 1 of 5 quizzes in a row without mistakes");
-        // Every level held: no next one.
-        AssertFollow(lines, "<b>Language pairs</b>: 🥈 Polyglot (words learned in 5 language pairs)", "");
-        // Earned single achievements, separated by blank lines.
-        AssertFollow(lines, "✅ <b>First steps</b> (first quiz finished)", "", "✅ <b>Pioneer</b> (first C1 word learned)");
+        var html = Html(request);
+        Assert.StartsWith("<h3>🏅 Achievements · 6 of 26</h3>\n", html);
+        // The level held with what it means, then the next one's medal with the progress to it; achievements with
+        // levels first, then the earned single ones.
+        Assert.Equal(
+            [
+                "Achievement | Level | Next",
+                "📚 Words learned | 🥉 Bookworm (100 words learned) | 🥈 120 / 500",
+                "🎯 Without mistakes | 🥉 Sharp eye (a quiz without mistakes) | 🥈 1 / 5",
+                // Every level held: no next one.
+                "🌍 Language pairs | 🥈 Polyglot (words learned with translations into 5 languages) | –",
+                "👣 First steps | ✅ First quiz finished | –",
+                "🔤 Pioneer | ✅ First C1 word learned | –",
+            ],
+            Rows(request));
         // Locked ones are only counted: quizzes finished, levels completed, days in a row and 3 single ones.
-        Assert.DoesNotContain(lines, l => l.Contains("Quizzes finished") || l.Contains("Marathon"));
-        Assert.Contains("🔒 Still locked: 6", lines);
+        Assert.EndsWith("<footer>🔒 Still locked: 6</footer>", html.TrimEnd());
         // Everything reached is granted: no waiting.
-        Assert.DoesNotContain(lines, l => l.StartsWith("⏳"));
+        Assert.DoesNotContain("⏳", html);
 
         Assert.Equal(("🔒 Show locked", "achs/l"), Buttons(request)[0][0]);
         Assert.Equal(("🎖 Choose a title", "achs/t"), Buttons(request)[1][0]);
@@ -74,13 +78,16 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.AchievementsLocked)));
 
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
-        var lines = request.Text!.Split('\n');
-        Assert.Equal("<b>🔒 Locked achievements</b>", lines[0]);
-        AssertFollow(lines, "<b>Quizzes finished</b>: 🔒", "Next: 🥉 Persistence · 1 of 100 quizzes");
-        AssertFollow(lines, "<b>Levels completed</b>: 🔒", "Next: 🥉 A1 Beginner · learn every A1 word");
-        Assert.Contains("🔒 <b>Marathon</b> (10 quizzes in one day)", lines);
+        Assert.StartsWith("<h3>🔒 Locked achievements</h3>\n", Html(request));
+        var rows = Rows(request);
+        // Before a first level, what it takes.
+        Assert.Contains("🧩 Quizzes finished | 🔒 100 quizzes finished | 🥉 1 / 100", rows);
+        Assert.Contains("🔥 Days in a row | 🔒 A quiz every day, 7 days in a row | 🥉 1 / 7", rows);
+        // Progress that isn't a count keeps its own wording.
+        Assert.Contains("🎓 Levels completed | 🔒 Every A1 word learned | 🥉 learn every A1 word", rows);
+        Assert.Contains("⚡ Marathon | 🔒 10 quizzes in one day | –", rows);
         // Earned ones aren't here.
-        Assert.DoesNotContain(lines, l => l.Contains("First steps") || l.Contains("Without mistakes"));
+        Assert.DoesNotContain(rows, r => r.Contains("First steps") || r.Contains("Without mistakes"));
         Assert.Equal(("← Back", "achs"), Buttons(request).Last()[0]);
     }
 
@@ -96,8 +103,8 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
 
         Assert.Contains(
-            "⏳ New achievements are on their way: open this section again after the message about them arrives.",
-            telegramTestHost.Requests().Single<EditMessageTextRequest>().Text!.Split('\n'));
+            "<p>⏳ New achievements are on their way: open this section again after the message about them arrives.</p>",
+            Html(telegramTestHost.Requests().Single<EditMessageTextRequest>()));
         Assert.NotNull(telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id)).AchievementsCheckRequestedAt);
 
         // The achievements job grants them; the screen no longer waits.
@@ -105,9 +112,9 @@ public class AchievementsScreenTests : IntegrationTest
             await scope.ServiceProvider.GetRequiredService<IAchievementChecker>().CheckRequestedAsync();
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Achievements)));
 
-        var text = telegramTestHost.Requests().Last<EditMessageTextRequest>().Text!;
-        Assert.Contains("<b>Words learned</b>: 🥉 Bookworm", text);
-        Assert.DoesNotContain("⏳", text);
+        var request = telegramTestHost.Requests().Last<EditMessageTextRequest>();
+        Assert.Contains("📚 Words learned | 🥉 Bookworm (100 words learned) | 🥈 120 / 500", Rows(request));
+        Assert.DoesNotContain("⏳", Html(request));
     }
 
     [Fact]
@@ -122,10 +129,10 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.AchievementTitles)));
         var titles = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         Assert.Equal(
-            ["🥉 Spark (7 days in a row)", "🥈 Flame (30 days in a row)", "✅ Without a title", "← Back"],
+            ["🥉 Spark (a quiz every day, 7 days in a row)", "🥈 Flame (a quiz every day, 30 days in a row)", "✅ Without a title", "← Back"],
             Buttons(titles).Select(r => r.Single().Item1).ToArray());
 
-        var flame = Buttons(titles).SelectMany(r => r).Single(b => b.Item1 == "🥈 Flame (30 days in a row)").Item2!;
+        var flame = Buttons(titles).SelectMany(r => r).Single(b => b.Item1 == "🥈 Flame (a quiz every day, 30 days in a row)").Item2!;
         await telegramTestHost.SendUpdateAsync(Callback(flame));
 
         var user = telegramTestHost.GetFromDb(db => db.Users.Single(u => u.Id == me.Id));
@@ -168,13 +175,6 @@ public class AchievementsScreenTests : IntegrationTest
 
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         Assert.Contains("🏅 Achievements: 1 of 26", request.Text!.Split('\n'));
-    }
-
-    private static void AssertFollow(string[] lines, string line, params string[] next)
-    {
-        var index = Array.IndexOf(lines, line);
-        Assert.True(index >= 0, $"No line \"{line}\"");
-        Assert.Equal(next, lines.Skip(index + 1).Take(next.Length));
     }
 
     private static User AddUser(
@@ -232,6 +232,20 @@ public class AchievementsScreenTests : IntegrationTest
         {
             UserId = user.Id, Achievement = achievement, Level = level, AchievedAt = DateTime.UtcNow.AddSeconds(level),
         });
+
+    // The achievements screens are rich messages (MIN-49): their HTML is in the rich content, not in the text.
+    private static string Html(EditMessageTextRequest request)
+    {
+        Assert.Null(request.Text);
+        return Assert.IsType<InputRichMessage>(request.RichMessage).Html!;
+    }
+
+    // Table rows as "achievement | level | next".
+    private static string[] Rows(EditMessageTextRequest request) =>
+        Regex.Matches(Html(request), "<tr>(.*?)</tr>")
+            .Select(row => string.Join(" | ", Regex.Matches(row.Groups[1].Value, "<t[dh][^>]*>(.*?)</t[dh]>")
+                .Select(cell => cell.Groups[1].Value)))
+            .ToArray();
 
     private static (string, string?)[][] Buttons(EditMessageTextRequest request) =>
         ((InlineKeyboardMarkup)request.ReplyMarkup!).InlineKeyboard
