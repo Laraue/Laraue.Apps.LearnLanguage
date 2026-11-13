@@ -20,8 +20,8 @@ public static class AchievementCatalog
             // Levels completed from A1 up: A1, A2, B1, B2, C1.
             new(Achievement.LevelsCompleted, "🎓", [1, 2, 3, 4, 5]),
             new(Achievement.FirstQuiz, "👣", [1]),
-            new(Achievement.TenQuizzesInADay, "⚡", [10]),
-            new(Achievement.FirstC1Word, "🔤", [1]),
+            new(Achievement.TenQuizzesInADay, "⚡", [10, 25, 50]),
+            new(Achievement.FirstC1Word, "🔤", [1, 100, 500]),
             new(Achievement.WelcomeBack, "👋", [1]),
             new(Achievement.AllWordsLearned, "🌟", [1]),
         }

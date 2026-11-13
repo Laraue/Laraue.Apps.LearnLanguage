@@ -42,7 +42,7 @@ public class AchievementsScreenTests : IntegrationTest
 
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
         var html = Html(request);
-        Assert.StartsWith("<h3>🏅 Achievements · 6 of 26</h3>\n", html);
+        Assert.StartsWith("<h3>🏅 Achievements · 6 of 30</h3>\n", html);
         // The level held with what it means, then the next one's medal with the progress to it; achievements with
         // levels first, then the earned single ones.
         Assert.Equal(
@@ -52,11 +52,13 @@ public class AchievementsScreenTests : IntegrationTest
                 "🎯 Without mistakes | 🥉 Sharp eye (a quiz without mistakes) | 🥈 1 / 5",
                 // Every level held: no next one.
                 "🌍 Language pairs | 🥈 Polyglot (words learned with translations into 5 languages) | –",
+                // C1 words learned among the first 120 words of the dictionary (MIN-53).
+                "🔤 C1 words | 🥉 Pioneer (first C1 word learned) | 🥈 39 / 100",
                 "👣 First steps | ✅ First quiz finished | –",
-                "🔤 Pioneer | ✅ First C1 word learned | –",
             ],
             Rows(request));
-        // Locked ones are only counted: quizzes finished, levels completed, days in a row and 3 single ones.
+        // Locked ones are only counted: quizzes finished, levels completed, days in a row, quizzes in a day and 2 single
+        // ones.
         Assert.EndsWith("<footer>🔒 Still locked: 6</footer>", html.TrimEnd());
         // Everything reached is granted: no waiting.
         Assert.DoesNotContain("⏳", html);
@@ -85,7 +87,7 @@ public class AchievementsScreenTests : IntegrationTest
         Assert.Contains("🔥 Days in a row | 🔒 A quiz every day, 7 days in a row | 🥉 1 / 7", rows);
         // Progress that isn't a count keeps its own wording.
         Assert.Contains("🎓 Levels completed | 🔒 Every A1 word learned | 🥉 learn every A1 word", rows);
-        Assert.Contains("⚡ Marathon | 🔒 10 quizzes in one day | –", rows);
+        Assert.Contains("⚡ Quizzes in a day | 🔒 10 quizzes in one day | 🥉 1 / 10", rows);
         // Earned ones aren't here.
         Assert.DoesNotContain(rows, r => r.Contains("First steps") || r.Contains("Without mistakes"));
         Assert.Equal(("← Back", "achs"), Buttons(request).Last()[0]);
@@ -174,7 +176,7 @@ public class AchievementsScreenTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Stat)));
 
         var request = telegramTestHost.Requests().Single<EditMessageTextRequest>();
-        Assert.Contains("🏅 Achievements: 1 of 26", request.Text!.Split('\n'));
+        Assert.Contains("🏅 Achievements: 1 of 30", request.Text!.Split('\n'));
     }
 
     private static User AddUser(
