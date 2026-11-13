@@ -105,8 +105,26 @@
     <data name="TenQuizzesInADay_1" xml:space="preserve">
         <value>Marathon</value>
     </data>
+    <data name="TenQuizzesInADay" xml:space="preserve">
+        <value>Quizzes in a day</value>
+    </data>
+    <data name="TenQuizzesInADay_2" xml:space="preserve">
+        <value>Ultramarathon</value>
+    </data>
+    <data name="TenQuizzesInADay_3" xml:space="preserve">
+        <value>Iron man</value>
+    </data>
     <data name="FirstC1Word_1" xml:space="preserve">
         <value>Pioneer</value>
+    </data>
+    <data name="FirstC1Word" xml:space="preserve">
+        <value>C1 words</value>
+    </data>
+    <data name="FirstC1Word_2" xml:space="preserve">
+        <value>Pathfinder</value>
+    </data>
+    <data name="FirstC1Word_3" xml:space="preserve">
+        <value>Conqueror</value>
     </data>
     <data name="WelcomeBack_1" xml:space="preserve">
         <value>Comeback</value>
@@ -222,8 +240,26 @@
     <data name="TenQuizzesInADay_Description_1" xml:space="preserve">
         <value>10 quizzes in one day</value>
     </data>
+    <data name="TenQuizzesInADay_Description_2" xml:space="preserve">
+        <value>25 quizzes in one day</value>
+    </data>
+    <data name="TenQuizzesInADay_Description_3" xml:space="preserve">
+        <value>50 quizzes in one day</value>
+    </data>
+    <data name="TenQuizzesInADay_Progress" xml:space="preserve">
+        <value>{0} of {1} quizzes today</value>
+    </data>
     <data name="FirstC1Word_Description_1" xml:space="preserve">
         <value>First C1 word learned</value>
+    </data>
+    <data name="FirstC1Word_Description_2" xml:space="preserve">
+        <value>100 C1 words learned</value>
+    </data>
+    <data name="FirstC1Word_Description_3" xml:space="preserve">
+        <value>500 C1 words learned</value>
+    </data>
+    <data name="FirstC1Word_Progress" xml:space="preserve">
+        <value>{0} of {1} C1 words</value>
     </data>
     <data name="WelcomeBack_Description_1" xml:space="preserve">
         <value>Back after a week away</value>

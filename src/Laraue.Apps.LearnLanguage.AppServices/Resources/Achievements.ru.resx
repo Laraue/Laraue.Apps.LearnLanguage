@@ -98,8 +98,26 @@
     <data name="TenQuizzesInADay_1" xml:space="preserve">
         <value>Марафон</value>
     </data>
+    <data name="TenQuizzesInADay" xml:space="preserve">
+        <value>Тестов за день</value>
+    </data>
+    <data name="TenQuizzesInADay_2" xml:space="preserve">
+        <value>Ультрамарафон</value>
+    </data>
+    <data name="TenQuizzesInADay_3" xml:space="preserve">
+        <value>Железный человек</value>
+    </data>
     <data name="FirstC1Word_1" xml:space="preserve">
         <value>Первопроходец</value>
+    </data>
+    <data name="FirstC1Word" xml:space="preserve">
+        <value>Слова C1</value>
+    </data>
+    <data name="FirstC1Word_2" xml:space="preserve">
+        <value>Следопыт</value>
+    </data>
+    <data name="FirstC1Word_3" xml:space="preserve">
+        <value>Покоритель</value>
     </data>
     <data name="WelcomeBack_1" xml:space="preserve">
         <value>Возвращение</value>
@@ -215,8 +233,26 @@
     <data name="TenQuizzesInADay_Description_1" xml:space="preserve">
         <value>10 тестов за один день</value>
     </data>
+    <data name="TenQuizzesInADay_Description_2" xml:space="preserve">
+        <value>25 тестов за один день</value>
+    </data>
+    <data name="TenQuizzesInADay_Description_3" xml:space="preserve">
+        <value>50 тестов за один день</value>
+    </data>
+    <data name="TenQuizzesInADay_Progress" xml:space="preserve">
+        <value>{0} из {1} тестов за сегодня</value>
+    </data>
     <data name="FirstC1Word_Description_1" xml:space="preserve">
         <value>Выучено первое слово уровня C1</value>
+    </data>
+    <data name="FirstC1Word_Description_2" xml:space="preserve">
+        <value>Выучено 100 слов уровня C1</value>
+    </data>
+    <data name="FirstC1Word_Description_3" xml:space="preserve">
+        <value>Выучено 500 слов уровня C1</value>
+    </data>
+    <data name="FirstC1Word_Progress" xml:space="preserve">
+        <value>{0} из {1} слов уровня C1</value>
     </data>
     <data name="WelcomeBack_Description_1" xml:space="preserve">
         <value>Возвращение после недели перерыва</value>

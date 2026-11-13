@@ -258,6 +258,59 @@ public class AchievementTests : IntegrationTest
     }
 
     [Fact]
+    public async Task QuizzesInADay_ShouldGrantALevelPerThreshold_CountingOnlyToday()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id);
+        // Yesterday's quizzes don't count.
+        for (var i = 0; i < 30; i++)
+            AddFinishedQuiz(telegramTestHost, me, DateTime.UtcNow.Date.AddMinutes(-1));
+        for (var i = 0; i < 24; i++)
+            AddFinishedQuiz(telegramTestHost, me, DateTime.UtcNow);
+
+        // The 25th quiz today (MIN-53).
+        await PlayQuizAsync(telegramTestHost, mistakes: 1);
+        await CheckAchievementsAsync(telegramTestHost);
+
+        var granted = Granted(telegramTestHost, me);
+        Assert.Contains((Achievement.TenQuizzesInADay, (byte)1), granted);
+        Assert.Contains((Achievement.TenQuizzesInADay, (byte)2), granted);
+        Assert.DoesNotContain((Achievement.TenQuizzesInADay, (byte)3), granted);
+        var text = telegramTestHost.Requests().Single<SendMessageRequest>().Text;
+        Assert.Contains("<b>⚡ 🥈 Ultramarathon</b>\n25 quizzes in one day", text);
+    }
+
+    [Fact]
+    public async Task C1Words_ShouldGrantALevelPerThreshold_CountingC1WordsOnly()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id);
+        var c1Words = telegramTestHost.GetFromDb(db => db.Translations
+            .Where(t => t.LanguageId == Ru && t.Word.CefrLevel!.Name == "C1")
+            .Select(t => t.WordId)
+            .Distinct()
+            .OrderBy(id => id)
+            .Take(100)
+            .ToArray());
+        Assert.Equal(100, c1Words.Length);
+        telegramTestHost.InsertRangeIntoDb(c1Words.Select(id => new LearnedTranslation
+        {
+            UserId = me.Id, WordId = id, LanguageId = Ru, WinStreakCount = 3, LearnedAt = DateTime.UtcNow,
+        }));
+
+        // No mistakes: a wrong answer would un-learn a word asked again for review (MIN-53).
+        await PlayQuizAsync(telegramTestHost, mistakes: 0);
+        await CheckAchievementsAsync(telegramTestHost);
+
+        var granted = Granted(telegramTestHost, me);
+        Assert.Contains((Achievement.FirstC1Word, (byte)1), granted);
+        Assert.Contains((Achievement.FirstC1Word, (byte)2), granted);
+        Assert.DoesNotContain((Achievement.FirstC1Word, (byte)3), granted);
+        var text = telegramTestHost.Requests().Single<SendMessageRequest>().Text;
+        Assert.Contains("<b>🔤 🥈 Pathfinder</b>\n100 C1 words learned", text);
+    }
+
+    [Fact]
     public async Task MutedUser_ShouldEarnAchievements_WithoutAMessage()
     {
         using var telegramTestHost = GetTelegramTestHost();

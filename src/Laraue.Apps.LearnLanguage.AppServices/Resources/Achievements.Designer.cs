@@ -321,11 +321,65 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quizzes in a day.
+        /// </summary>
+        public static string TenQuizzesInADay {
+            get {
+                return ResourceManager.GetString("TenQuizzesInADay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ultramarathon.
+        /// </summary>
+        public static string TenQuizzesInADay_2 {
+            get {
+                return ResourceManager.GetString("TenQuizzesInADay_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Iron man.
+        /// </summary>
+        public static string TenQuizzesInADay_3 {
+            get {
+                return ResourceManager.GetString("TenQuizzesInADay_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pioneer.
         /// </summary>
         public static string FirstC1Word_1 {
             get {
                 return ResourceManager.GetString("FirstC1Word_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C1 words.
+        /// </summary>
+        public static string FirstC1Word {
+            get {
+                return ResourceManager.GetString("FirstC1Word", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pathfinder.
+        /// </summary>
+        public static string FirstC1Word_2 {
+            get {
+                return ResourceManager.GetString("FirstC1Word_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conqueror.
+        /// </summary>
+        public static string FirstC1Word_3 {
+            get {
+                return ResourceManager.GetString("FirstC1Word_3", resourceCulture);
             }
         }
         
@@ -672,11 +726,65 @@ namespace Laraue.Apps.LearnLanguage.AppServices.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 25 quizzes in one day.
+        /// </summary>
+        public static string TenQuizzesInADay_Description_2 {
+            get {
+                return ResourceManager.GetString("TenQuizzesInADay_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 50 quizzes in one day.
+        /// </summary>
+        public static string TenQuizzesInADay_Description_3 {
+            get {
+                return ResourceManager.GetString("TenQuizzesInADay_Description_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} quizzes today.
+        /// </summary>
+        public static string TenQuizzesInADay_Progress {
+            get {
+                return ResourceManager.GetString("TenQuizzesInADay_Progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First C1 word learned.
         /// </summary>
         public static string FirstC1Word_Description_1 {
             get {
                 return ResourceManager.GetString("FirstC1Word_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100 C1 words learned.
+        /// </summary>
+        public static string FirstC1Word_Description_2 {
+            get {
+                return ResourceManager.GetString("FirstC1Word_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 500 C1 words learned.
+        /// </summary>
+        public static string FirstC1Word_Description_3 {
+            get {
+                return ResourceManager.GetString("FirstC1Word_Description_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} C1 words.
+        /// </summary>
+        public static string FirstC1Word_Progress {
+            get {
+                return ResourceManager.GetString("FirstC1Word_Progress", resourceCulture);
             }
         }
         

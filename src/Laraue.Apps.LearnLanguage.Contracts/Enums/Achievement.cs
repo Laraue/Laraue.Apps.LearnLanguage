@@ -26,9 +26,10 @@ public enum Achievement : byte
 
     FirstQuiz = 7,
 
-    /// <summary>10 quizzes with answers in one day (UTC).</summary>
+    /// <summary>Quizzes with answers in one day (UTC): 10, 25, 50. Named after its first level.</summary>
     TenQuizzesInADay = 8,
 
+    /// <summary>C1 words learned: 1, 100, 500. Named after its first level.</summary>
     FirstC1Word = 9,
 
     /// <summary>A quiz after 7 or more days away.</summary>

@@ -82,8 +82,11 @@ public sealed class AchievementService(
             [Achievement.LevelsCompleted] = () => CountLevelsCompletedAsync(userId, ct),
             [Achievement.FirstQuiz] = async () => await AnsweredQuizzes(userId).AnyAsync(ct) ? 1 : 0,
             [Achievement.TenQuizzesInADay] = () => AnsweredQuizzes(userId).CountAsync(q => q.FinishedAt >= now.Date, ct),
-            [Achievement.FirstC1Word] = async () => await LearnedTranslations(userId)
-                .AnyAsync(t => t.Word.CefrLevel!.Name == C1Level, ct) ? 1 : 0,
+            [Achievement.FirstC1Word] = () => LearnedTranslations(userId)
+                .Where(t => t.Word.CefrLevel!.Name == C1Level)
+                .Select(t => t.WordId)
+                .Distinct()
+                .CountAsync(ct),
             [Achievement.WelcomeBack] = async () =>
             {
                 // The latest quiz came after a week or more without one.
