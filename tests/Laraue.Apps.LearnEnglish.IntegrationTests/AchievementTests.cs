@@ -54,14 +54,15 @@ public class AchievementTests : IntegrationTest
         Assert.Equal([("👌 OK", "d"), ("📤 Share", null)], buttons[0]);
         Assert.Equal([("🔕 Don't notify me", "1 ach/off")], buttons[1]);
 
-        // Share opens Telegram's share dialog with the rarest achievement and a tracked link to the bot.
+        // Share opens Telegram's share dialog with the rarest achievement and what it means, without a link:
+        // the bot's @username is clickable (MIN-52).
         var shareUrl = ((InlineKeyboardMarkup)message.ReplyMarkup!).InlineKeyboard.First().Last().Url!;
         var query = System.Web.HttpUtility.ParseQueryString(new Uri(shareUrl).Query);
         Assert.StartsWith("https://t.me/share/url?", shareUrl);
-        Assert.Equal("https://t.me/TestBot?start=source-achievement", query["url"]);
+        Assert.Equal("url", Assert.Single(query.AllKeys));
         Assert.Equal(
-            "My new achievement with @TestBot: 🎯 Without mistakes · 🥉 Sharp eye. ✨ Only you have it",
-            query["text"]);
+            "My new achievement with @TestBot: 🎯 🥉 Sharp eye (a quiz without mistakes). ✨ Only you have it",
+            query["url"]);
     }
 
     [Fact]

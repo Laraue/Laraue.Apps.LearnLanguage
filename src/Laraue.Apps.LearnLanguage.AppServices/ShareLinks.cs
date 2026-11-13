@@ -14,4 +14,11 @@ public static class ShareLinks
         var botLink = $"https://t.me/{botUsername}?start={UtmLabels.Source}{UtmLabels.NameValueSeparator}{utmSource}";
         return $"https://t.me/share/url?url={Uri.EscapeDataString(botLink)}&text={Uri.EscapeDataString(text)}";
     }
+
+    /// <summary>
+    /// A Telegram share link with only <paramref name="text"/>: Telegram's share dialog needs the url parameter,
+    /// and puts whatever it holds into the message, so the text goes there and no link is added before it.
+    /// </summary>
+    public static string CreateTextOnly(string text) =>
+        $"https://t.me/share/url?url={Uri.EscapeDataString(text)}";
 }
