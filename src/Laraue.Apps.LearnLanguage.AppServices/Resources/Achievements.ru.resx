@@ -132,7 +132,7 @@
         <value>Есть менее чем у 1% игроков</value>
     </data>
     <data name="ShareText" xml:space="preserve">
-        <value>Моё новое достижение в @{1}: {0}. {2}</value>
+        <value>Моё новое достижение: {0}. {1}</value>
     </data>
     <data name="NobodyYet" xml:space="preserve">
         <value>Пока ни у кого нет</value>

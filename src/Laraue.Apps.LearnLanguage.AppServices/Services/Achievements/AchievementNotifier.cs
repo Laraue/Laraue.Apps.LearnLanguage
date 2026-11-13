@@ -71,8 +71,8 @@ public sealed class AchievementNotifier(
     }
 
     /// <summary>
-    /// A Telegram share link with just the text: the level and what it was earned for, and the bot's @username,
-    /// which Telegram makes clickable, so no separate link to the bot (MIN-52).
+    /// A Telegram share link: the level, what it was earned for and how rare it is, then a link to the bot tracked
+    /// as <see cref="UtmSources.Achievement"/> (MIN-52).
     /// </summary>
     private static string GetShareUrl(EarnedAchievement achievement, string botUsername)
     {
@@ -80,9 +80,8 @@ public sealed class AchievementNotifier(
             AchievementTexts.ShareText,
             $"{AchievementCatalog.All[achievement.Achievement].Emoji} " +
             AchievementCatalog.LevelWithMeaning(achievement.Achievement, achievement.Level),
-            botUsername,
             Rarity(achievement));
-        return ShareLinks.CreateTextOnly(text);
+        return ShareLinks.CreateWithLinkAtEnd(botUsername, UtmSources.Achievement, text);
     }
 
     private static string Rarity(EarnedAchievement achievement) =>
