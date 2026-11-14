@@ -21,8 +21,13 @@ namespace Laraue.Apps.LearnEnglish.IntegrationTests;
 public class SeasonTests : IntegrationTest
 {
     private static readonly long Ru = DefaultContextData.GetWordLanguages().GetId("ru");
-    private static readonly DateTime LastWeek = SeasonPeriods.LastEndedStart(SeasonType.Week, DateTime.UtcNow);
-    private static readonly int LastWeekNumber = ISOWeek.GetWeekOfYear(LastWeek);
+    private static readonly DateTime LastMonth = SeasonPeriods.LastEndedStart(SeasonType.Month, DateTime.UtcNow);
+    // Only months award trophies, named like "October 2026".
+    private static string MonthName(string culture)
+    {
+        var month = new CultureInfo(culture).DateTimeFormat.GetMonthName(LastMonth.Month);
+        return $"{char.ToUpper(month[0], new CultureInfo(culture))}{month[1..]} {LastMonth.Year}";
+    }
 
     [Fact]
     public async Task Trophies_ShouldGoToTheTop3_TiesSharingAPlace()
@@ -33,15 +38,15 @@ public class SeasonTests : IntegrationTest
         var carl = AddUser(telegramTestHost, 3);
         var dan = AddUser(telegramTestHost, 4);
         var eve = AddUser(telegramTestHost, 5);
-        AddAnswers(telegramTestHost, anna, LastWeek.AddDays(1), correct: 5);
-        AddAnswers(telegramTestHost, bob, LastWeek.AddDays(2), correct: 3);
-        AddAnswers(telegramTestHost, carl, LastWeek.AddDays(3), correct: 3);
-        AddAnswers(telegramTestHost, dan, LastWeek.AddDays(4), correct: 1);
+        AddAnswers(telegramTestHost, anna, LastMonth.AddDays(1), correct: 5);
+        AddAnswers(telegramTestHost, bob, LastMonth.AddDays(2), correct: 3);
+        AddAnswers(telegramTestHost, carl, LastMonth.AddDays(3), correct: 3);
+        AddAnswers(telegramTestHost, dan, LastMonth.AddDays(4), correct: 1);
         // No points: no place.
-        AddAnswers(telegramTestHost, eve, LastWeek.AddDays(4), correct: 0, wrong: 1);
-        // Answers of this week don't count for last week.
-        AddAnswers(telegramTestHost, dan, LastWeek.AddDays(7), correct: 100);
-        var season = AddSeason(telegramTestHost, SeasonType.Week, LastWeek);
+        AddAnswers(telegramTestHost, eve, LastMonth.AddDays(4), correct: 0, wrong: 1);
+        // Answers of this month don't count for last month.
+        AddAnswers(telegramTestHost, dan, LastMonth.AddMonths(1), correct: 100);
+        var season = AddSeason(telegramTestHost, SeasonType.Month, LastMonth);
 
         Assert.Equal(3, await CloseEndedSeasonsAsync(telegramTestHost));
 
@@ -54,7 +59,7 @@ public class SeasonTests : IntegrationTest
 
         var messages = telegramTestHost.Requests().OfType<SendMessageRequest>().ToArray();
         Assert.Equal(3, messages.Length);
-        Assert.Contains(messages, m => m.Text.TrimEnd() == $"<b>🏆 🥇 1st place · week {LastWeekNumber}</b>");
+        Assert.Contains(messages, m => m.Text.TrimEnd() == $"<b>🏆 🥇 1st place · {MonthName("en")}</b>");
         var share = ((InlineKeyboardMarkup)messages[0].ReplyMarkup!).InlineKeyboard.First().Last().Url!;
         Assert.Equal(
             "https://t.me/TestBot?start=source-trophy",
@@ -68,9 +73,9 @@ public class SeasonTests : IntegrationTest
     public async Task Season_ShouldBeClosedWithoutTrophies_WithFewerThanThreePlayers()
     {
         using var telegramTestHost = GetTelegramTestHost();
-        AddAnswers(telegramTestHost, AddUser(telegramTestHost, 1), LastWeek.AddDays(1), correct: 9);
-        AddAnswers(telegramTestHost, AddUser(telegramTestHost, 2), LastWeek.AddDays(1), correct: 5);
-        var season = AddSeason(telegramTestHost, SeasonType.Week, LastWeek);
+        AddAnswers(telegramTestHost, AddUser(telegramTestHost, 1), LastMonth.AddDays(1), correct: 9);
+        AddAnswers(telegramTestHost, AddUser(telegramTestHost, 2), LastMonth.AddDays(1), correct: 5);
+        var season = AddSeason(telegramTestHost, SeasonType.Month, LastMonth);
 
         Assert.Equal(0, await CloseEndedSeasonsAsync(telegramTestHost));
         Assert.NotNull(telegramTestHost.GetFromDb(db => db.Seasons.Single(s => s.Id == season.Id)).ClosedAt);
@@ -88,14 +93,14 @@ public class SeasonTests : IntegrationTest
             AddUser(telegramTestHost, 3),
         };
         for (var i = 0; i < users.Length; i++)
-            AddAnswers(telegramTestHost, users[i], LastWeek.AddDays(1), correct: 3 - i);
-        AddSeason(telegramTestHost, SeasonType.Week, LastWeek);
+            AddAnswers(telegramTestHost, users[i], LastMonth.AddDays(1), correct: 3 - i);
+        AddSeason(telegramTestHost, SeasonType.Month, LastMonth);
 
         await CloseEndedSeasonsAsync(telegramTestHost);
 
         var messages = telegramTestHost.Requests().OfType<SendMessageRequest>().Select(m => m.Text.TrimEnd()).ToArray();
-        Assert.Contains($"<b>🏆 🥇 1-е место · неделя {LastWeekNumber}</b>", messages);
-        Assert.Contains($"<b>🏆 🥈 2nd place · week {LastWeekNumber}</b>", messages);
+        Assert.Contains($"<b>🏆 🥇 1-е место · {MonthName("ru")}</b>", messages);
+        Assert.Contains($"<b>🏆 🥈 2nd place · {MonthName("en")}</b>", messages);
     }
 
     [Fact]
@@ -103,33 +108,33 @@ public class SeasonTests : IntegrationTest
     {
         using var telegramTestHost = GetTelegramTestHost();
         foreach (var id in Enumerable.Range(1, 3))
-            AddAnswers(telegramTestHost, AddUser(telegramTestHost, id), LastWeek.AddDays(1), correct: id);
+            AddAnswers(telegramTestHost, AddUser(telegramTestHost, id), LastMonth.AddDays(1), correct: id);
 
         Assert.Equal(0, await CloseEndedSeasonsAsync(telegramTestHost));
 
         var seasons = telegramTestHost.GetFromDb(db => db.Seasons.OrderBy(s => s.Type).ToArray());
         Assert.Equal(
-            [(SeasonType.Week, LastWeek), (SeasonType.Month, SeasonPeriods.LastEndedStart(SeasonType.Month, DateTime.UtcNow))],
+            [(SeasonType.Month, LastMonth)],
             seasons.Select(s => (s.Type, s.StartsAt)).ToArray());
         Assert.All(seasons, s => Assert.NotNull(s.ClosedAt));
         Assert.Empty(telegramTestHost.GetFromDb(db => db.UserTrophies.ToArray()));
     }
 
     [Fact]
-    public async Task NextRun_ShouldRecordTheEndedWeek_AndAwardIt()
+    public async Task NextRun_ShouldRecordTheEndedMonth_AndAwardIt()
     {
         using var telegramTestHost = GetTelegramTestHost();
         foreach (var id in Enumerable.Range(1, 3))
-            AddAnswers(telegramTestHost, AddUser(telegramTestHost, id), LastWeek.AddDays(1), correct: id);
-        // Seasons were recorded before: the week before last is closed.
-        AddSeason(telegramTestHost, SeasonType.Week, LastWeek.AddDays(-7), closed: true);
+            AddAnswers(telegramTestHost, AddUser(telegramTestHost, id), LastMonth.AddDays(1), correct: id);
+        // Seasons were recorded before: the month before last is closed.
+        AddSeason(telegramTestHost, SeasonType.Month, LastMonth.AddMonths(-1), closed: true);
 
         Assert.Equal(3, await CloseEndedSeasonsAsync(telegramTestHost));
 
         var lastWeek = telegramTestHost.GetFromDb(db => db.Seasons
-            .Single(s => s.Type == SeasonType.Week && s.StartsAt == LastWeek));
+            .Single(s => s.Type == SeasonType.Month && s.StartsAt == LastMonth));
         Assert.NotNull(lastWeek.ClosedAt);
-        Assert.Equal(LastWeek.AddDays(7), lastWeek.EndsAt);
+        Assert.Equal(LastMonth.AddMonths(1), lastWeek.EndsAt);
     }
 
     [Fact]
@@ -137,8 +142,8 @@ public class SeasonTests : IntegrationTest
     {
         using var telegramTestHost = GetTelegramTestHost();
         var me = AddUser(telegramTestHost, DefaultUser.Id);
-        AddTrophy(telegramTestHost, me, AddSeason(telegramTestHost, SeasonType.Week, LastWeek, closed: true), 1);
-        AddTrophy(telegramTestHost, me, AddSeason(telegramTestHost, SeasonType.Week, LastWeek.AddDays(-7), closed: true), 2);
+        AddTrophy(telegramTestHost, me, AddSeason(telegramTestHost, SeasonType.Week, LastMonth, closed: true), 1);
+        AddTrophy(telegramTestHost, me, AddSeason(telegramTestHost, SeasonType.Week, LastMonth.AddDays(-7), closed: true), 2);
         AddTrophy(telegramTestHost, me, AddSeason(telegramTestHost, SeasonType.Month,
             new DateTime(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc), closed: true), 2);
 

@@ -27,12 +27,12 @@ public sealed class SeasonService(
     public async Task<int> CloseEndedSeasonsAsync(CancellationToken ct = default)
     {
         var now = dateTimeProvider.UtcNow;
-        foreach (var type in Enum.GetValues<SeasonType>())
-            await RecordLastEndedAsync(type, now, ct);
+        // Only months award trophies: weekly ones would make them too common.
+        await RecordLastEndedAsync(SeasonType.Month, now, ct);
 
         var awarded = 0;
         var toClose = await context.Seasons
-            .Where(s => s.ClosedAt == null && s.EndsAt <= now)
+            .Where(s => s.Type == SeasonType.Month && s.ClosedAt == null && s.EndsAt <= now)
             .OrderBy(s => s.StartsAt)
             .ToListAsync(ct);
         foreach (var season in toClose)
