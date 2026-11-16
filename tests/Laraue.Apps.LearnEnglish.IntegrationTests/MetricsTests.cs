@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.Metrics;
 using Laraue.Apps.LearnLanguage.AppServices.Identity;
 using Laraue.Apps.LearnLanguage.AppServices.Metrics;
+using Laraue.Apps.LearnLanguage.Contracts.Enums;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
 using Laraue.Apps.LearnLanguage.Host;
@@ -319,6 +320,46 @@ public class MetricsTests : IAsyncLifetime
         Assert.DoesNotContain("7d/de/true", byTelegram.Keys);
         Assert.Equal(1, byTelegram["30d/de/true"]);
         Assert.Equal(1, byTelegram["30d/unknown/unknown"]);
+    }
+
+    [Fact]
+    public async Task StateMetrics_CountAchievementsAndMessagesOff()
+    {
+        var now = DateTime.UtcNow;
+        using (var scope = _provider.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+            // Silver of words learned and the first quiz, messages off.
+            var silent = NewUser(1, now.AddDays(-10));
+            silent.AchievementMessagesOff = true;
+            // Bronze of words learned and the first quiz.
+            var regular = NewUser(2, now.AddDays(-10));
+            // No achievements.
+            var idle = NewUser(3, now.AddDays(-10));
+            db.Users.AddRange(silent, regular, idle);
+            await db.SaveChangesAsync();
+
+            db.UserAchievements.AddRange(
+                new UserAchievement { UserId = silent.Id, Achievement = Achievement.WordsLearned, Level = 1, AchievedAt = now },
+                new UserAchievement { UserId = silent.Id, Achievement = Achievement.WordsLearned, Level = 2, AchievedAt = now },
+                new UserAchievement { UserId = silent.Id, Achievement = Achievement.FirstQuiz, Level = 1, AchievedAt = now },
+                new UserAchievement { UserId = regular.Id, Achievement = Achievement.WordsLearned, Level = 1, AchievedAt = now },
+                new UserAchievement { UserId = regular.Id, Achievement = Achievement.FirstQuiz, Level = 1, AchievedAt = now });
+            await db.SaveChangesAsync();
+        }
+
+        var measurements = await CollectStateAsync();
+
+        Assert.Equal(1, measurements["learnlanguage.achievement_messages_off"][""]);
+
+        var achievements = measurements["learnlanguage.user_achievements"];
+        Assert.Equal(2, achievements["WordsLearned/1"]);
+        Assert.Equal(1, achievements["WordsLearned/2"]);
+        Assert.Equal(0, achievements["WordsLearned/5"]);
+        Assert.Equal(2, achievements["FirstQuiz/1"]);
+        Assert.Equal(0, achievements["QuizzesFinished/3"]);
+        Assert.DoesNotContain("FirstQuiz/2", achievements.Keys);
     }
 
     private async Task<Dictionary<string, Dictionary<string, long>>> CollectStateAsync()
