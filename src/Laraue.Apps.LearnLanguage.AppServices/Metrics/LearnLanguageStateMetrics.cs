@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Metrics;
+using Laraue.Apps.LearnLanguage.AppServices.Services.Achievements;
 using Laraue.Apps.LearnLanguage.DataAccess;
 using Laraue.Apps.LearnLanguage.DataAccess.Entities;
 using Laraue.Core.DateTime.Services.Abstractions;
@@ -166,6 +167,17 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
                 "(the language part of the IETF tag, unknown without one, other outside the top 10). supported " +
                 "is true when the bot has translations to it, false when not, source for English, unknown for unknown " +
                 "and other.");
+
+        meter.CreateObservableGauge(
+            "learnlanguage.achievement_messages_off",
+            () => new Measurement<long>(_snapshot.AchievementMessagesOff),
+            description: "Users who turned off the messages about new achievements. They still earn them.");
+
+        meter.CreateObservableGauge(
+            "learnlanguage.user_achievements",
+            () => Measurements(_snapshot.Achievements),
+            description: "Users holding each level of each achievement, zeros included. A user with a silver " +
+                "level also holds the bronze one, so the levels of an achievement don't add up to its holders.");
     }
 
     private static IEnumerable<Measurement<long>> Measurements(IEnumerable<LabeledValue> values)
@@ -276,6 +288,11 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
 
         var languages = await GetLanguageStatsAsync(context, now, cancellationToken);
 
+        var achievementMessagesOff = await context.Users
+            .LongCountAsync(u => u.AchievementMessagesOff, cancellationToken);
+
+        var achievements = await GetAchievementsAsync(context, cancellationToken);
+
         _snapshot = new Snapshot(
             users,
             activeUsers,
@@ -288,7 +305,27 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
             funnel,
             reminderSubscribers,
             reminders,
-            languages);
+            languages,
+            achievementMessagesOff,
+            achievements);
+    }
+
+    private static async Task<LabeledValue[]> GetAchievementsAsync(
+        DatabaseContext context,
+        CancellationToken cancellationToken)
+    {
+        var held = await context.UserAchievements
+            .GroupBy(x => new { x.Achievement, x.Level })
+            .Select(g => new { g.Key.Achievement, g.Key.Level, Count = g.LongCount() })
+            .ToDictionaryAsync(x => (x.Achievement, x.Level), x => x.Count, cancellationToken);
+
+        // Every level of the catalog gets a value, so a level nobody has reached yet shows as zero.
+        return AchievementCatalog.All.Values
+            .SelectMany(a => Enumerable.Range(1, a.Thresholds.Length).Select(level => LabeledValue.Of(
+                held.GetValueOrDefault((a.Achievement, (byte)level)),
+                ("achievement", a.Achievement.ToString()),
+                ("level", level.ToString()))))
+            .ToArray();
     }
 
     private static async Task<FunnelMeasurement[]> GetFunnelAsync(
@@ -540,7 +577,9 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
         IReadOnlyList<FunnelMeasurement> Funnel,
         long ReminderSubscribers,
         IReadOnlyList<ReminderMeasurement> Reminders,
-        LanguageStats Languages)
+        LanguageStats Languages,
+        long AchievementMessagesOff,
+        IReadOnlyList<LabeledValue> Achievements)
     {
         public static readonly Snapshot Empty = new(
             0,
@@ -552,6 +591,8 @@ public sealed class LearnLanguageStateMetrics : BackgroundService
             [],
             0,
             [],
-            LanguageStats.Empty);
+            LanguageStats.Empty,
+            0,
+            []);
     }
 }
