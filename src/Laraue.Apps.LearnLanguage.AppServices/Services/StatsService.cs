@@ -246,7 +246,10 @@ public class StatsService(
         return ShareLinks.Create(botUsername, UtmSources.Share, text);
     }
 
-    private static int Percent(int part, int total) => total == 0 ? 0 : (int)Math.Round(part * 100.0 / total);
+    // 100% only when every answer is right and 0% only when none is (MIN-60): 208 of 209 is 99%, not 100%.
+    private static int Percent(int part, int total) => total == 0
+        ? 0
+        : Math.Clamp((int)Math.Round(part * 100.0 / total), part == 0 ? 0 : 1, part == total ? 100 : 99);
 
     private static string Number(int value) => value.ToString("N0", CultureInfo.CurrentUICulture);
 

@@ -121,8 +121,8 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
             .ToListAsync(ct);
         var playersCount = top.Count < count ? top.Count : await scores.CountAsync(ct);
 
-        // Ties share a place: the place is 1 + the number of users strictly ahead.
-        var ranks = top.ToDictionary(x => x.UserId, x => 1 + top.Count(o => IsAhead(o, x)));
+        // Places go in row order, ties included (MIN-60): two tied 9ths read as a repeated row, so they're 9 and 10.
+        var ranks = top.Select((x, i) => (x.UserId, Place: i + 1)).ToDictionary(x => x.UserId, x => x.Place);
         var me = top.FirstOrDefault(x => x.UserId == userId);
         // The viewer's own row only on their league's board.
         if (me is null)
@@ -132,8 +132,9 @@ public class StatsRepository(DatabaseContext context) : IStatsRepository
             if (me is not null)
             {
                 var (points, correct) = (me.Points, me.Correct);
-                ranks[me.UserId] = 1 + await scores.CountAsync(
-                    x => x.Points > points || (x.Points == points && x.Correct > correct), ct);
+                // Below every shown row, even when tied with the last of them.
+                ranks[me.UserId] = Math.Max(count, await scores.CountAsync(
+                    x => x.Points > points || (x.Points == points && x.Correct > correct), ct)) + 1;
             }
         }
 
