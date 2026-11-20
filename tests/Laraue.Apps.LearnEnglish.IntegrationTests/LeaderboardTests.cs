@@ -130,14 +130,14 @@ public class LeaderboardTests : IntegrationTest
     }
 
     [Fact]
-    public async Task Leaderboard_ShouldGiveTiesTheSamePlace()
+    public async Task Leaderboard_ShouldNumberTiesInRowOrder()
     {
         using var telegramTestHost = GetTelegramTestHost();
         // The largest id, so the viewer is listed last of the tied users.
         var me = AddUser(telegramTestHost, DefaultUser.Id, "Me", nameMode: LeaderboardNameMode.FirstName, id: Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffffffff"));
         AddAnswers(telegramTestHost, me, Now, correct: 1, wrong: 0);
-        // Ten users ahead of the viewer, the tenth tied with them: the viewer shares 10th place but isn't
-        // among the 10 rows, so they're shown below.
+        // Ten users ahead of the viewer, the tenth tied with them: tied rows still get places of their own
+        // (MIN-60), and the viewer, tied but not among the 10 rows, is shown below as 11th.
         for (var id = 2; id <= 10; id++)
             AddAnswers(telegramTestHost, AddUser(telegramTestHost, id, $"User{id}"), Now, correct: 5, wrong: 0);
         AddAnswers(telegramTestHost, AddUser(telegramTestHost, 11, "Tied"), Now, correct: 1, wrong: 0);
@@ -146,9 +146,30 @@ public class LeaderboardTests : IntegrationTest
         await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
 
         var rows = Rows(telegramTestHost.Requests().Single<EditMessageTextRequest>());
-        Assert.Equal(9, rows.Count(r => r == "🥇 | ******* | 15 | 100%"));
-        Assert.Contains("10 | ******* | 3 | 100%", rows);
-        Assert.Equal(["…", "10 | Me <b>(you)</b> | 3 | 100%"], rows[^2..]);
+        Assert.Equal(
+            ["🥇", "🥈", "🥉", "4", "5", "6", "7", "8", "9", "10", "…", "11"],
+            rows.Skip(1).Select(r => r.Split(" | ")[0]));
+        Assert.Equal("10 | ******* | 3 | 100%", rows[10]);
+        Assert.Equal("11 | Me <b>(you)</b> | 3 | 100%", rows[^1]);
+    }
+
+    [Fact]
+    public async Task Leaderboard_ShouldShow100Percent_OnlyWithoutWrongAnswers()
+    {
+        using var telegramTestHost = GetTelegramTestHost();
+        var me = AddUser(telegramTestHost, DefaultUser.Id, "Me", nameMode: LeaderboardNameMode.FirstName);
+        // 208 of 209 is 99.5%, which plain rounding would show as 100% (MIN-60).
+        AddAnswers(telegramTestHost, me, Now, correct: 208, wrong: 1);
+        // 1 of 250 is 0.4%, which plain rounding would show as 0%.
+        AddAnswers(telegramTestHost, AddUser(telegramTestHost, 2, "Low", nameMode: LeaderboardNameMode.FirstName), Now, correct: 1, wrong: 249);
+        AddAnswers(telegramTestHost, AddUser(telegramTestHost, 3, "Perfect", nameMode: LeaderboardNameMode.FirstName), Now, correct: 5, wrong: 0);
+
+        await telegramTestHost.SendUpdateAsync(Callback(new CallbackRoutePath(TelegramRoutes.Leaderboard)));
+
+        var rows = Rows(telegramTestHost.Requests().Single<EditMessageTextRequest>());
+        Assert.Contains("🥇 | Me <b>(you)</b> | 623 | 99%", rows);
+        Assert.Contains("🥈 | Perfect | 15 | 100%", rows);
+        Assert.Contains("🥉 | Low | -246 | 1%", rows);
     }
 
     [Fact]
